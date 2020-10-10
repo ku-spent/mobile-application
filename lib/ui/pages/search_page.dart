@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spent/ui/bottom_navbar.dart';
+import 'package:spent/ui/widgets/bottom_navbar.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
@@ -15,9 +15,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: Text('Search'),
       ),
-      body: Center(
-        child: Text('Search'),
-      ),
+      body: Center(child: Text('Search')),
       bottomNavigationBar: BottomNavbar(),
     );
   }

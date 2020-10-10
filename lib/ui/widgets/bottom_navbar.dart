@@ -9,7 +9,6 @@ class BottomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     void _handleItemClick(BuildContext context, int index) {
       NavItem item = NavItem.values[index];
-      print(item);
       BlocProvider.of<NavigationBloc>(context).add(NavigateTo(item));
     }
 
@@ -18,9 +17,10 @@ class BottomNavbar extends StatelessWidget {
         return BottomNavigationBar(
           currentIndex: state.currentIndex,
           items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-            BottomNavigationBarItem(icon: Icon(Icons.wifi), label: 'Following')
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าแรก'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'ค้นหา'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.rss_feed_rounded), label: 'การติดตาม')
           ],
           onTap: (index) => _handleItemClick(context, index),
         );
