@@ -19,7 +19,7 @@ class AppScreen extends StatelessWidget {
         case NavItem.page_search:
           return SearchPage();
         case NavItem.page_following:
-          return SearchPage();
+          return FollowingPage();
         default:
           return HomePage();
       }

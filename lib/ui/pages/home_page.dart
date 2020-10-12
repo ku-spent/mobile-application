@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<dynamic> news = [
     {
+      'source': 'ไทยรัฐ',
       'imageUrl':
           "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
       'title':
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
       'publishDate': "2020-10-07T05:13:44.758Z"
     },
     {
+      'source': 'ไทยรัฐ',
       'imageUrl':
           "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
       'title':
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       'publishDate': "2020-10-06T05:13:44.758Z"
     },
     {
+      'source': 'ไทยรัฐ',
       'imageUrl':
           "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
       'title':

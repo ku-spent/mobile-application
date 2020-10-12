@@ -3,10 +3,29 @@ import 'package:spent/model/news.dart';
 import 'package:spent/ui/pages/webview.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CardBase extends StatelessWidget {
-  const CardBase({Key key, @required this.news}) : super(key: key);
+enum LikeStatus { like, unlike, none }
 
+class CardBase extends StatefulWidget {
   final News news;
+
+  CardBase({Key key, @required this.news}) : super(key: key);
+
+  @override
+  _CardBaseState createState() => _CardBaseState();
+}
+
+class _CardBaseState extends State<CardBase> {
+  News _news;
+
+  LikeStatus _likeStatus = LikeStatus.like;
+
+  bool _isBookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _news = widget.news;
+  }
 
   void _goToLink(BuildContext context) {
     print('open link');
@@ -14,7 +33,7 @@ class CardBase extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => WebViewPage(
-                  news: news,
+                  news: _news,
                 )));
   }
 
@@ -25,9 +44,6 @@ class CardBase extends StatelessWidget {
         shadowColor: Theme.of(context).primaryColorLight,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            print('Card tapped.');
-          },
           child: Container(
             width: 360,
             padding: EdgeInsets.all(16),
@@ -38,13 +54,24 @@ class CardBase extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.crop_square),
+                        Container(
+                          margin: EdgeInsets.only(right: 8),
+                          height: 16,
+                          width: 16,
+                          color: Theme.of(context).primaryColor,
+                        ),
                         Text(
-                          'Thairath',
+                          _news.source,
                         )
                       ],
                     ),
-                    Icon(Icons.bookmark_outline)
+                    IconButton(
+                      icon: _isBookmarked
+                          ? Icon(Icons.bookmark)
+                          : Icon(Icons.bookmark_border),
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () => {},
+                    )
                   ],
                 ),
                 GestureDetector(
@@ -56,19 +83,19 @@ class CardBase extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
-                              news.imageUrl,
+                              _news.imageUrl,
                               fit: BoxFit.cover,
                             ),
                           )),
                       Text(
-                        news.title,
+                        _news.title,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(
                         height: 4,
                       ),
                       Text(
-                        news.body,
+                        _news.body,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
@@ -80,16 +107,23 @@ class CardBase extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        timeago.format(news.publishDate, locale: 'th'),
+                        timeago.format(_news.publishDate, locale: 'th'),
                         style: Theme.of(context).textTheme.caption,
                       ),
                       Row(children: [
-                        Icon(Icons.thumb_up_outlined),
-                        SizedBox(
-                          width: 16,
+                        IconButton(
+                          icon: _likeStatus == LikeStatus.like
+                              ? Icon(Icons.thumb_up)
+                              : Icon(Icons.thumb_up_outlined),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () => {},
                         ),
-                        Icon(
-                          Icons.thumb_down_outlined,
+                        IconButton(
+                          icon: _likeStatus == LikeStatus.unlike
+                              ? Icon(Icons.thumb_down)
+                              : Icon(Icons.thumb_down_outlined),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () => {},
                         )
                       ])
                     ],
