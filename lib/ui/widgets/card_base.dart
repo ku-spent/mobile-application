@@ -37,7 +37,12 @@ class CardBase extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: [Icon(Icons.crop_square), Text('Thairath')],
+                      children: [
+                        Icon(Icons.crop_square),
+                        Text(
+                          'Thairath',
+                        )
+                      ],
                     ),
                     Icon(Icons.bookmark_outline)
                   ],

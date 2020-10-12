@@ -17,3 +17,9 @@ enum NavItem {
   page_search,
   page_following,
 }
+
+const Map<NavItem, String> PageName = {
+  NavItem.page_home: 'หน้าแรก',
+  NavItem.page_search: 'ค้นหา',
+  NavItem.page_following: 'การติดตาม'
+};

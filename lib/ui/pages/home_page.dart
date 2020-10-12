@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
 import 'package:spent/ui/widgets/bottom_navbar.dart';
 import 'package:spent/ui/widgets/card_base.dart';
-import 'package:spent/ui/widgets/nav_drawer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -53,10 +52,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
       body: Center(
           child: ListView.separated(
         padding: const EdgeInsets.all(16),
