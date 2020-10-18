@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
 import 'package:spent/ui/pages/webview.dart';
@@ -31,7 +32,7 @@ class _CardBaseState extends State<CardBase> {
     print('open link');
     Navigator.push(
         context,
-        MaterialPageRoute(
+        CupertinoPageRoute(
             builder: (context) => WebViewPage(
                   news: _news,
                 )));
@@ -46,7 +47,7 @@ class _CardBaseState extends State<CardBase> {
           splashColor: Colors.blue.withAlpha(30),
           child: Container(
             width: 360,
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Column(
               children: [
                 Row(
@@ -79,7 +80,7 @@ class _CardBaseState extends State<CardBase> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.only(bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
@@ -102,7 +103,7 @@ class _CardBaseState extends State<CardBase> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16),
+                  padding: EdgeInsets.only(top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

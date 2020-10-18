@@ -46,19 +46,22 @@ class _WebViewPageState extends State<WebViewPage> {
                 IconButton(
                   iconSize: 28.0,
                   icon: Icon(Icons.thumb_up_alt_outlined),
-                  onPressed: null,
+                  onPressed: () => {},
+                  color: Theme.of(context).hintColor,
                 ),
                 IconButton(
                   iconSize: 28.0,
                   padding: EdgeInsets.only(left: 28.0),
                   icon: Icon(Icons.thumb_down_alt_outlined),
-                  onPressed: null,
+                  onPressed: () => {},
+                  color: Theme.of(context).hintColor,
                 ),
                 IconButton(
                   iconSize: 28.0,
                   padding: EdgeInsets.only(left: 28.0),
                   icon: Icon(Icons.bookmark_outline),
-                  onPressed: null,
+                  onPressed: () => {},
+                  color: Theme.of(context).hintColor,
                 ),
                 IconButton(
                   iconSize: 28.0,
@@ -66,7 +69,8 @@ class _WebViewPageState extends State<WebViewPage> {
                     left: 28.0,
                   ),
                   icon: Icon(Icons.share),
-                  onPressed: null,
+                  onPressed: () => {},
+                  color: Theme.of(context).hintColor,
                 )
               ],
             ),
