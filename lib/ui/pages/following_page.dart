@@ -11,11 +11,8 @@ class FollowingPage extends StatefulWidget {
 class _FollowingPageState extends State<FollowingPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Following'),
-      ),
-      bottomNavigationBar: BottomNavbar(),
+    return Center(
+      child: Text('Following'),
     );
   }
 }

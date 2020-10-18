@@ -54,18 +54,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: news.length,
-        itemBuilder: (BuildContext context, int index) =>
-            CardBase(news: News.fromJson(news[index])),
-        separatorBuilder: (BuildContext context, int index) => SizedBox(
-          height: 8,
-        ),
-      )),
-      bottomNavigationBar: BottomNavbar(),
-    );
+    return Center(
+        child: ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: news.length,
+      itemBuilder: (BuildContext context, int index) =>
+          CardBase(news: News.fromJson(news[index])),
+      separatorBuilder: (BuildContext context, int index) => SizedBox(
+        height: 8,
+      ),
+    ));
   }
 }

@@ -11,9 +11,6 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Search')),
-      bottomNavigationBar: BottomNavbar(),
-    );
+    return Center(child: Text('Search'));
   }
 }

@@ -13,13 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'SPENT',
-      theme: MyTheme(context: context).mainTheme,
-      home: ChangeNotifierProvider(
-        create: (_) => SearchModel(),
-        child: AppScreen(),
-      ),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'SPENT',
+        theme: MyTheme(context: context).mainTheme,
+        home: AppScreen()
+        // ChangeNotifierProvider(
+        //   create: (_) => SearchModel(),
+        //   child: AppScreen(),
+        // ),
+        );
   }
 }
