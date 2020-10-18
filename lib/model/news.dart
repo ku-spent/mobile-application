@@ -1,17 +1,33 @@
-class News {
-  String imageUrl;
-  String title;
-  String body;
-  String url;
-  String source;
-  DateTime publishDate;
+import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
-  News(Map news) {
-    this.imageUrl = news['imageUrl'];
-    this.title = news['title'];
-    this.body = news['body'];
-    this.url = news['url'];
-    this.source = news['source'];
-    this.publishDate = DateTime.parse(news['publishDate']);
+class News extends Equatable {
+  final String url;
+  final String title;
+  final String summary;
+  final String imageUrl;
+  final String source;
+  final DateTime publishDate;
+
+  @override
+  List<Object> get props => [url];
+
+  const News({
+    @required this.url,
+    @required this.title,
+    @required this.summary,
+    @required this.imageUrl,
+    @required this.source,
+    @required this.publishDate,
+  });
+
+  factory News.fromJson(Map<String, dynamic> news) {
+    return News(
+        url: news['url'] ?? '',
+        title: news['title'] ?? '',
+        summary: news['summary'] ?? '',
+        imageUrl: news['imageUrl'] ?? '',
+        source: news['source'] ?? '',
+        publishDate: DateTime.parse(news['publishDate']));
   }
 }

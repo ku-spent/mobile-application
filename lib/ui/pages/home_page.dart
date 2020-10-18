@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
           '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',
       'url':
           'https://stackoverflow.com/questions/45189282/mapping-json-into-class-objects',
-      'body':
+      'summary':
           'พรรคเพื่อไทย ร่อนหนังสือ นายสมพงษ์ อมรวิวัฒน์ ขอลาออกจากตำแหน่งหัวหน้าพรรคแล้ว มีผลตั้งแต่ 16.00 น. วันนี้ เตรียมเรียกประชุมสมัยวิสามัญ และเลือกคณะกรรมการบริหารพรรคชุดใหม่',
       'publishDate': "2020-10-07T05:13:44.758Z"
     },
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
           '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',
       'url':
           'https://stackoverflow.com/questions/45189282/mapping-json-into-class-objects',
-      'body':
+      'summary':
           'พรรคเพื่อไทย ร่อนหนังสือ นายสมพงษ์ อมรวิวัฒน์ ขอลาออกจากตำแหน่งหัวหน้าพรรคแล้ว มีผลตั้งแต่ 16.00 น. วันนี้ เตรียมเรียกประชุมสมัยวิสามัญ และเลือกคณะกรรมการบริหารพรรคชุดใหม่',
       'publishDate': "2020-10-06T05:13:44.758Z"
     },
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',
       'url':
           'https://stackoverflow.com/questions/45189282/mapping-json-into-class-objects',
-      'body':
+      'summary':
           'พรรคเพื่อไทย ร่อนหนังสือ นายสมพงษ์ อมรวิวัฒน์ ขอลาออกจากตำแหน่งหัวหน้าพรรคแล้ว มีผลตั้งแต่ 16.00 น. วันนี้ เตรียมเรียกประชุมสมัยวิสามัญ และเลือกคณะกรรมการบริหารพรรคชุดใหม่',
       'publishDate': "2020-10-06T05:13:44.758Z"
     }
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16),
         itemCount: news.length,
         itemBuilder: (BuildContext context, int index) =>
-            CardBase(news: News(news[index])),
+            CardBase(news: News.fromJson(news[index])),
         separatorBuilder: (BuildContext context, int index) => SizedBox(
           height: 8,
         ),

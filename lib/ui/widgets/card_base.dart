@@ -96,7 +96,7 @@ class _CardBaseState extends State<CardBase> {
                         height: 4,
                       ),
                       Text(
-                        _news.body,
+                        _news.summary,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ],
