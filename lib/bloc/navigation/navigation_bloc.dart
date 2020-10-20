@@ -16,7 +16,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     NavigationEvent event,
   ) async* {
     if (event is NavigateTo) {
-      // only route to a new location if the new location is different
       if (event.destination != state.selectedPage) {
         yield NavigationState(event.destination, _getIndex(event.destination));
       }

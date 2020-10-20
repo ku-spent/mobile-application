@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/model/search_result.dart';
-// import 'package:spent/ui/widgets/search_item_builder.dart';
+import 'package:spent/ui/widgets/search_item_builder.dart';
 
 typedef Widget DisplayBody();
 
@@ -41,7 +41,9 @@ class _SearchBarState extends State<SearchBar> {
       FloatingSearchBarAction(
         showIfOpened: false,
         child: CircularButton(
-          icon: const Icon(Icons.fiber_new_sharp),
+          icon: const Icon(
+            Icons.fiber_new_sharp,
+          ),
           onPressed: () {},
         ),
       ),
@@ -53,7 +55,10 @@ class _SearchBarState extends State<SearchBar> {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final SearchResult result = SearchResult(name: 'test', type: 'test');
+    void _onQueryChanged(String query) {
+      BlocProvider.of<SearchBloc>(context).add(SearchLoad());
+      BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
+    }
 
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (BuildContext context, SearchState state) {
@@ -69,23 +74,14 @@ class _SearchBarState extends State<SearchBar> {
         openAxisAlignment: 0.0,
         maxWidth: isPortrait ? 600 : 500,
         actions: actions,
-        // progress: model.isLoading,
+        progress: state is SearchLoading,
         debounceDelay: const Duration(milliseconds: 500),
-        // onQueryChanged: model.onQueryChanged,
+        onQueryChanged: _onQueryChanged,
         scrollPadding: EdgeInsets.zero,
         transition: CircularFloatingSearchBarTransition(),
-        builder: (context, _) => ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Material(
-            color: Colors.white,
-            elevation: 4.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: Colors.accents.map((color) {
-                return Container(height: 112, color: color);
-              }).toList(),
-            ),
-          ),
+        builder: (context, _) => Container(
+          child: SearchItemBuilder(results: state.results),
+          margin: EdgeInsets.only(top: 8),
         ),
         // SearchItemBuilder(
         //   result: result,

@@ -18,9 +18,10 @@ class BottomNavbar extends StatelessWidget {
           currentIndex: state.currentIndex,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าแรก'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'ค้นหา'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.rss_feed_rounded), label: 'การติดตาม')
+                icon: Icon(Icons.rss_feed_rounded), label: 'การติดตาม'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bookmark), label: 'ที่บันทึกไว้'),
           ],
           onTap: (index) => _handleItemClick(context, index),
         );

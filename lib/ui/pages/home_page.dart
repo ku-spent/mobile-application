@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
-import 'package:spent/ui/widgets/bottom_navbar.dart';
 import 'package:spent/ui/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {

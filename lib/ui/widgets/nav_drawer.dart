@@ -57,7 +57,7 @@ class NavDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.bookmark),
-                    title: Text('คั่นหน้า'),
+                    title: Text('ที่บันทึกไว้'),
                     onTap: () => {Navigator.of(context).pop()},
                   ),
                   ListTile(

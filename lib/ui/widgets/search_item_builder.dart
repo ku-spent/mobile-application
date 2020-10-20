@@ -1,74 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/model/search_result.dart';
 
 class SearchItemBuilder extends StatelessWidget {
-  const SearchItemBuilder({Key key, SearchResult result}) : super(key: key);
+  final List<SearchResult> results;
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   final theme = Theme.of(context);
-  //   final textTheme = theme.textTheme;
+  const SearchItemBuilder({Key key, this.results}) : super(key: key);
 
-  //   // final model = Provider.of<SearchModel>(context, listen: false);
-
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: [
-  //       InkWell(
-  //         onTap: () {
-  //           FloatingSearchBar.of(context).close();
-  //           Future.delayed(
-  //             const Duration(milliseconds: 500),
-  //             // () => model.clear(),
-  //           );
-  //         },
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(16),
-  //           child: Row(
-  //             children: [
-  //               SizedBox(
-  //                 width: 36,
-  //                 child: AnimatedSwitcher(
-  //                   duration: const Duration(milliseconds: 500),
-  //                   child: model.suggestions == history
-  //                       ? const Icon(Icons.history, key: Key('history'))
-  //                       : const Icon(Icons.place, key: Key('place')),
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               Expanded(
-  //                 child: Column(
-  //                   mainAxisSize: MainAxisSize.min,
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Text(
-  //                       place.name,
-  //                       style: textTheme.subtitle1,
-  //                     ),
-  //                     const SizedBox(height: 2),
-  //                     Text(
-  //                       place.level2Address,
-  //                       style: textTheme.bodyText2
-  //                           .copyWith(color: Colors.grey.shade600),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       if (model.suggestions.isNotEmpty && place != model.suggestions.last)
-  //         const Divider(height: 0),
-  //     ],
-  //   );
-  // }
+  Icon _buildIconType(ResultType type) {
+    print(type);
+    switch (type) {
+      case ResultType.news:
+        return Icon(Icons.fiber_new_sharp);
+      case ResultType.topic:
+        return Icon(Icons.topic);
+      default:
+        return Icon(Icons.rss_feed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Container(),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Material(
+        color: Colors.white,
+        elevation: 4.0,
+        child: ImplicitlyAnimatedList<SearchResult>(
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+          items: results,
+          removeDuration: const Duration(milliseconds: 200),
+          insertDuration: const Duration(milliseconds: 200),
+          updateDuration: const Duration(milliseconds: 200),
+          areItemsTheSame: (a, b) => a == b,
+          itemBuilder: (context, animation, result, i) {
+            return SizeFadeTransition(
+              animation: animation,
+              child: buildItem(context, result),
+            );
+          },
+          updateItemBuilder: (context, animation, result) {
+            return FadeTransition(
+              opacity: animation,
+              child: buildItem(context, result),
+            );
+          },
+        ),
+      ),
     );
+  }
+
+  Widget buildItem(BuildContext context, SearchResult result) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return BlocBuilder<SearchBloc, SearchState>(
+        builder: (BuildContext context, SearchState state) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () {
+              FloatingSearchBar.of(context).close();
+              Future.delayed(
+                const Duration(milliseconds: 500),
+                () => {
+                  // model.clear()
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 36,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildIconType(result.type),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          result.name,
+                          style: textTheme.subtitle1,
+                        ),
+                        Text(
+                          result.name,
+                          style: textTheme.bodyText2
+                              .copyWith(color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // if (model.suggestions.isNotEmpty && place != model.suggestions.last)
+          Divider(height: 0),
+        ],
+      );
+    });
   }
 }

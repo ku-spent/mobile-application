@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spent/ui/widgets/bottom_navbar.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key}) : super(key: key);
