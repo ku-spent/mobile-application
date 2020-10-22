@@ -14,12 +14,12 @@ class NavigationInitial extends NavigationState {
 
 enum NavItem {
   page_home,
-  page_search,
   page_following,
+  page_bookmark,
 }
 
 const Map<NavItem, String> PageName = {
   NavItem.page_home: 'หน้าแรก',
-  NavItem.page_search: 'ค้นหา',
-  NavItem.page_following: 'การติดตาม'
+  NavItem.page_following: 'การติดตาม',
+  NavItem.page_bookmark: 'ที่บันทึกไว้',
 };

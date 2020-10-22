@@ -12,7 +12,6 @@ class SearchItemBuilder extends StatelessWidget {
   const SearchItemBuilder({Key key, this.results}) : super(key: key);
 
   Icon _buildIconType(ResultType type) {
-    print(type);
     switch (type) {
       case ResultType.news:
         return Icon(Icons.fiber_new_sharp);

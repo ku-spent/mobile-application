@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
+import 'package:spent/ui/pages/bookmark_page.dart';
 
 // Page
 import 'package:spent/ui/pages/following_page.dart';
@@ -17,16 +19,18 @@ class AppScreen extends StatelessWidget {
 
   Widget _getBody(NavigationState state) {
     switch (state.selectedPage) {
-      case NavItem.page_search:
-        return SearchPage();
+      case NavItem.page_bookmark:
+        return BookmarkPage();
       case NavItem.page_following:
         return FollowingPage();
       default:
-        return Container(
-          margin: const EdgeInsets.only(top: 76),
-          child: HomePage(),
-        );
+        return HomePage();
     }
+  }
+
+  void _onClickSearch(context) {
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => SearchPage()));
   }
 
   @override
@@ -41,17 +45,15 @@ class AppScreen extends StatelessWidget {
         child: BlocBuilder<NavigationBloc, NavigationState>(
           builder: (BuildContext context, NavigationState state) => Scaffold(
               drawer: NavDrawer(),
-              resizeToAvoidBottomInset: false,
-              body: Stack(
-                fit: StackFit.expand,
-                children: [
-                  _getBody(state),
-                  Container(
-                    margin: EdgeInsets.only(top: 8),
-                    child: SearchBar(),
-                  )
+              appBar: AppBar(
+                actions: [
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () => _onClickSearch(context))
                 ],
               ),
+              resizeToAvoidBottomInset: false,
+              body: _getBody(state),
               bottomNavigationBar: BottomNavbar()),
         ));
   }

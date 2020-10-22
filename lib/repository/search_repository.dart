@@ -18,7 +18,6 @@ class SearchRepository {
                 type = 'source';
               else
                 type = 'news';
-              print(type);
               return {'name': 'testzztest$num', 'type': type};
             })
             .map((e) => SearchResult.fromJson(e))

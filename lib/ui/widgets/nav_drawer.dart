@@ -43,12 +43,6 @@ class NavDrawer extends StatelessWidget {
                     onTap: () => _handleItemClick(context, NavItem.page_home),
                   ),
                   ListTile(
-                    leading: Icon(Icons.search),
-                    selected: state.selectedPage == NavItem.page_search,
-                    title: Text('ค้นหา'),
-                    onTap: () => _handleItemClick(context, NavItem.page_search),
-                  ),
-                  ListTile(
                     leading: Icon(Icons.rss_feed_rounded),
                     selected: state.selectedPage == NavItem.page_following,
                     title: Text('การติดตาม'),
