@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/bloc/feed/feed_bloc.dart';
 import 'package:spent/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/ui/pages/bookmark_page.dart';
@@ -12,7 +14,6 @@ import 'package:spent/ui/pages/search_page.dart';
 import 'package:spent/ui/widgets/bottom_navbar.dart';
 
 import 'package:spent/ui/widgets/nav_drawer.dart';
-import 'package:spent/ui/widgets/search_bar.dart';
 
 class AppScreen extends StatelessWidget {
   const AppScreen({Key key}) : super(key: key);
@@ -37,6 +38,7 @@ class AppScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider<FeedBloc>(create: (BuildContext context) => FeedBloc()),
           BlocProvider<NavigationBloc>(
               create: (BuildContext context) => NavigationBloc()),
           BlocProvider<SearchBloc>(
@@ -46,6 +48,10 @@ class AppScreen extends StatelessWidget {
           builder: (BuildContext context, NavigationState state) => Scaffold(
               drawer: NavDrawer(),
               appBar: AppBar(
+                title: Text(
+                  PageName[state.selectedPage],
+                  style: GoogleFonts.kanit(),
+                ),
                 actions: [
                   IconButton(
                       icon: Icon(Icons.search),

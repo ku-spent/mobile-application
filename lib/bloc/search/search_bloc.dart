@@ -30,6 +30,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapLoadResultsState(String query) async* {
+    yield SearchLoading();
     try {
       final List<SearchResult> results =
           await searchRepository.loadSearchResults();

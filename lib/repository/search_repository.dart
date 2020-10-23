@@ -7,7 +7,9 @@ class SearchRepository {
     Random rand = Random();
     int num = rand.nextInt(10) + 1;
     var list = new List<int>.generate(num, (i) => i + 1);
-    return Future.value(list
+    return Future.delayed(
+        const Duration(milliseconds: 500),
+        () => list
             .map((e) {
               int num = rand.nextInt(10);
               int num2 = rand.nextInt(3);
@@ -21,7 +23,6 @@ class SearchRepository {
               return {'name': 'testzztest$num', 'type': type};
             })
             .map((e) => SearchResult.fromJson(e))
-            .toList())
-        .timeout(const Duration(seconds: 15));
+            .toList());
   }
 }
