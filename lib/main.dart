@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:spent/ui/app_screen.dart';
+import 'package:spent/ui/pages/splash_screen.dart';
 import 'package:spent/ui/theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
 
@@ -14,6 +16,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SPENT',
         theme: MyTheme(context: context).mainTheme,
-        home: AppScreen());
+        home: SplashPage());
   }
 }
