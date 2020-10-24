@@ -7,7 +7,7 @@ class News extends Equatable {
   final String summary;
   final String imageUrl;
   final String source;
-  final DateTime publishDate;
+  final DateTime pubDate;
 
   @override
   List<Object> get props => [url];
@@ -18,7 +18,7 @@ class News extends Equatable {
     @required this.summary,
     @required this.imageUrl,
     @required this.source,
-    @required this.publishDate,
+    @required this.pubDate,
   });
 
   factory News.fromJson(Map<String, dynamic> news) {
@@ -28,6 +28,6 @@ class News extends Equatable {
         summary: news['summary'] ?? '',
         imageUrl: news['imageUrl'] ?? '',
         source: news['source'] ?? '',
-        publishDate: DateTime.parse(news['publishDate']));
+        pubDate: DateTime.parse(news['pubDate']));
   }
 }

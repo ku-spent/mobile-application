@@ -2,37 +2,55 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:spent/model/news.dart';
 import 'package:spent/repository/feed_repository.dart';
+import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 
 part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  FeedRepository feedRepository = FeedRepository();
+  FeedRepository feedRepository = FeedRepository(client: http.Client());
+  final int fetchSize = 5;
 
-  FeedBloc() : super(FeedLoading());
+  FeedBloc() : super(FeedInitial());
 
   @override
   Stream<FeedState> mapEventToState(
     FeedEvent event,
   ) async* {
-    if (event is FetchFeed) {
+    if (state is FeedInitial || (event is FetchFeed && __hasMore(state))) {
       yield* _mapLoadedFeedState();
     }
   }
 
-  Stream<FeedState> _mapLoadingFeedState() async* {
-    yield FeedLoading();
-  }
+  bool __hasMore(FeedState state) => state is FeedLoaded && state.hasMore;
 
   Stream<FeedState> _mapLoadedFeedState() async* {
     try {
-      yield FeedLoading();
-      List<News> news = await feedRepository.fetchFeeds();
-      yield FeedLoaded(news);
+      final curState = state;
+      if (curState is FeedInitial) {
+        final feeds = await feedRepository.fetchFeeds(from: 0, size: fetchSize);
+        yield FeedLoaded(feeds: feeds, hasMore: true);
+      } else if (curState is FeedLoaded) {
+        final feeds = await feedRepository.fetchFeeds(
+            from: curState.feeds.length, size: fetchSize);
+        yield news.isEmpty
+            ? curState.copyWith(hasMore: false)
+            : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
+      }
     } catch (_) {
-      yield FeedNotLoaded();
+      yield FeedError();
     }
+  }
+
+  @override
+  Stream<Transition<FeedEvent, FeedState>> transformEvents(
+      Stream<FeedEvent> events, transitionFn) {
+    // TODO: implement transformEvents
+    return super.transformEvents(
+        events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
   }
 }

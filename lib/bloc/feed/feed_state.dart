@@ -7,6 +7,11 @@ abstract class FeedState extends Equatable {
   List<Object> get props => [];
 }
 
+class FeedInitial extends FeedState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedLoading extends FeedState {
   @override
   List<Object> get props => [];
@@ -14,14 +19,20 @@ class FeedLoading extends FeedState {
 
 class FeedLoaded extends FeedState {
   final List<News> feeds;
+  final bool hasMore;
 
-  const FeedLoaded(this.feeds);
+  const FeedLoaded({@required this.feeds, @required this.hasMore});
 
   @override
-  List<Object> get props => [feeds];
+  List<Object> get props => [feeds, hasMore];
+
+  FeedLoaded copyWith({List<News> feeds, bool hasMore}) {
+    return FeedLoaded(
+        feeds: feeds ?? this.feeds, hasMore: hasMore ?? this.hasMore);
+  }
 }
 
-class FeedNotLoaded extends FeedState {
+class FeedError extends FeedState {
   @override
   List<Object> get props => [];
 }

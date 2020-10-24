@@ -108,7 +108,7 @@ class _CardBaseState extends State<CardBase> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        timeago.format(_news.publishDate, locale: 'th'),
+                        timeago.format(_news.pubDate, locale: 'th'),
                         style: Theme.of(context).textTheme.caption,
                       ),
                       Row(children: [

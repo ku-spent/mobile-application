@@ -14,37 +14,85 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _scrollController = ScrollController();
+  final _scrollThreshold = 200.0;
+  FeedBloc _feedBloc;
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
+    _feedBloc = BlocProvider.of<FeedBloc>(context);
     Future.delayed(Duration.zero, () {
       _fetchFeeds();
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= _scrollThreshold) {
+      _fetchFeeds();
+    }
+  }
+
   void _fetchFeeds() {
-    BlocProvider.of<FeedBloc>(context).add(FetchFeed());
+    print('fetch');
+    _feedBloc.add(FetchFeed());
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-      if (state is FeedLoading) {
+      if (state is FeedInitial) {
         return Center(child: CircularProgressIndicator());
       }
       if (state is FeedLoaded) {
+        if (state.feeds.isEmpty) {
+          return Center(
+            child: Text('no feeds'),
+          );
+        }
         return Center(
             child: ListView.separated(
           padding: const EdgeInsets.all(16),
-          itemCount: state.feeds.length,
+          itemCount:
+              state.hasMore ? state.feeds.length + 1 : state.feeds.length,
           itemBuilder: (BuildContext context, int index) =>
-              CardBase(news: state.feeds[index]),
+              index >= state.feeds.length
+                  ? BottomLoader()
+                  : CardBase(news: state.feeds[index]),
           separatorBuilder: (BuildContext context, int index) => SizedBox(
             height: 8,
           ),
+          controller: _scrollController,
         ));
       }
-      return Center(child: Text('Something went wrong!'));
+      if (state is FeedError) {
+        return Center(child: Text('Something went wrong!'));
+      }
     });
+  }
+}
+
+class BottomLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Center(
+        child: SizedBox(
+          width: 33,
+          height: 33,
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }
