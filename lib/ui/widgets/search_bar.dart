@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/ui/widgets/search_item_builder.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 typedef Widget DisplayBody();
 
@@ -19,21 +18,37 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   DisplayBody _widget;
-  final controller = FloatingSearchBarController();
+  final _controller = FloatingSearchBarController();
 
   @override
   void initState() {
     _widget = widget.widget;
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.open();
+      _controller.open();
+    });
+    KeyboardVisibility.onChange.listen((bool visible) {
+      if (!visible) _controller.close();
     });
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  void _onQueryChanged(String query) {
+    BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
+  }
+
+  void _onSumitted(String query) {
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => SearchPage(
+    //               query: query,
+    //             )));
   }
 
   @override
@@ -56,23 +71,10 @@ class _SearchBarState extends State<SearchBar> {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    void _onQueryChanged(String query) {
-      BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
-    }
-
-    void _onSumitted(String query) {
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => SearchPage(
-      //               query: query,
-      //             )));
-    }
-
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (BuildContext context, SearchState state) {
       return FloatingSearchBar(
-        controller: controller,
+        controller: _controller,
         clearQueryOnClose: false,
         hint: 'Search for a news...',
         iconColor: Colors.grey,
