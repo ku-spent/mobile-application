@@ -4,7 +4,6 @@ import 'package:spent/ui/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   runApp(MyApp());
 }
 

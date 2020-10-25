@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -13,9 +14,12 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  WebViewController _controller;
+
   @override
   void initState() {
     super.initState();
+    // Enable hybrid composition.
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
@@ -26,10 +30,16 @@ class _WebViewPageState extends State<WebViewPage> {
         title: Text(widget.news.url,
             style: TextStyle(fontSize: 14, color: Colors.white)),
       ),
-      body: WebView(
-        initialUrl: widget.news.url,
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
+      body: Container(
+          color: Colors.white,
+          child: WebView(
+            initialUrl: 'about:blank',
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (WebViewController webViewController) {
+              _controller = webViewController;
+              _controller.loadUrl(widget.news.url);
+            },
+          )),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           decoration: BoxDecoration(
@@ -49,25 +59,29 @@ class _WebViewPageState extends State<WebViewPage> {
                   onPressed: () => {},
                   color: Theme.of(context).hintColor,
                 ),
+                Container(
+                  width: 28,
+                ),
                 IconButton(
                   iconSize: 28.0,
-                  padding: EdgeInsets.only(left: 28.0),
                   icon: Icon(Icons.thumb_down_alt_outlined),
                   onPressed: () => {},
                   color: Theme.of(context).hintColor,
                 ),
+                Container(
+                  width: 28,
+                ),
                 IconButton(
                   iconSize: 28.0,
-                  padding: EdgeInsets.only(left: 28.0),
                   icon: Icon(Icons.bookmark_outline),
                   onPressed: () => {},
                   color: Theme.of(context).hintColor,
                 ),
+                Container(
+                  width: 28,
+                ),
                 IconButton(
                   iconSize: 28.0,
-                  padding: EdgeInsets.only(
-                    left: 28.0,
-                  ),
                   icon: Icon(Icons.share),
                   onPressed: () => {},
                   color: Theme.of(context).hintColor,
