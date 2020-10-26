@@ -29,7 +29,7 @@ class FeedRepository {
 final List<dynamic> news = [
   {
     'source': 'ไทยรัฐ',
-    'imageUrl':
+    'image':
         "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
     'title':
         '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',
@@ -41,7 +41,7 @@ final List<dynamic> news = [
   },
   {
     'source': 'ไทยรัฐ',
-    'imageUrl':
+    'image':
         "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
     'title':
         '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',
@@ -53,7 +53,7 @@ final List<dynamic> news = [
   },
   {
     'source': 'ไทยรัฐ',
-    'imageUrl':
+    'image':
         "https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIK6yN28ukTeFChbXDrZSSGeCHgb8heV8rCzAd97ealY269dPrq.webp",
     'title':
         '"สมพงษ์" ลาออก หัวหน้าพรรคเพื่อไทยแล้ว มีผลตั้งแต่ 4 โมงเย็น วันนี้',

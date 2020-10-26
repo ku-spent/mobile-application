@@ -3,12 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/bloc/navigation/navigation_bloc.dart';
 
 class BottomNavbar extends StatelessWidget {
-  const BottomNavbar({Key key}) : super(key: key);
+  final ScrollController scrollController;
+  const BottomNavbar({Key key, this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void _handleItemClick(BuildContext context, int index) {
+    void _handleItemClick(BuildContext context, int index, int currentIndex) {
       NavItem item = NavItem.values[index];
+      if (scrollController != null && currentIndex == index)
+        scrollController.animateTo(scrollController.position.minScrollExtent,
+            duration: Duration(milliseconds: 270), curve: Curves.easeInExpo);
       BlocProvider.of<NavigationBloc>(context).add(NavigateTo(item));
     }
 
@@ -23,7 +27,8 @@ class BottomNavbar extends StatelessWidget {
             BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark), label: 'ที่บันทึกไว้'),
           ],
-          onTap: (index) => _handleItemClick(context, index),
+          onTap: (index) =>
+              _handleItemClick(context, index, state.currentIndex),
         );
       },
     );

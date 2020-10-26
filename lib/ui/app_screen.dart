@@ -16,8 +16,9 @@ import 'package:spent/ui/widgets/bottom_navbar.dart';
 import 'package:spent/ui/widgets/nav_drawer.dart';
 
 class AppScreen extends StatelessWidget {
-  const AppScreen({Key key}) : super(key: key);
+  final ScrollController scrollController = ScrollController();
 
+  AppScreen({Key key}) : super(key: key);
   Widget _getBody(NavigationState state) {
     switch (state.selectedPage) {
       case NavItem.page_bookmark:
@@ -25,7 +26,9 @@ class AppScreen extends StatelessWidget {
       case NavItem.page_following:
         return FollowingPage();
       default:
-        return HomePage();
+        return HomePage(
+          scrollController: scrollController,
+        );
     }
   }
 
@@ -60,7 +63,9 @@ class AppScreen extends StatelessWidget {
               ),
               resizeToAvoidBottomInset: false,
               body: _getBody(state),
-              bottomNavigationBar: BottomNavbar()),
+              bottomNavigationBar: BottomNavbar(
+                scrollController: scrollController,
+              )),
         ));
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/bloc/feed/feed_bloc.dart';
-import 'package:spent/model/news.dart';
 import 'package:spent/ui/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  final ScrollController scrollController;
+  HomePage({Key key, this.title, this.scrollController}) : super(key: key);
 
   final String title;
 
@@ -14,13 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _scrollController = ScrollController();
+  ScrollController _scrollController;
   final _scrollThreshold = 200.0;
   FeedBloc _feedBloc;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _feedBloc = BlocProvider.of<FeedBloc>(context);
     Future.delayed(Duration.zero, () {
@@ -30,7 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
   }
 

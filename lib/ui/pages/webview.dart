@@ -23,6 +23,13 @@ class _WebViewPageState extends State<WebViewPage> {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
+  void _loadUrl() async {
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      print(123);
+      _controller.loadUrl(widget.news.url);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,15 +38,18 @@ class _WebViewPageState extends State<WebViewPage> {
             style: TextStyle(fontSize: 14, color: Colors.white)),
       ),
       body: Container(
-          color: Colors.white,
-          child: WebView(
-            initialUrl: 'about:blank',
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller = webViewController;
-              _controller.loadUrl(widget.news.url);
-            },
-          )),
+        color: Colors.white,
+        child: Container(),
+      ),
+      // child: WebView(
+      //   initialUrl: 'about:blank',
+      //   javascriptMode: JavascriptMode.unrestricted,
+      //   onWebViewCreated: (WebViewController webViewController) {
+      //     _controller = webViewController;
+      //     _loadUrl();
+      //     // _controller.loadUrl(widget.news.url);
+      //   },
+      // )),
       bottomNavigationBar: BottomAppBar(
         child: Container(
           decoration: BoxDecoration(

@@ -5,7 +5,7 @@ class News extends Equatable {
   final String url;
   final String title;
   final String summary;
-  final String imageUrl;
+  final String image;
   final String source;
   final DateTime pubDate;
 
@@ -16,7 +16,7 @@ class News extends Equatable {
     @required this.url,
     @required this.title,
     @required this.summary,
-    @required this.imageUrl,
+    @required this.image,
     @required this.source,
     @required this.pubDate,
   });
@@ -26,7 +26,7 @@ class News extends Equatable {
         url: news['url'] ?? '',
         title: news['title'] ?? '',
         summary: news['summary'] ?? '',
-        imageUrl: news['imageUrl'] ?? '',
+        image: news['image'] ?? '',
         source: news['source'] ?? '',
         pubDate: DateTime.parse(news['pubDate']));
   }

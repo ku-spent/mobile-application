@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
@@ -18,7 +19,7 @@ class CardBase extends StatefulWidget {
 class _CardBaseState extends State<CardBase> {
   News _news;
 
-  LikeStatus _likeStatus = LikeStatus.like;
+  LikeStatus _likeStatus = LikeStatus.none;
 
   bool _isBookmarked = false;
 
@@ -29,7 +30,6 @@ class _CardBaseState extends State<CardBase> {
   }
 
   void _goToLink(BuildContext context) {
-    print('open link');
     Navigator.push(
         context,
         CupertinoPageRoute(
@@ -83,8 +83,15 @@ class _CardBaseState extends State<CardBase> {
                           padding: EdgeInsets.only(bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              _news.imageUrl,
+                            child: CachedNetworkImage(
+                              imageUrl: _news.image,
+                              placeholder: (context, url) => Container(
+                                color: Colors.black26,
+                                width: 300,
+                                height: 200,
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                               fit: BoxFit.cover,
                             ),
                           )),
