@@ -24,18 +24,14 @@ class _WebViewPageState extends State<WebViewPage> {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
-  void _loadUrl() async {
-    Future.delayed(const Duration(seconds: 1), () {
-      _controller.loadUrl(widget.news.url);
-      _loadFinished();
-    });
+  Future<String> _getUrl() async {
+    return Future.delayed(
+        const Duration(milliseconds: 300), () => widget.news.url);
   }
 
-  void _loadFinished() async {
-    Future.delayed(const Duration(milliseconds: 800), () {
-      setState(() {
-        _isLoaded = true;
-      });
+  void _loadFinished(String url) {
+    setState(() {
+      _isLoaded = true;
     });
   }
 
@@ -50,15 +46,18 @@ class _WebViewPageState extends State<WebViewPage> {
             : MyLinearProgressIndicator(backgroundColor: Colors.purple[200]),
       ),
       body: Container(
-          color: Colors.white,
-          child: WebView(
-            initialUrl: 'about:blank',
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              _controller = webViewController;
-              _loadUrl();
-            },
-          )),
+        color: Colors.white,
+        child: FutureBuilder(
+            future: _getUrl(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) =>
+                snapshot.hasData
+                    ? WebView(
+                        initialUrl: snapshot.data,
+                        javascriptMode: JavascriptMode.unrestricted,
+                        onPageFinished: _loadFinished,
+                      )
+                    : Container()),
+      ),
       bottomNavigationBar: _isLoaded ? WebViewBottom() : null,
     );
   }

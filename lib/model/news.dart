@@ -31,3 +31,23 @@ class News extends Equatable {
         pubDate: DateTime.parse(news['pubDate']));
   }
 }
+
+enum EnumNewsSource {
+  voiceTV,
+  matichon,
+  thaipbs,
+}
+
+const Map<EnumNewsSource, String> NewsSource = {
+  EnumNewsSource.voiceTV: 'Voice TV',
+  EnumNewsSource.matichon: 'มติชน',
+  EnumNewsSource.thaipbs: 'thaipbs',
+};
+
+const Map<EnumNewsSource, String> NewsSourceImage = {
+  EnumNewsSource.voiceTV:
+      'https://voicetv.co.th/images/icons/favicon-32x32.png',
+  EnumNewsSource.matichon:
+      'https://www.matichon.co.th/wp-content/themes/matichon-theme/images/matichon-logo-retina.png',
+  EnumNewsSource.thaipbs: 'https://news.thaipbs.or.th/favicon.ico',
+};

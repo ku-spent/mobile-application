@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
 import 'package:spent/ui/pages/webview.dart';
+import 'package:spent/ui/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 enum LikeStatus { like, unlike, none }
@@ -29,13 +30,15 @@ class _CardBaseState extends State<CardBase> {
     _news = widget.news;
   }
 
-  void _goToLink(BuildContext context) {
-    Navigator.push(
-        context,
-        CupertinoPageRoute(
-            builder: (context) => WebViewPage(
-                  news: _news,
-                )));
+  void _goToLink(BuildContext context) async {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => WebViewPage(
+                    news: _news,
+                  )));
+    });
   }
 
   @override
@@ -55,11 +58,11 @@ class _CardBaseState extends State<CardBase> {
                   children: [
                     Row(
                       children: [
+                        SourceIcon(
+                          source: _news.source,
+                        ),
                         Container(
-                          margin: EdgeInsets.only(right: 8),
-                          height: 16,
-                          width: 16,
-                          color: Theme.of(context).primaryColor,
+                          width: 8,
                         ),
                         Text(
                           _news.source,
@@ -75,7 +78,8 @@ class _CardBaseState extends State<CardBase> {
                     )
                   ],
                 ),
-                GestureDetector(
+                InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
                   onTap: () => _goToLink(context),
                   child: Column(
                     children: [
@@ -87,17 +91,19 @@ class _CardBaseState extends State<CardBase> {
                               imageUrl: _news.image,
                               placeholder: (context, url) => Container(
                                 color: Colors.black26,
-                                width: 300,
-                                height: 200,
                               ),
                               errorWidget: (context, url, error) =>
                                   Icon(Icons.error),
+                              width: double.infinity,
+                              height: 200,
                               fit: BoxFit.cover,
                             ),
                           )),
                       Text(
                         _news.title,
                         style: Theme.of(context).textTheme.headline6,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
                       ),
                       SizedBox(
                         height: 4,
@@ -105,6 +111,8 @@ class _CardBaseState extends State<CardBase> {
                       Text(
                         _news.summary,
                         style: Theme.of(context).textTheme.bodyText2,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                     ],
                   ),
