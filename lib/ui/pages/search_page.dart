@@ -10,17 +10,6 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (BuildContext context) => SearchBloc(),
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                Center(child: Text('search')),
-                Container(
-                  margin: EdgeInsets.only(top: 8),
-                  child: SearchBar(),
-                )
-              ],
-            )));
+        child: Scaffold(body: SearchBar()));
   }
 }

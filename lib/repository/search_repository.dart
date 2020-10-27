@@ -5,7 +5,8 @@ import 'package:spent/model/search_result.dart';
 class SearchRepository {
   Future<List<SearchResult>> loadSearchResults() async {
     Random rand = Random();
-    int num = rand.nextInt(10) + 1;
+    // int num = rand.nextInt(10) + 1;
+    int num = 20;
     var list = new List<int>.generate(num, (i) => i + 1);
     return Future.delayed(
         const Duration(milliseconds: 500),

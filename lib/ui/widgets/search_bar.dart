@@ -6,53 +6,18 @@ import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/ui/widgets/search_item_builder.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
-typedef Widget DisplayBody();
+class SearchBar extends StatelessWidget {
+  final FloatingSearchBarController _controller = FloatingSearchBarController();
+  SearchBar({Key key}) : super(key: key);
 
-class SearchBar extends StatefulWidget {
-  final DisplayBody widget;
-  SearchBar({Key key, this.widget}) : super(key: key);
-
-  @override
-  _SearchBarState createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
-  DisplayBody _widget;
-  final _controller = FloatingSearchBarController();
-
-  @override
-  void initState() {
-    _widget = widget.widget;
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.open();
-    });
-    KeyboardVisibility.onChange.listen((bool visible) {
-      if (!visible) _controller.close();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onQueryChanged(String query) {
-    BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
-  }
-
-  void _onSumitted(String query) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => SearchPage(
-    //               query: query,
-    //             )));
-  }
+  void _onSumitted(String query) {}
 
   @override
   Widget build(BuildContext context) {
+    void _onQueryChanged(String query) {
+      BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
+    }
+
     final actions = [
       FloatingSearchBarAction(
         showIfOpened: false,
@@ -68,36 +33,29 @@ class _SearchBarState extends State<SearchBar> {
       ),
     ];
 
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (BuildContext context, SearchState state) {
-      return FloatingSearchBar(
+      return FloatingSearchAppBar(
+        elevation: 12,
+        alwaysOpened: true,
+        hideKeyboardOnDownScroll: true,
         controller: _controller,
         clearQueryOnClose: false,
         hint: 'Search for a news...',
         iconColor: Colors.grey,
+        color: Colors.white,
+        colorOnScroll: Colors.white,
+        liftOnScrollElevation: 4,
         transitionDuration: const Duration(milliseconds: 300),
         transitionCurve: Curves.easeInOutCubic,
-        physics: const BouncingScrollPhysics(),
-        axisAlignment: isPortrait ? 0.0 : -1.0,
-        openAxisAlignment: 0.0,
-        maxWidth: isPortrait ? 600 : 500,
         actions: actions,
         progress: state is SearchLoading,
         debounceDelay: const Duration(milliseconds: 500),
         onQueryChanged: _onQueryChanged,
         onSubmitted: _onSumitted,
-        scrollPadding: EdgeInsets.zero,
-        transition: CircularFloatingSearchBarTransition(),
-        builder: (context, _) => Container(
-          child: SearchItemBuilder(results: state.results),
-          margin: EdgeInsets.only(top: 8),
+        body: ListView(
+          children: [SearchItemBuilder(results: state.results)],
         ),
-        // SearchItemBuilder(
-        //   result: result,
-        // ),
       );
     });
   }

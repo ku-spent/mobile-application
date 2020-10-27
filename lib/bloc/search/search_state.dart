@@ -15,7 +15,7 @@ class SearchInitial extends SearchState {
 }
 
 class SearchLoading extends SearchState {
-  const SearchLoading() : super(const [], '');
+  const SearchLoading({List<SearchResult> results}) : super(results, '');
 
   @override
   String toString() => 'SearchLoading';

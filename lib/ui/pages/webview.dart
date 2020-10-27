@@ -26,7 +26,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   Future<String> _getUrl() async {
     return Future.delayed(
-        const Duration(milliseconds: 300), () => widget.news.url);
+        const Duration(milliseconds: 400), () => widget.news.url);
   }
 
   void _loadFinished(String url) {
@@ -53,7 +53,6 @@ class _WebViewPageState extends State<WebViewPage> {
                 snapshot.hasData
                     ? WebView(
                         initialUrl: snapshot.data,
-                        javascriptMode: JavascriptMode.unrestricted,
                         onPageFinished: _loadFinished,
                       )
                     : Container()),

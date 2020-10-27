@@ -16,11 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController _scrollController;
-  final _scrollThreshold = 200.0;
   FeedBloc _feedBloc;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  ScrollController _scrollController;
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final _scrollThreshold = 200.0;
 
   @override
   void initState() {

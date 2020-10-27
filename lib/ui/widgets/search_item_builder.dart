@@ -24,34 +24,26 @@ class SearchItemBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Material(
-        color: Colors.white,
-        elevation: 4.0,
-        child: ImplicitlyAnimatedList<SearchResult>(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          items: results,
-          removeDuration: const Duration(milliseconds: 200),
-          insertDuration: const Duration(milliseconds: 200),
-          updateDuration: const Duration(milliseconds: 200),
-          areItemsTheSame: (a, b) => a == b,
-          itemBuilder: (context, animation, result, i) {
-            return SizeFadeTransition(
-              animation: animation,
-              child: buildItem(context, result),
-            );
-          },
-          updateItemBuilder: (context, animation, result) {
-            return FadeTransition(
-              opacity: animation,
-              child: buildItem(context, result),
-            );
-          },
-        ),
-      ),
+    return ImplicitlyAnimatedList<SearchResult>(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      items: results,
+      removeDuration: const Duration(milliseconds: 200),
+      insertDuration: const Duration(milliseconds: 200),
+      updateDuration: const Duration(milliseconds: 200),
+      areItemsTheSame: (a, b) => a == b,
+      itemBuilder: (context, animation, result, i) {
+        return SizeFadeTransition(
+          animation: animation,
+          child: buildItem(context, result),
+        );
+      },
+      updateItemBuilder: (context, animation, result) {
+        return FadeTransition(
+          opacity: animation,
+          child: buildItem(context, result),
+        );
+      },
     );
   }
 

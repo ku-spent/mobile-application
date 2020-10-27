@@ -32,7 +32,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<FeedState> _mapLoadedFeedState() async* {
     try {
       final curState = state;
-      // yield FeedLoading();
       if (curState is FeedInitial) {
         final feeds = await feedRepository.fetchFeeds(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
