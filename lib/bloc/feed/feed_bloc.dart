@@ -5,17 +5,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:spent/model/news.dart';
 import 'package:spent/repository/feed_repository.dart';
-import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  FeedRepository feedRepository = FeedRepository(client: http.Client());
   final int fetchSize = 5;
+  final FeedRepository feedRepository;
 
-  FeedBloc() : super(FeedInitial());
+  FeedBloc({@required this.feedRepository}) : super(FeedInitial());
 
   @override
   Stream<FeedState> mapEventToState(
@@ -23,6 +22,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   ) async* {
     if (state is FeedInitial || (event is FetchFeed && __hasMore(state))) {
       yield* _mapLoadedFeedState();
+    } else if (event is RefreshFeed) {
+      yield* _mapRefreshLoadedFeedState();
     }
   }
 
@@ -31,6 +32,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<FeedState> _mapLoadedFeedState() async* {
     try {
       final curState = state;
+      // yield FeedLoading();
       if (curState is FeedInitial) {
         final feeds = await feedRepository.fetchFeeds(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
@@ -40,6 +42,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         yield news.isEmpty
             ? curState.copyWith(hasMore: false)
             : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
+      }
+    } catch (_) {
+      yield FeedError();
+    }
+  }
+
+  Stream<FeedState> _mapRefreshLoadedFeedState() async* {
+    try {
+      final curState = state;
+      // yield FeedLoading();
+      if (curState is FeedLoaded) {
+        final feeds = await feedRepository.fetchFeeds(from: 0, size: fetchSize);
+        yield FeedLoaded(feeds: feeds, hasMore: true);
       }
     } catch (_) {
       yield FeedError();

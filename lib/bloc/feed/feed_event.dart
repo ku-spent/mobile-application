@@ -11,3 +11,8 @@ class FetchFeed extends FeedEvent {
   @override
   List<Object> get props => [];
 }
+
+class RefreshFeed extends FeedEvent {
+  @override
+  List<Object> get props => [];
+}

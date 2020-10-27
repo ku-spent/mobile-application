@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/bloc/feed/feed_bloc.dart';
 import 'package:spent/ui/widgets/card_base.dart';
 
@@ -17,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController;
   final _scrollThreshold = 200.0;
   FeedBloc _feedBloc;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
 
   @override
   void initState() {
@@ -43,8 +47,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fetchFeeds() {
-    print('fetch');
     _feedBloc.add(FetchFeed());
+  }
+
+  void _onRefresh() async {
+    _feedBloc.add(RefreshFeed());
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _refreshController.refreshCompleted();
+    });
   }
 
   @override
@@ -52,29 +62,32 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
       if (state is FeedInitial) {
         return Center(child: CircularProgressIndicator());
-      }
-      if (state is FeedLoaded) {
+      } else if (state is FeedLoaded) {
         if (state.feeds.isEmpty) {
           return Center(
             child: Text('no feeds'),
           );
         }
-        return Center(
-            child: ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount:
-              state.hasMore ? state.feeds.length + 1 : state.feeds.length,
-          itemBuilder: (BuildContext context, int index) =>
-              index >= state.feeds.length
-                  ? BottomLoader()
-                  : CardBase(news: state.feeds[index]),
-          separatorBuilder: (BuildContext context, int index) => SizedBox(
-            height: 8,
+        return SmartRefresher(
+          enablePullDown: true,
+          header: WaterDropMaterialHeader(),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount:
+                state.hasMore ? state.feeds.length + 1 : state.feeds.length,
+            itemBuilder: (BuildContext context, int index) =>
+                index >= state.feeds.length
+                    ? BottomLoader()
+                    : CardBase(news: state.feeds[index]),
+            separatorBuilder: (BuildContext context, int index) => SizedBox(
+              height: 8,
+            ),
+            controller: _scrollController,
           ),
-          controller: _scrollController,
-        ));
-      }
-      if (state is FeedError) {
+        );
+      } else if (state is FeedError) {
         return Center(child: Text('Something went wrong!'));
       }
     });
