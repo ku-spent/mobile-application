@@ -60,6 +60,7 @@ class AppScreen extends StatelessWidget {
                 ],
               ),
               resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.white,
               body: PageView(
                 controller: _pageController,
                 onPageChanged: (int index) => _onPageChanged(context, index),

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
 import 'package:spent/ui/widgets/search_item_builder.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class SearchBar extends StatelessWidget {
   final FloatingSearchBarController _controller = FloatingSearchBarController();

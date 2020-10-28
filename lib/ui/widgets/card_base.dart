@@ -35,6 +35,7 @@ class _CardBaseState extends State<CardBase> {
       Navigator.push(
           context,
           CupertinoPageRoute(
+              maintainState: false,
               builder: (context) => WebViewPage(
                     news: _news,
                   )));
