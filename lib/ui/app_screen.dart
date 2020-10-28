@@ -41,7 +41,8 @@ class AppScreen extends StatelessWidget {
               create: (BuildContext context) => FeedBloc(
                   feedRepository: FeedRepository(client: http.Client()))),
           BlocProvider<NavigationBloc>(
-              create: (BuildContext context) => NavigationBloc()),
+              create: (BuildContext context) =>
+                  NavigationBloc(pageController: _pageController)),
           BlocProvider<SearchBloc>(
               create: (BuildContext context) => SearchBloc())
         ],
@@ -72,10 +73,9 @@ class AppScreen extends StatelessWidget {
                   BookmarkPage()
                 ],
               ),
-              // body: _getBody(state),
               bottomNavigationBar: BottomNavbar(
-                  scrollController: _scrollController,
-                  pageController: _pageController)),
+                scrollController: _scrollController,
+              )),
         ));
   }
 }

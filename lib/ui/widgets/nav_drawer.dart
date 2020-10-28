@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/bloc/navigation/navigation_bloc.dart';
 
 class NavDrawer extends StatelessWidget {
+  const NavDrawer({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     void _handleItemClick(BuildContext context, NavItem item) {
@@ -37,22 +39,24 @@ class NavDrawer extends StatelessWidget {
                     height: 32,
                   ),
                   ListTile(
+                    title: Text('หน้าแรก'),
                     leading: Icon(Icons.home),
                     selected: state.selectedPage == NavItem.page_home,
-                    title: Text('หน้าแรก'),
                     onTap: () => _handleItemClick(context, NavItem.page_home),
                   ),
                   ListTile(
+                    title: Text('การติดตาม'),
                     leading: Icon(Icons.rss_feed_rounded),
                     selected: state.selectedPage == NavItem.page_following,
-                    title: Text('การติดตาม'),
                     onTap: () =>
                         _handleItemClick(context, NavItem.page_following),
                   ),
                   ListTile(
-                    leading: Icon(Icons.bookmark),
                     title: Text('ที่บันทึกไว้'),
-                    onTap: () => {Navigator.of(context).pop()},
+                    leading: Icon(Icons.bookmark),
+                    selected: state.selectedPage == NavItem.page_bookmark,
+                    onTap: () =>
+                        {_handleItemClick(context, NavItem.page_bookmark)},
                   ),
                   ListTile(
                     leading: Icon(Icons.history),

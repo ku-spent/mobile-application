@@ -23,7 +23,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (state is FeedInitial || (event is FetchFeed && __hasMore(state))) {
       yield* _mapLoadedFeedState();
     } else if (event is RefreshFeed) {
-      yield* _mapRefreshLoadedFeedState();
+      yield* _mapRefreshLoadedFeedState(event.callback);
     }
   }
 
@@ -47,14 +47,15 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
   }
 
-  Stream<FeedState> _mapRefreshLoadedFeedState() async* {
+  Stream<FeedState> _mapRefreshLoadedFeedState(
+      RefreshFeedCallback callback) async* {
     try {
       final curState = state;
-      // yield FeedLoading();
       if (curState is FeedLoaded) {
         final feeds = await feedRepository.fetchFeeds(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
       }
+      if (callback != null) callback();
     } catch (_) {
       yield FeedError();
     }

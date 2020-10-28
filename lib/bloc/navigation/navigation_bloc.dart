@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(NavigationInitial());
+  final PageController pageController;
+
+  bool _isNavigating = false;
+
+  NavigationBloc({@required this.pageController}) : super(NavigationInitial());
 
   int _getIndex(NavItem item) => NavItem.values.indexWhere((e) => e == item);
 
@@ -15,10 +20,21 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   Stream<NavigationState> mapEventToState(
     NavigationEvent event,
   ) async* {
-    if (event is NavigateTo) {
+    if (!_isNavigating && event is NavigateTo) {
+      _isNavigating = true;
       if (event.destination != state.selectedPage) {
-        yield NavigationState(event.destination, _getIndex(event.destination));
+        int index = _getIndex(event.destination);
+        if (index >= 0) {
+          pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOut);
+        }
+        yield NavigationState(event.destination, index);
       }
+      // debounce
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _isNavigating = false;
+      });
     }
   }
 }

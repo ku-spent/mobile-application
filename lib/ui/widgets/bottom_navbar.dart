@@ -4,15 +4,14 @@ import 'package:spent/bloc/navigation/navigation_bloc.dart';
 
 class BottomNavbar extends StatelessWidget {
   final ScrollController scrollController;
-  final PageController pageController;
 
-  const BottomNavbar({Key key, this.scrollController, this.pageController})
-      : super(key: key);
+  const BottomNavbar({Key key, this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     void _scrollToTop(int index, int currentIndex) {
-      if (scrollController != null && currentIndex == index)
+      bool isHomePage = currentIndex == 0;
+      if (isHomePage && scrollController != null && currentIndex == index)
         scrollController.animateTo(scrollController.position.minScrollExtent,
             duration: Duration(milliseconds: 270), curve: Curves.easeInExpo);
     }
@@ -21,8 +20,6 @@ class BottomNavbar extends StatelessWidget {
       NavItem item = NavItem.values[index];
       _scrollToTop(index, currentIndex);
       BlocProvider.of<NavigationBloc>(context).add(NavigateTo(item));
-      pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 150), curve: Curves.easeOut);
     }
 
     return BlocBuilder<NavigationBloc, NavigationState>(
