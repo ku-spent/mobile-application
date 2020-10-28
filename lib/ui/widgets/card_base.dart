@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
+import 'package:spent/ui/pages/source_page.dart';
 import 'package:spent/ui/pages/webview.dart';
 import 'package:spent/ui/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -10,8 +11,10 @@ enum LikeStatus { like, unlike, none }
 
 class CardBase extends StatefulWidget {
   final News news;
+  final bool canClickSource;
 
-  CardBase({Key key, @required this.news}) : super(key: key);
+  CardBase({Key key, @required this.news, this.canClickSource = true})
+      : super(key: key);
 
   @override
   _CardBaseState createState() => _CardBaseState();
@@ -42,6 +45,14 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
+  void _goToSourcePage(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            maintainState: false,
+            builder: (context) => SourcePage(source: _news.source)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,24 +62,34 @@ class _CardBaseState extends State<CardBase> {
           splashColor: Colors.blue.withAlpha(30),
           child: Container(
             width: 360,
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            padding: EdgeInsets.only(left: 16, right: 16, bottom: 4),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        SourceIcon(
-                          source: _news.source,
+                    IgnorePointer(
+                      ignoring: !widget.canClickSource,
+                      child: InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () => _goToSourcePage(context),
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              SourceIcon(
+                                source: _news.source,
+                              ),
+                              Container(
+                                width: 8,
+                              ),
+                              Text(
+                                _news.source,
+                              )
+                            ],
+                          ),
                         ),
-                        Container(
-                          width: 8,
-                        ),
-                        Text(
-                          _news.source,
-                        )
-                      ],
+                      ),
                     ),
                     IconButton(
                       icon: _isBookmarked

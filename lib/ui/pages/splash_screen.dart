@@ -4,13 +4,17 @@ import 'package:splashscreen/splashscreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key key}) : super(key: key);
+  final PageController pageController;
+
+  const SplashPage({Key key, this.pageController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
         seconds: 1,
-        navigateAfterSeconds: AppScreen(),
+        navigateAfterSeconds: AppScreen(
+          pageController: pageController,
+        ),
         title: Text(
           'SPENT',
           style: GoogleFonts.kanit(),

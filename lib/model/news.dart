@@ -51,3 +51,11 @@ const Map<EnumNewsSource, String> NewsSourceImage = {
       'https://www.matichon.co.th/wp-content/themes/matichon-theme/images/matichon-logo-retina.png',
   EnumNewsSource.thaipbs: 'https://news.thaipbs.or.th/favicon.ico',
 };
+
+const Map<EnumNewsSource, String> NewsSourceCover = {
+  EnumNewsSource.voiceTV:
+      'https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIEyjkIzuxZVM7y9dNXa6BvDcWSyyVFqz6CEowoMZWpKrcbE7su.jpg',
+  EnumNewsSource.matichon:
+      'https://www.khaosod.co.th/wpapp/uploads/2020/02/%E0%B8%A1%E0%B8%95%E0%B8%B4%E0%B8%8A%E0%B8%99.jpg',
+  EnumNewsSource.thaipbs: 'https://www.thaipbs.or.th/images/logo/home_logo.jpg',
+};

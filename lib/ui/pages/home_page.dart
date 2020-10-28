@@ -19,9 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FeedBloc _feedBloc;
   ScrollController _scrollController;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
   final _scrollThreshold = 200.0;
+  final RefreshController _refreshController = RefreshController();
 
   @override
   void initState() {

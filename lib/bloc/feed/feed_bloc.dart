@@ -20,7 +20,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<FeedState> mapEventToState(
     FeedEvent event,
   ) async* {
-    if (state is FeedInitial || (event is FetchFeed && __hasMore(state))) {
+    if (event is FetchFeed && (__hasMore(state) || state is FeedInitial)) {
       yield* _mapLoadedFeedState();
     } else if (event is RefreshFeed) {
       yield* _mapRefreshLoadedFeedState(event.callback);
@@ -38,7 +38,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       } else if (curState is FeedLoaded) {
         final feeds = await feedRepository.fetchFeeds(
             from: curState.feeds.length, size: fetchSize);
-        yield news.isEmpty
+        yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
             : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
       }
@@ -64,7 +64,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   @override
   Stream<Transition<FeedEvent, FeedState>> transformEvents(
       Stream<FeedEvent> events, transitionFn) {
-    // TODO: implement transformEvents
     return super.transformEvents(
         events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
   }
