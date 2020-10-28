@@ -7,24 +7,13 @@ class SourceIcon extends StatelessWidget {
 
   const SourceIcon({Key key, @required this.source}) : super(key: key);
 
-  String get _sourceImage {
-    if (source == NewsSource[EnumNewsSource.matichon])
-      return NewsSourceImage[EnumNewsSource.matichon];
-    else if (source == NewsSource[EnumNewsSource.voiceTV])
-      return NewsSourceImage[EnumNewsSource.voiceTV];
-    else if (source == NewsSource[EnumNewsSource.thaipbs])
-      return NewsSourceImage[EnumNewsSource.thaipbs];
-    else
-      return '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 20,
       height: 20,
       child: CachedNetworkImage(
-        imageUrl: _sourceImage,
+        imageUrl: NewsSource.newsSourceIcon[source],
         placeholder: (context, url) => Container(
           color: Colors.black26,
           width: 20,

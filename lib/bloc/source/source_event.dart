@@ -7,7 +7,21 @@ abstract class SourceEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class InitialSource extends SourceEvent {
+  final String source;
+
+  const InitialSource({@required this.source});
+
+  @override
+  List<Object> get props => [];
+}
+
 class FetchSource extends SourceEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ClearSource extends SourceEvent {
   @override
   List<Object> get props => [];
 }

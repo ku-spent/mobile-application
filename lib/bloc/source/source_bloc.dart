@@ -11,18 +11,20 @@ part 'source_event.dart';
 part 'source_state.dart';
 
 class SourceBloc extends Bloc<SourceEvent, SourceState> {
+  String source;
   final int fetchSize = 5;
   final FeedRepository feedRepository;
-  final String source;
 
-  SourceBloc({@required this.feedRepository, @required this.source})
-      : super(SourceInitial());
+  SourceBloc({@required this.feedRepository}) : super(SourceInitial());
 
   @override
   Stream<SourceState> mapEventToState(
     SourceEvent event,
   ) async* {
-    if ((event is FetchSource &&
+    if (event is InitialSource) {
+      source = event.source;
+      yield* _mapInitialLoadedSourceState();
+    } else if ((event is FetchSource &&
         (__hasMore(state) || state is SourceInitial))) {
       yield* _mapLoadedSourceState();
     } else if (event is RefreshSource) {
@@ -31,6 +33,16 @@ class SourceBloc extends Bloc<SourceEvent, SourceState> {
   }
 
   bool __hasMore(SourceState state) => state is SourceLoaded && state.hasMore;
+
+  Stream<SourceState> _mapInitialLoadedSourceState() async* {
+    try {
+      final feeds = await feedRepository.fetchFeeds(
+          from: 0, size: fetchSize, source: source);
+      yield SourceLoaded(feeds: feeds, hasMore: true);
+    } catch (_) {
+      yield SourceError();
+    }
+  }
 
   Stream<SourceState> _mapLoadedSourceState() async* {
     try {

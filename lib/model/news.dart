@@ -32,30 +32,23 @@ class News extends Equatable {
   }
 }
 
-enum EnumNewsSource {
-  voiceTV,
-  matichon,
-  thaipbs,
+class NewsSource {
+  static const String voiceTV = 'Voice TV';
+  static const String matichon = 'มติชน';
+  static const String thaipbs = 'thaipbs';
+
+  static Map<String, String> newsSourceIcon = {
+    voiceTV: 'https://voicetv.co.th/images/icons/favicon-32x32.png',
+    matichon:
+        'https://www.matichon.co.th/wp-content/themes/matichon-theme/images/matichon-logo-retina.png',
+    thaipbs: 'https://news.thaipbs.or.th/favicon.ico',
+  };
+
+  static Map<String, String> newsSourceCover = {
+    voiceTV:
+        'https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIEyjkIzuxZVM7y9dNXa6BvDcWSyyVFqz6CEowoMZWpKrcbE7su.jpg',
+    matichon:
+        'https://www.khaosod.co.th/wpapp/uploads/2020/02/%E0%B8%A1%E0%B8%95%E0%B8%B4%E0%B8%8A%E0%B8%99.jpg',
+    thaipbs: 'https://www.thaipbs.or.th/images/logo/home_logo.jpg',
+  };
 }
-
-const Map<EnumNewsSource, String> NewsSource = {
-  EnumNewsSource.voiceTV: 'Voice TV',
-  EnumNewsSource.matichon: 'มติชน',
-  EnumNewsSource.thaipbs: 'thaipbs',
-};
-
-const Map<EnumNewsSource, String> NewsSourceImage = {
-  EnumNewsSource.voiceTV:
-      'https://voicetv.co.th/images/icons/favicon-32x32.png',
-  EnumNewsSource.matichon:
-      'https://www.matichon.co.th/wp-content/themes/matichon-theme/images/matichon-logo-retina.png',
-  EnumNewsSource.thaipbs: 'https://news.thaipbs.or.th/favicon.ico',
-};
-
-const Map<EnumNewsSource, String> NewsSourceCover = {
-  EnumNewsSource.voiceTV:
-      'https://www.thairath.co.th/media/dFQROr7oWzulq5FZUIEyjkIzuxZVM7y9dNXa6BvDcWSyyVFqz6CEowoMZWpKrcbE7su.jpg',
-  EnumNewsSource.matichon:
-      'https://www.khaosod.co.th/wpapp/uploads/2020/02/%E0%B8%A1%E0%B8%95%E0%B8%B4%E0%B8%8A%E0%B8%99.jpg',
-  EnumNewsSource.thaipbs: 'https://www.thaipbs.or.th/images/logo/home_logo.jpg',
-};

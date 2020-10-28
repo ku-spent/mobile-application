@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/bloc/feed/feed_bloc.dart';
 import 'package:spent/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
+import 'package:spent/bloc/source/source_bloc.dart';
 import 'package:spent/repository/feed_repository.dart';
 import 'package:spent/ui/app_screen.dart';
 import 'package:spent/ui/theme.dart';
@@ -34,10 +35,10 @@ class MyApp extends StatelessWidget {
                   NavigationBloc(pageController: _pageController)),
           BlocProvider<SearchBloc>(
               create: (BuildContext context) => SearchBloc()),
-          // BlocProvider<SourceBloc>(
-          //   create: (BuildContext context) =>
-          //       SourceBloc(feedRepository: _feedRepository),
-          // )
+          BlocProvider<SourceBloc>(
+            create: (BuildContext context) =>
+                SourceBloc(feedRepository: _feedRepository),
+          )
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

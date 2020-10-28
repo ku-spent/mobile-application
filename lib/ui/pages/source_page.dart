@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/bloc/source/source_bloc.dart';
 import 'package:spent/model/news.dart';
-import 'package:spent/repository/feed_repository.dart';
 import 'package:spent/ui/pages/home_page.dart';
 import 'package:spent/ui/widgets/card_base.dart';
-import 'package:http/http.dart' as http;
 
 class SourcePage extends StatefulWidget {
   final String source;
@@ -28,22 +25,15 @@ class _SourcePageState extends State<SourcePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => SourceBloc(
-            feedRepository: FeedRepository(client: http.Client()),
-            source: widget.source),
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          floatingActionButton: FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
-              onPressed: _scrollToTop,
-              child: Icon(Icons.arrow_upward_rounded)),
-          // appBar: AppBar(SourcePageOptions
-          //   backgroundColor: Colors.transparent,
-          // ),
-          body: SourceContent(
-              source: widget.source, scrollController: scrollController),
-        ));
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
+          onPressed: _scrollToTop,
+          child: Icon(Icons.arrow_upward_rounded)),
+      body: SourceContent(
+          source: widget.source, scrollController: scrollController),
+    );
   }
 }
 
@@ -64,7 +54,12 @@ class _SourceContentState extends State<SourceContent> {
   ScrollController _scrollController;
 
   final _scrollThreshold = 200.0;
-  final RefreshController _refreshController = RefreshController();
+  // final RefreshController _refreshController = RefreshController();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -73,19 +68,8 @@ class _SourceContentState extends State<SourceContent> {
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () {
       _sourceBloc = BlocProvider.of<SourceBloc>(context);
-      _fetchFeeds();
+      _sourceBloc.add(InitialSource(source: widget.source));
     });
-  }
-
-  String get _sourceImage {
-    if (widget.source == NewsSource[EnumNewsSource.matichon])
-      return NewsSourceCover[EnumNewsSource.matichon];
-    else if (widget.source == NewsSource[EnumNewsSource.voiceTV])
-      return NewsSourceCover[EnumNewsSource.voiceTV];
-    else if (widget.source == NewsSource[EnumNewsSource.thaipbs])
-      return NewsSourceCover[EnumNewsSource.thaipbs];
-    else
-      return '';
   }
 
   void _onScroll() {
@@ -100,16 +84,17 @@ class _SourceContentState extends State<SourceContent> {
     _sourceBloc.add(FetchSource());
   }
 
-  void _onRefresh() async {
-    _sourceBloc.add(RefreshSource(
-        source: widget.source,
-        callback: () => {_refreshController.refreshCompleted()}));
-  }
+  // void _onRefresh() async {
+  //   _sourceBloc.add(RefreshSource(
+  //       source: widget.source,
+  //       callback: () => {_refreshController.refreshCompleted()}));
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SourceBloc, SourceState>(builder: (context, state) {
-      if (state is SourceInitial) {
+      if (context.bloc<SourceBloc>().source != widget.source ||
+          state is SourceInitial) {
         return Center(child: CircularProgressIndicator());
       } else if (state is SourceLoaded) {
         if (state.feeds.isEmpty) {
@@ -152,7 +137,7 @@ class _SourceContentState extends State<SourceContent> {
                     StretchMode.zoomBackground,
                   ],
                   background: CachedNetworkImage(
-                    imageUrl: _sourceImage,
+                    imageUrl: NewsSource.newsSourceCover[widget.source],
                     placeholder: (context, url) => Container(
                       color: Colors.black26,
                     ),
