@@ -2,7 +2,7 @@ part of 'search_bloc.dart';
 
 abstract class SearchState extends Equatable {
   final String query;
-  final List<SearchResult> results;
+  final List<SearchItem> results;
 
   const SearchState(this.results, this.query);
 
@@ -15,15 +15,14 @@ class SearchInitial extends SearchState {
 }
 
 class SearchLoading extends SearchState {
-  const SearchLoading({List<SearchResult> results}) : super(results, '');
+  const SearchLoading({List<SearchItem> results}) : super(results, '');
 
   @override
   String toString() => 'SearchLoading';
 }
 
 class SearchLoaded extends SearchState {
-  SearchLoaded(List<SearchResult> results, String query)
-      : super(results, query);
+  SearchLoaded(List<SearchItem> results, String query) : super(results, query);
 
   @override
   String toString() {

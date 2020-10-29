@@ -5,28 +5,30 @@ import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorder
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
-import 'package:spent/model/search_result.dart';
+import 'package:spent/model/search_item.dart';
+
+typedef OnClick = void Function(String query);
 
 class SearchItemBuilder extends StatelessWidget {
   final String title;
-  final List<SearchResult> results;
+  final List<SearchItem> results;
+  final OnClick onClick;
 
   const SearchItemBuilder({
     Key key,
     @required this.results,
     @required this.title,
+    @required this.onClick,
   }) : super(key: key);
 
-  // Icon _buildIconType(ResultType type) {
-  //   switch (type) {
-  //     case ResultType.news:
-  //       return Icon(Icons.fiber_new_sharp);
-  //     case ResultType.topic:
-  //       return Icon(Icons.topic);
-  //     default:
-  //       return Icon(Icons.rss_feed);
-  //   }
-  // }
+  Icon _buildIconType(String type) {
+    if (type == SearchItem.category)
+      return Icon(Icons.fiber_new_rounded);
+    else if (type == SearchItem.topic)
+      return Icon(Icons.topic);
+    else if (type == SearchItem.source) return Icon(Icons.rss_feed);
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class SearchItemBuilder extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               )),
-      ImplicitlyAnimatedList<SearchResult>(
+      ImplicitlyAnimatedList<SearchItem>(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         items: results,
@@ -66,7 +68,7 @@ class SearchItemBuilder extends StatelessWidget {
     ]);
   }
 
-  Widget buildItem(BuildContext context, SearchResult result) {
+  Widget buildItem(BuildContext context, SearchItem result) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
@@ -77,25 +79,22 @@ class SearchItemBuilder extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              FloatingSearchBar.of(context).close();
               Future.delayed(
-                const Duration(milliseconds: 500),
-                () => {
-                  // model.clear()
-                },
+                const Duration(milliseconds: 100),
+                () => {onClick(result.value)},
               );
             },
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // SizedBox(
-                  //   width: 36,
-                  //   child: AnimatedSwitcher(
-                  //     duration: const Duration(milliseconds: 500),
-                  //     child: _buildIconType(result.type),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    width: 36,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      child: _buildIconType(result.type),
+                    ),
+                  ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
@@ -103,12 +102,12 @@ class SearchItemBuilder extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          result.name,
+                          result.value,
                           style: textTheme.subtitle1,
                         ),
                         Text(
-                          result.name,
-                          style: textTheme.bodyText2
+                          result.description,
+                          style: textTheme.caption
                               .copyWith(color: Colors.grey.shade600),
                         ),
                       ],

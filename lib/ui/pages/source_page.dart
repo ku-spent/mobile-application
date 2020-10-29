@@ -17,42 +17,11 @@ class SourcePage extends StatefulWidget {
 
 class _SourcePageState extends State<SourcePage> {
   final ScrollController scrollController = ScrollController();
-
-  void _scrollToTop() {
-    scrollController.animateTo(scrollController.position.minScrollExtent,
-        duration: Duration(milliseconds: 300), curve: Curves.easeInExpo);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
-          onPressed: _scrollToTop,
-          child: Icon(Icons.arrow_upward_rounded)),
-      body: SourceContent(
-          source: widget.source, scrollController: scrollController),
-    );
-  }
-}
-
-class SourceContent extends StatefulWidget {
-  final String source;
-  final ScrollController scrollController;
-
-  SourceContent(
-      {Key key, @required this.source, @required this.scrollController})
-      : super(key: key);
-
-  @override
-  _SourceContentState createState() => _SourceContentState();
-}
-
-class _SourceContentState extends State<SourceContent> {
   SourceBloc _sourceBloc;
   ScrollController _scrollController;
+  bool _isShowFloatingAction = false;
 
+  final _minScrollThreshold = 50.0;
   final _scrollThreshold = 200.0;
   // final RefreshController _refreshController = RefreshController();
 
@@ -64,7 +33,7 @@ class _SourceContentState extends State<SourceContent> {
   @override
   void initState() {
     super.initState();
-    _scrollController = widget.scrollController;
+    _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () {
       _sourceBloc = BlocProvider.of<SourceBloc>(context);
@@ -74,8 +43,19 @@ class _SourceContentState extends State<SourceContent> {
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
+    final minScroll =
+        _scrollController.position.minScrollExtent + _minScrollThreshold;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
+
+    if (currentScroll > minScroll && _isShowFloatingAction == false) {
+      setState(() {
+        _isShowFloatingAction = true;
+      });
+    } else if (currentScroll <= minScroll) {
+      setState(() {
+        _isShowFloatingAction = false;
+      });
+    } else if (maxScroll - currentScroll <= _scrollThreshold) {
       _fetchFeeds();
     }
   }
@@ -90,86 +70,166 @@ class _SourceContentState extends State<SourceContent> {
   //       callback: () => {_refreshController.refreshCompleted()}));
   // }
 
+  void _scrollToTop() {
+    scrollController.animateTo(scrollController.position.minScrollExtent,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInExpo);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SourceBloc, SourceState>(builder: (context, state) {
-      if (context.bloc<SourceBloc>().source != widget.source ||
-          state is SourceInitial) {
-        return Center(child: CircularProgressIndicator());
-      } else if (state is SourceLoaded) {
-        if (state.feeds.isEmpty) {
-          return Center(
-            child: Text('no feeds'),
-          );
-        }
-        return CustomScrollView(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-                actions: [
-                  PopupMenuButton(itemBuilder: (BuildContext context) {
-                    return SourcePageOptions.choices
-                        .map((choice) => PopupMenuItem(
-                            value: choice,
-                            child: Row(
-                              children: [
-                                SourcePageOptions.icons[choice],
-                                Container(
-                                  width: 16,
-                                ),
-                                Text(choice)
-                              ],
-                            )))
-                        .toList();
-                  })
-                ],
-                expandedHeight: 190.0,
-                stretch: true,
-                leading: IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                backgroundColor: Colors.transparent,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: [
-                    StretchMode.zoomBackground,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      floatingActionButton: AnimatedOpacity(
+        opacity: _isShowFloatingAction ? 1 : 0,
+        duration: const Duration(milliseconds: 200),
+        child: FloatingActionButton(
+            tooltip: 'Scroll to Top',
+            backgroundColor: Theme.of(context).primaryColor.withOpacity(0.7),
+            onPressed: _scrollToTop,
+            child: Icon(Icons.arrow_upward_rounded)),
+      ),
+      body: BlocBuilder<SourceBloc, SourceState>(builder: (context, state) {
+        if (context.bloc<SourceBloc>().source != widget.source ||
+            state is SourceInitial) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is SourceLoaded) {
+          if (state.feeds.isEmpty) {
+            return Center(
+              child: Text('no feeds'),
+            );
+          }
+          return CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                  actions: [
+                    PopupMenuButton(itemBuilder: (BuildContext context) {
+                      return SourcePageOptions.choices
+                          .map((choice) => PopupMenuItem(
+                              value: choice,
+                              child: Row(
+                                children: [
+                                  SourcePageOptions.icons[choice],
+                                  Container(
+                                    width: 16,
+                                  ),
+                                  Text(choice)
+                                ],
+                              )))
+                          .toList();
+                    })
                   ],
-                  background: CachedNetworkImage(
-                    imageUrl: NewsSource.newsSourceCover[widget.source],
-                    placeholder: (context, url) => Container(
-                      color: Colors.black26,
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.cover,
+                  expandedHeight: 190.0,
+                  stretch: true,
+                  leading: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                )),
-            SliverPadding(
-                padding: EdgeInsets.only(top: 16.0),
-                sliver: SliverList(
-                    delegate: SliverChildListDelegate(List.generate(
-                        state.hasMore
-                            ? state.feeds.length + 1
-                            : state.feeds.length,
-                        (index) => index >= state.feeds.length
-                            ? BottomLoader()
-                            : Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 4),
-                                child: CardBase(
-                                  news: state.feeds[index],
-                                  canClickSource: false,
-                                ),
-                              )))))
-          ],
-        );
-      } else if (state is SourceError) {
-        return Center(child: Text('Something went wrong!'));
-      }
-    });
+                  backgroundColor: Colors.transparent,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    stretchModes: [
+                      StretchMode.zoomBackground,
+                    ],
+                    background: CachedNetworkImage(
+                      imageUrl: NewsSource.newsSourceCover[widget.source],
+                      placeholder: (context, url) => Container(
+                        color: Colors.black26,
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
+                    ),
+                  )),
+              SliverPadding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  sliver: SliverList(
+                      delegate: SliverChildListDelegate(List.generate(
+                          state.hasMore
+                              ? state.feeds.length + 1
+                              : state.feeds.length,
+                          (index) => index >= state.feeds.length
+                              ? BottomLoader()
+                              : Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 4),
+                                  child: CardBase(
+                                    news: state.feeds[index],
+                                    canClickSource: false,
+                                  ),
+                                )))))
+            ],
+          );
+        } else if (state is SourceError) {
+          return Center(child: Text('Something went wrong!'));
+        }
+      }),
+    );
   }
 }
+
+// class SourceContent extends StatefulWidget {
+//   final String source;
+//   final ScrollController scrollController;
+
+//   SourceContent(
+//       {Key key, @required this.source, @required this.scrollController})
+//       : super(key: key);
+
+//   @override
+//   _SourceContentState createState() => _SourceContentState();
+// }
+
+// class _SourceContentState extends State<SourceContent> {
+//   SourceBloc _sourceBloc;
+//   ScrollController _scrollController;
+//   // bool isS
+
+//   final _scrollThreshold = 200.0;
+//   // final RefreshController _refreshController = RefreshController();
+
+//   @override
+//   void dispose() {
+//     super.dispose();
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _scrollController = widget.scrollController;
+//     _scrollController.addListener(_onScroll);
+//     Future.delayed(Duration.zero, () {
+//       _sourceBloc = BlocProvider.of<SourceBloc>(context);
+//       _sourceBloc.add(InitialSource(source: widget.source));
+//     });
+//   }
+
+//   void _onScroll() {
+//     final maxScroll = _scrollController.position.maxScrollExtent;
+//     final minScroll = _scrollController.position.minScrollExtent;
+//     final currentScroll = _scrollController.position.pixels;
+//     if (currentScroll == minScroll) {
+//       setState(() {});
+//     } else if (maxScroll - currentScroll <= _scrollThreshold) {
+//       _fetchFeeds();
+//     }
+//   }
+
+//   void _fetchFeeds() {
+//     _sourceBloc.add(FetchSource());
+//   }
+
+//   // void _onRefresh() async {
+//   //   _sourceBloc.add(RefreshSource(
+//   //       source: widget.source,
+//   //       callback: () => {_refreshController.refreshCompleted()}));
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
 
 class SourcePageOptions {
   static const String block = "ซ่อนเนื้อหาจากแหล่งข่าวนี้";

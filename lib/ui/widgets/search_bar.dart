@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:spent/bloc/search/search_bloc.dart';
+import 'package:spent/model/search_item.dart';
+import 'package:spent/ui/pages/source_page.dart';
 import 'package:spent/ui/widgets/search_item_builder.dart';
+
+typedef OnClickItem = void Function(BuildContext context, String source);
 
 class SearchBar extends StatelessWidget {
   final FloatingSearchBarController _controller = FloatingSearchBarController();
@@ -12,26 +17,53 @@ class SearchBar extends StatelessWidget {
 
   void _onSumitted(String query) {}
 
+  final actions = [
+    FloatingSearchBarAction(
+      showIfOpened: false,
+      child: CircularButton(
+        icon: const Icon(
+          Icons.fiber_new_sharp,
+        ),
+        onPressed: () {},
+      ),
+    ),
+    FloatingSearchBarAction.searchToClear(
+      showIfClosed: false,
+    ),
+  ];
+
+  void _onClickCategoryItem(BuildContext context, String source) {}
+
+  void _onClickSourceItem(BuildContext context, String source) {
+    print(123);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            maintainState: false,
+            builder: (context) => SourcePage(source: source)));
+  }
+
   @override
   Widget build(BuildContext context) {
     void _onQueryChanged(String query) {
       BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
     }
 
-    final actions = [
-      FloatingSearchBarAction(
-        showIfOpened: false,
-        child: CircularButton(
-          icon: const Icon(
-            Icons.fiber_new_sharp,
-          ),
-          onPressed: () {},
-        ),
-      ),
-      FloatingSearchBarAction.searchToClear(
-        showIfClosed: false,
-      ),
-    ];
+    Widget _buildResults({List<SearchItem> results, String type}) {
+      final List<SearchItem> typeResults =
+          results.where((item) => item.type == type).toList();
+      OnClickItem _onClick;
+
+      if (type == SearchItem.category)
+        _onClick = _onClickCategoryItem;
+      else if (type == SearchItem.source) _onClick = _onClickSourceItem;
+
+      return SearchItemBuilder(
+        results: typeResults,
+        title: type,
+        onClick: (String query) => _onClick(context, query),
+      );
+    }
 
     return BlocBuilder<SearchBloc, SearchState>(
         builder: (BuildContext context, SearchState state) {
@@ -41,6 +73,7 @@ class SearchBar extends StatelessWidget {
         hideKeyboardOnDownScroll: true,
         controller: _controller,
         clearQueryOnClose: false,
+        hintStyle: GoogleFonts.kanit(),
         hint: 'Search for a news...',
         iconColor: Colors.grey,
         color: Colors.white,
@@ -53,22 +86,21 @@ class SearchBar extends StatelessWidget {
         debounceDelay: const Duration(milliseconds: 500),
         onQueryChanged: _onQueryChanged,
         onSubmitted: _onSumitted,
-        body: ListView(
-          children: [
-            SearchItemBuilder(
-              results: state.results,
-              title: 'test',
-            ),
-            SearchItemBuilder(
-              results: state.results,
-              title: 'test',
-            ),
-            SearchItemBuilder(
-              results: state.results,
-              title: 'test',
-            ),
-          ],
-        ),
+        body: state.results.isEmpty
+            ? Center(
+                child: Text('Search'),
+              )
+            : ListView(
+                children: [
+                  _buildResults(
+                      results: state.results, type: SearchItem.source),
+                  Container(
+                    height: 16,
+                  ),
+                  _buildResults(
+                      results: state.results, type: SearchItem.category),
+                ],
+              ),
       );
     });
   }

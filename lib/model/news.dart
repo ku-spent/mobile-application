@@ -37,6 +37,12 @@ class NewsSource {
   static const String matichon = 'มติชน';
   static const String thaipbs = 'thaipbs';
 
+  static const List<String> values = [
+    voiceTV,
+    matichon,
+    thaipbs,
+  ];
+
   static Map<String, String> newsSourceIcon = {
     voiceTV: 'https://voicetv.co.th/images/icons/favicon-32x32.png',
     matichon:
