@@ -13,7 +13,7 @@ part 'query_state.dart';
 class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
   String query;
   String queryField;
-  final int fetchSize = 5;
+  final int fetchSize = 10;
   final FeedRepository feedRepository;
 
   QueryFeed({@required this.feedRepository}) : super(QueryFeedInitial());
@@ -26,8 +26,7 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
       query = event.query;
       queryField = event.queryField;
       yield* _mapInitialLoadedQueryFeedState();
-    } else if ((event is FetchQueryFeed &&
-        (__hasMore(state) || state is QueryFeedInitial))) {
+    } else if ((event is FetchQueryFeed && __hasMore(state))) {
       yield* _mapLoadedQueryFeedState();
     } else if (event is RefreshQueryFeed) {
       yield* _mapRefreshLoadedQueryFeedState(event.callback);
@@ -41,7 +40,8 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
     try {
       final feeds = await feedRepository.fetchFeeds(
           from: 0, size: fetchSize, query: query, queryField: queryField);
-      yield QueryFeedLoaded(feeds: feeds, hasMore: true);
+      final hasMore = feeds.length >= fetchSize;
+      yield QueryFeedLoaded(feeds: feeds, hasMore: hasMore);
     } catch (_) {
       yield QueryFeedError();
     }
@@ -50,11 +50,7 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
   Stream<QueryFeedState> _mapLoadedQueryFeedState() async* {
     try {
       final curState = state;
-      if (curState is QueryFeedInitial) {
-        final feeds = await feedRepository.fetchFeeds(
-            from: 0, size: fetchSize, query: query, queryField: queryField);
-        yield QueryFeedLoaded(feeds: feeds, hasMore: true);
-      } else if (curState is QueryFeedLoaded) {
+      if (curState is QueryFeedLoaded) {
         final feeds = await feedRepository.fetchFeeds(
             from: curState.feeds.length,
             size: fetchSize,
@@ -94,5 +90,5 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
 
 class QueryField {
   static const String source = 'source';
-  static const String category = 'source';
+  static const String category = 'category';
 }

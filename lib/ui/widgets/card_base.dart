@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/bloc/query/query_bloc.dart';
+import 'package:spent/model/category.dart';
 import 'package:spent/model/news.dart';
+import 'package:spent/model/news_source.dart';
 import 'package:spent/ui/pages/query_page.dart';
 import 'package:spent/ui/pages/webview.dart';
 import 'package:spent/ui/widgets/source_icon.dart';
@@ -46,16 +49,33 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
-  void _goToQueryPage(BuildContext context) {
+  void _goToQuerySourcePage(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            maintainState: false,
-            builder: (context) => QueryPage(
-                  query: _news.source,
-                  queryField: QueryField.source,
-                  coverUrl: NewsSource.newsSourceCover[_news.source],
-                )));
+      context,
+      MaterialPageRoute(
+        maintainState: false,
+        builder: (context) => QueryPage(
+          query: _news.source,
+          queryField: QueryField.source,
+          coverUrl: NewsSource.newsSourceCover[_news.source],
+        ),
+      ),
+    );
+  }
+
+  void _goToQueryCategoryPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        maintainState: false,
+        builder: (context) => QueryPage(
+          isShowTitle: true,
+          query: _news.category,
+          queryField: QueryField.category,
+          coverUrl: Category.newsCategoryCover[_news.category],
+        ),
+      ),
+    );
   }
 
   @override
@@ -67,7 +87,7 @@ class _CardBaseState extends State<CardBase> {
           splashColor: Colors.blue.withAlpha(30),
           child: Container(
             width: 360,
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 4),
+            padding: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
             child: Column(
               children: [
                 Row(
@@ -77,7 +97,7 @@ class _CardBaseState extends State<CardBase> {
                       ignoring: !widget.canClickSource,
                       child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
-                        onTap: () => _goToQueryPage(context),
+                        onTap: () => _goToQuerySourcePage(context),
                         child: Container(
                           padding: EdgeInsets.all(4),
                           child: Row(
@@ -86,11 +106,20 @@ class _CardBaseState extends State<CardBase> {
                                 source: _news.source,
                               ),
                               Container(
-                                width: 8,
+                                width: 12,
                               ),
-                              Text(
-                                _news.source,
-                              )
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _news.source,
+                                  ),
+                                  Text(
+                                    timeago.format(_news.pubDate, locale: 'th'),
+                                    style: Theme.of(context).textTheme.caption,
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -111,7 +140,7 @@ class _CardBaseState extends State<CardBase> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(top: 8, bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: CachedNetworkImage(
@@ -149,9 +178,15 @@ class _CardBaseState extends State<CardBase> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        timeago.format(_news.pubDate, locale: 'th'),
-                        style: Theme.of(context).textTheme.caption,
+                      InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () => _goToQueryCategoryPage(context),
+                        child: Text(
+                          '#' + _news.category,
+                          style: GoogleFonts.kanit(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ),
                       Row(children: [
                         IconButton(
@@ -168,7 +203,7 @@ class _CardBaseState extends State<CardBase> {
                           color: Theme.of(context).primaryColor,
                           onPressed: () => {},
                         )
-                      ])
+                      ]),
                     ],
                   ),
                 )

@@ -9,7 +9,10 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => SearchBloc(),
-        child: Scaffold(body: SearchBar()));
+      create: (BuildContext context) => SearchBloc(),
+      child: Scaffold(
+        body: SearchBar(),
+      ),
+    );
   }
 }

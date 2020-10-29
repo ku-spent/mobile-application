@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     _scrollController.addListener(_onScroll);
     _feedBloc = BlocProvider.of<FeedBloc>(context);
     Future.delayed(Duration.zero, () {
-      _fetchFeeds();
+      // _fetchFeeds();
     });
   }
 
@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
+      print(state);
       if (state is FeedInitial) {
         return Center(child: CircularProgressIndicator());
       } else if (state is FeedLoaded) {

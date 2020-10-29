@@ -35,7 +35,8 @@ dependencies:
   # amplify_core: '<1.0.0'
   # amplify_auth_cognito: '<1.0.0'
   rxdart: ^0.24.1
-  splashscreen: ^1.2.0
+  # splashscreen: ^1.2.0
+  animated_splash: ^1.0.0
   cached_network_image: ^2.3.3
   pull_to_refresh: ^1.6.2
   flutter_inappwebview: ^4.0.0+4

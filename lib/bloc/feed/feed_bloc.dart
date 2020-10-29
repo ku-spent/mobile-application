@@ -11,7 +11,7 @@ part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  final int fetchSize = 5;
+  final int fetchSize = 10;
   final FeedRepository feedRepository;
 
   FeedBloc({@required this.feedRepository}) : super(FeedInitial());
@@ -21,7 +21,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     FeedEvent event,
   ) async* {
     if (event is FetchFeed && (__hasMore(state) || state is FeedInitial)) {
-      yield* _mapLoadedFeedState();
+      yield* _mapLoadedFeedState(event);
     } else if (event is RefreshFeed) {
       yield* _mapRefreshLoadedFeedState(event.callback);
     }
@@ -29,7 +29,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   bool __hasMore(FeedState state) => state is FeedLoaded && state.hasMore;
 
-  Stream<FeedState> _mapLoadedFeedState() async* {
+  Stream<FeedState> _mapLoadedFeedState(FeedEvent event) async* {
     try {
       final curState = state;
       if (curState is FeedInitial) {

@@ -99,15 +99,11 @@ class _QueryPageState extends State<QueryPage> {
             child: Icon(Icons.arrow_upward_rounded)),
       ),
       body: BlocBuilder<QueryFeed, QueryFeedState>(builder: (context, state) {
+        print(state);
         if (context.bloc<QueryFeed>().query != widget.query ||
             state is QueryFeedInitial) {
           return Center(child: CircularProgressIndicator());
         } else if (state is QueryFeedLoaded) {
-          if (state.feeds.isEmpty) {
-            return Center(
-              child: Text('no feeds'),
-            );
-          }
           return CustomScrollView(
             controller: _scrollController,
             physics: const BouncingScrollPhysics(),
@@ -157,23 +153,30 @@ class _QueryPageState extends State<QueryPage> {
                       fit: BoxFit.cover,
                     ),
                   )),
-              SliverPadding(
-                  padding: EdgeInsets.only(top: 16.0),
-                  sliver: SliverList(
-                      delegate: SliverChildListDelegate(List.generate(
-                          state.hasMore
-                              ? state.feeds.length + 1
-                              : state.feeds.length,
-                          (index) => index >= state.feeds.length
-                              ? BottomLoader()
-                              : Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 4),
-                                  child: CardBase(
-                                    news: state.feeds[index],
-                                    canClickSource: false,
-                                  ),
-                                )))))
+              state.feeds.isEmpty
+                  ? SliverFillRemaining(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Text('No Results')],
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: EdgeInsets.only(top: 16.0),
+                      sliver: SliverList(
+                          delegate: SliverChildListDelegate(List.generate(
+                              state.hasMore
+                                  ? state.feeds.length + 1
+                                  : state.feeds.length,
+                              (index) => index >= state.feeds.length
+                                  ? BottomLoader()
+                                  : Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 4),
+                                      child: CardBase(
+                                        news: state.feeds[index],
+                                        canClickSource: false,
+                                      ),
+                                    )))))
             ],
           );
         } else if (state is QueryFeedError) {

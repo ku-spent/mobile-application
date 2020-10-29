@@ -1,26 +1,10 @@
 import 'package:fuzzy/fuzzy.dart';
 import 'package:spent/model/category.dart';
-import 'package:spent/model/news.dart';
+import 'package:spent/model/news_source.dart';
 import 'package:spent/model/search_item.dart';
 
 class SearchRepository {
   Fuzzy<SearchItem> fuse;
-
-  static List<String> get itemList => [
-        NewsSource.matichon,
-        NewsSource.thaipbs,
-        NewsSource.voiceTV,
-        Category.crime,
-        Category.economic,
-        Category.entertainment,
-        Category.environment,
-        Category.international,
-        Category.lifeStyle,
-        Category.localNews,
-        Category.politics,
-        Category.sport,
-        Category.technology,
-      ];
 
   List<dynamic> searchList;
 
@@ -34,14 +18,16 @@ class SearchRepository {
 
   SearchRepository() {
     List<SearchItem> catogoryList = _mapToFuzzy(
-        items: Category.values,
-        type: SearchItem.category,
-        description: SearchItem.categoryDescription);
+      items: Category.values,
+      type: SearchItem.category,
+      description: SearchItem.categoryDescription,
+    );
 
     List<SearchItem> sourceList = _mapToFuzzy(
-        items: NewsSource.values,
-        type: SearchItem.source,
-        description: SearchItem.sourceDescription);
+      items: NewsSource.values,
+      type: SearchItem.source,
+      description: SearchItem.sourceDescription,
+    );
 
     fuse = Fuzzy(catogoryList + sourceList,
         options: FuzzyOptions(
@@ -58,7 +44,7 @@ class SearchRepository {
 
   Future<List<SearchItem>> loadSearchResults(String query) async {
     final result = fuse.search(query);
-    return Future.delayed(const Duration(milliseconds: 200),
+    return Future.delayed(const Duration(milliseconds: 300),
         () => result.map((r) => r.item).toList());
   }
 }

@@ -24,7 +24,8 @@ class FeedRepository {
         queryParameters: {
           'from': from.toString(),
           'size': size.toString(),
-          queryField: query,
+          'queryField': queryField,
+          'query': query,
         },
       ).toString();
       final res = await client.get(url);
