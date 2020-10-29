@@ -7,6 +7,7 @@ import 'package:spent/ui/widgets/search_item_builder.dart';
 
 class SearchBar extends StatelessWidget {
   final FloatingSearchBarController _controller = FloatingSearchBarController();
+
   SearchBar({Key key}) : super(key: key);
 
   void _onSumitted(String query) {}
@@ -53,7 +54,20 @@ class SearchBar extends StatelessWidget {
         onQueryChanged: _onQueryChanged,
         onSubmitted: _onSumitted,
         body: ListView(
-          children: [SearchItemBuilder(results: state.results)],
+          children: [
+            SearchItemBuilder(
+              results: state.results,
+              title: 'test',
+            ),
+            SearchItemBuilder(
+              results: state.results,
+              title: 'test',
+            ),
+            SearchItemBuilder(
+              results: state.results,
+              title: 'test',
+            ),
+          ],
         ),
       );
     });
