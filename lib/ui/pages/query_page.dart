@@ -26,6 +26,7 @@ class QueryPage extends StatefulWidget {
 
 class _QueryPageState extends State<QueryPage> {
   final ScrollController scrollController = ScrollController();
+  final _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
   QueryFeed _sourceBloc;
   ScrollController _scrollController;
   bool _isShowFloatingAction = false;

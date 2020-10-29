@@ -11,7 +11,7 @@ import 'package:spent/ui/pages/webview.dart';
 import 'package:spent/ui/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-enum LikeStatus { like, unlike, none }
+enum LikeStatus { like, dislike, none }
 
 class CardBase extends StatefulWidget {
   final News news;
@@ -24,12 +24,11 @@ class CardBase extends StatefulWidget {
   _CardBaseState createState() => _CardBaseState();
 }
 
-class _CardBaseState extends State<CardBase> {
+class _CardBaseState extends State<CardBase>
+    with SingleTickerProviderStateMixin {
   News _news;
-
-  LikeStatus _likeStatus = LikeStatus.none;
-
   bool _isBookmarked = false;
+  LikeStatus _likeStatus = LikeStatus.none;
 
   @override
   void initState() {
@@ -78,6 +77,36 @@ class _CardBaseState extends State<CardBase> {
     );
   }
 
+  void _onClickLike() {
+    setState(() {
+      _likeStatus =
+          _likeStatus == LikeStatus.like ? LikeStatus.none : LikeStatus.like;
+    });
+  }
+
+  void _onClickDislike() {
+    setState(() {
+      _likeStatus = _likeStatus == LikeStatus.dislike
+          ? LikeStatus.none
+          : LikeStatus.dislike;
+    });
+  }
+
+  void _onClickBookmark() {
+    setState(() {
+      _isBookmarked = !_isBookmarked;
+    });
+  }
+
+  Widget _buildIcon(
+      {Function onPressed, Icon inActive, Icon active, bool isActive}) {
+    return IconButton(
+      color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+      onPressed: onPressed,
+      icon: isActive ? active : inActive,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -113,6 +142,9 @@ class _CardBaseState extends State<CardBase> {
                                 children: [
                                   Text(
                                     _news.source,
+                                    style: GoogleFonts.kanit(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   Text(
                                     timeago.format(_news.pubDate, locale: 'th'),
@@ -125,13 +157,12 @@ class _CardBaseState extends State<CardBase> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: _isBookmarked
-                          ? Icon(Icons.bookmark)
-                          : Icon(Icons.bookmark_border),
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () => {},
-                    )
+                    _buildIcon(
+                      isActive: _isBookmarked,
+                      active: Icon(Icons.bookmark),
+                      inActive: Icon(Icons.bookmark_outline),
+                      onPressed: _onClickBookmark,
+                    ),
                   ],
                 ),
                 InkWell(
@@ -189,20 +220,18 @@ class _CardBaseState extends State<CardBase> {
                         ),
                       ),
                       Row(children: [
-                        IconButton(
-                          icon: _likeStatus == LikeStatus.like
-                              ? Icon(Icons.thumb_up)
-                              : Icon(Icons.thumb_up_outlined),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () => {},
+                        _buildIcon(
+                          isActive: _likeStatus == LikeStatus.like,
+                          active: Icon(Icons.thumb_up),
+                          inActive: Icon(Icons.thumb_up_outlined),
+                          onPressed: _onClickLike,
                         ),
-                        IconButton(
-                          icon: _likeStatus == LikeStatus.unlike
-                              ? Icon(Icons.thumb_down)
-                              : Icon(Icons.thumb_down_outlined),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () => {},
-                        )
+                        _buildIcon(
+                          isActive: _likeStatus == LikeStatus.dislike,
+                          active: Icon(Icons.thumb_down),
+                          inActive: Icon(Icons.thumb_down_outlined),
+                          onPressed: _onClickDislike,
+                        ),
                       ]),
                     ],
                   ),
