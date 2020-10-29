@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:spent/bloc/query/query_bloc.dart';
 import 'package:spent/model/news.dart';
-import 'package:spent/ui/pages/source_page.dart';
+import 'package:spent/ui/pages/query_page.dart';
 import 'package:spent/ui/pages/webview.dart';
 import 'package:spent/ui/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -45,12 +46,16 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
-  void _goToSourcePage(BuildContext context) {
+  void _goToQueryPage(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
             maintainState: false,
-            builder: (context) => SourcePage(source: _news.source)));
+            builder: (context) => QueryPage(
+                  query: _news.source,
+                  queryField: QueryField.source,
+                  coverUrl: NewsSource.newsSourceCover[_news.source],
+                )));
   }
 
   @override
@@ -72,7 +77,7 @@ class _CardBaseState extends State<CardBase> {
                       ignoring: !widget.canClickSource,
                       child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
-                        onTap: () => _goToSourcePage(context),
+                        onTap: () => _goToQueryPage(context),
                         child: Container(
                           padding: EdgeInsets.all(4),
                           child: Row(

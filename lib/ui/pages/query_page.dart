@@ -1,23 +1,32 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spent/bloc/source/source_bloc.dart';
-import 'package:spent/model/news.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/bloc/query/query_bloc.dart';
 import 'package:spent/ui/pages/home_page.dart';
 import 'package:spent/ui/widgets/card_base.dart';
 
-class SourcePage extends StatefulWidget {
-  final String source;
+class QueryPage extends StatefulWidget {
+  final String query;
+  final String queryField;
+  final String coverUrl;
+  final bool isShowTitle;
 
-  SourcePage({Key key, this.source}) : super(key: key);
+  QueryPage({
+    Key key,
+    @required this.query,
+    @required this.queryField,
+    @required this.coverUrl,
+    this.isShowTitle = false,
+  }) : super(key: key);
 
   @override
-  _SourcePageState createState() => _SourcePageState();
+  _QueryPageState createState() => _QueryPageState();
 }
 
-class _SourcePageState extends State<SourcePage> {
+class _QueryPageState extends State<QueryPage> {
   final ScrollController scrollController = ScrollController();
-  SourceBloc _sourceBloc;
+  QueryFeed _sourceBloc;
   ScrollController _scrollController;
   bool _isShowFloatingAction = false;
 
@@ -36,8 +45,9 @@ class _SourcePageState extends State<SourcePage> {
     _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () {
-      _sourceBloc = BlocProvider.of<SourceBloc>(context);
-      _sourceBloc.add(InitialSource(source: widget.source));
+      _sourceBloc = BlocProvider.of<QueryFeed>(context);
+      _sourceBloc.add(
+          InitialQueryFeed(query: widget.query, queryField: widget.queryField));
     });
   }
 
@@ -61,7 +71,7 @@ class _SourcePageState extends State<SourcePage> {
   }
 
   void _fetchFeeds() {
-    _sourceBloc.add(FetchSource());
+    _sourceBloc.add(FetchQueryFeed());
   }
 
   // void _onRefresh() async {
@@ -88,11 +98,11 @@ class _SourcePageState extends State<SourcePage> {
             onPressed: _scrollToTop,
             child: Icon(Icons.arrow_upward_rounded)),
       ),
-      body: BlocBuilder<SourceBloc, SourceState>(builder: (context, state) {
-        if (context.bloc<SourceBloc>().source != widget.source ||
-            state is SourceInitial) {
+      body: BlocBuilder<QueryFeed, QueryFeedState>(builder: (context, state) {
+        if (context.bloc<QueryFeed>().query != widget.query ||
+            state is QueryFeedInitial) {
           return Center(child: CircularProgressIndicator());
-        } else if (state is SourceLoaded) {
+        } else if (state is QueryFeedLoaded) {
           if (state.feeds.isEmpty) {
             return Center(
               child: Text('no feeds'),
@@ -103,14 +113,20 @@ class _SourcePageState extends State<SourcePage> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverAppBar(
+                  title: widget.isShowTitle
+                      ? Text(
+                          widget.query,
+                          style: GoogleFonts.kanit(),
+                        )
+                      : null,
                   actions: [
                     PopupMenuButton(itemBuilder: (BuildContext context) {
-                      return SourcePageOptions.choices
+                      return QueryPageOptions.choices
                           .map((choice) => PopupMenuItem(
                               value: choice,
                               child: Row(
                                 children: [
-                                  SourcePageOptions.icons[choice],
+                                  QueryPageOptions.icons[choice],
                                   Container(
                                     width: 16,
                                   ),
@@ -133,7 +149,7 @@ class _SourcePageState extends State<SourcePage> {
                       StretchMode.zoomBackground,
                     ],
                     background: CachedNetworkImage(
-                      imageUrl: NewsSource.newsSourceCover[widget.source],
+                      imageUrl: widget.coverUrl,
                       placeholder: (context, url) => Container(
                         color: Colors.black26,
                       ),
@@ -160,7 +176,7 @@ class _SourcePageState extends State<SourcePage> {
                                 )))))
             ],
           );
-        } else if (state is SourceError) {
+        } else if (state is QueryFeedError) {
           return Center(child: Text('Something went wrong!'));
         }
       }),
@@ -168,70 +184,7 @@ class _SourcePageState extends State<SourcePage> {
   }
 }
 
-// class SourceContent extends StatefulWidget {
-//   final String source;
-//   final ScrollController scrollController;
-
-//   SourceContent(
-//       {Key key, @required this.source, @required this.scrollController})
-//       : super(key: key);
-
-//   @override
-//   _SourceContentState createState() => _SourceContentState();
-// }
-
-// class _SourceContentState extends State<SourceContent> {
-//   SourceBloc _sourceBloc;
-//   ScrollController _scrollController;
-//   // bool isS
-
-//   final _scrollThreshold = 200.0;
-//   // final RefreshController _refreshController = RefreshController();
-
-//   @override
-//   void dispose() {
-//     super.dispose();
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _scrollController = widget.scrollController;
-//     _scrollController.addListener(_onScroll);
-//     Future.delayed(Duration.zero, () {
-//       _sourceBloc = BlocProvider.of<SourceBloc>(context);
-//       _sourceBloc.add(InitialSource(source: widget.source));
-//     });
-//   }
-
-//   void _onScroll() {
-//     final maxScroll = _scrollController.position.maxScrollExtent;
-//     final minScroll = _scrollController.position.minScrollExtent;
-//     final currentScroll = _scrollController.position.pixels;
-//     if (currentScroll == minScroll) {
-//       setState(() {});
-//     } else if (maxScroll - currentScroll <= _scrollThreshold) {
-//       _fetchFeeds();
-//     }
-//   }
-
-//   void _fetchFeeds() {
-//     _sourceBloc.add(FetchSource());
-//   }
-
-//   // void _onRefresh() async {
-//   //   _sourceBloc.add(RefreshSource(
-//   //       source: widget.source,
-//   //       callback: () => {_refreshController.refreshCompleted()}));
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-// }
-
-class SourcePageOptions {
+class QueryPageOptions {
   static const String block = "ซ่อนเนื้อหาจากแหล่งข่าวนี้";
 
   static const Map<String, Icon> icons = {

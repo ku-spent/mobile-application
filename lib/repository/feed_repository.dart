@@ -10,8 +10,12 @@ class FeedRepository {
 
   const FeedRepository({@required this.client});
 
-  Future<List<News>> fetchFeeds(
-      {int from = 0, int size = 5, String source}) async {
+  Future<List<News>> fetchFeeds({
+    int from = 0,
+    int size = 5,
+    String queryField = '_',
+    String query,
+  }) async {
     try {
       String url = Uri(
         scheme: 'https',
@@ -20,7 +24,7 @@ class FeedRepository {
         queryParameters: {
           'from': from.toString(),
           'size': size.toString(),
-          'source': source
+          queryField: query,
         },
       ).toString();
       final res = await client.get(url);
