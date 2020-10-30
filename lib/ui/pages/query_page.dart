@@ -100,7 +100,6 @@ class _QueryPageState extends State<QueryPage> {
             child: Icon(Icons.arrow_upward_rounded)),
       ),
       body: BlocBuilder<QueryFeed, QueryFeedState>(builder: (context, state) {
-        print(state);
         if (context.bloc<QueryFeed>().query != widget.query ||
             state is QueryFeedInitial) {
           return Center(child: CircularProgressIndicator());
@@ -164,20 +163,26 @@ class _QueryPageState extends State<QueryPage> {
                   : SliverPadding(
                       padding: EdgeInsets.only(top: 16.0),
                       sliver: SliverList(
-                          delegate: SliverChildListDelegate(List.generate(
-                              state.hasMore
-                                  ? state.feeds.length + 1
-                                  : state.feeds.length,
-                              (index) => index >= state.feeds.length
-                                  ? BottomLoader()
-                                  : Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 4),
-                                      child: CardBase(
-                                        news: state.feeds[index],
-                                        canClickSource: false,
-                                      ),
-                                    )))))
+                        delegate: SliverChildListDelegate(
+                          List.generate(
+                            state.hasMore
+                                ? state.feeds.length + 1
+                                : state.feeds.length,
+                            (index) => index >= state.feeds.length
+                                ? BottomLoader()
+                                : Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 4),
+                                    child: CardBase(
+                                      news: state.feeds[index],
+                                      canClickSource: false,
+                                      canClickCategory: false,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    )
             ],
           );
         } else if (state is QueryFeedError) {

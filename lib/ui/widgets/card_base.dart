@@ -16,9 +16,14 @@ enum LikeStatus { like, dislike, none }
 class CardBase extends StatefulWidget {
   final News news;
   final bool canClickSource;
+  final bool canClickCategory;
 
-  CardBase({Key key, @required this.news, this.canClickSource = true})
-      : super(key: key);
+  CardBase({
+    Key key,
+    @required this.news,
+    this.canClickSource = true,
+    this.canClickCategory = true,
+  }) : super(key: key);
 
   @override
   _CardBaseState createState() => _CardBaseState();
@@ -209,13 +214,16 @@ class _CardBaseState extends State<CardBase>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        splashColor: Colors.blue.withAlpha(30),
-                        onTap: () => _goToQueryCategoryPage(context),
-                        child: Text(
-                          '#' + _news.category,
-                          style: GoogleFonts.kanit(
-                            color: Theme.of(context).primaryColor,
+                      IgnorePointer(
+                        ignoring: !widget.canClickCategory,
+                        child: InkWell(
+                          splashColor: Colors.blue.withAlpha(30),
+                          onTap: () => _goToQueryCategoryPage(context),
+                          child: Text(
+                            '#' + _news.category,
+                            style: GoogleFonts.kanit(
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         ),
                       ),

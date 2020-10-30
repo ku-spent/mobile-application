@@ -76,7 +76,9 @@ class _WebViewPageState extends State<WebViewPage> {
                     height: double.infinity,
                     color: Colors.white),
           )),
-      bottomNavigationBar: WebViewBottom(),
+      bottomNavigationBar: WebViewBottom(
+        news: widget.news,
+      ),
     );
   }
 }

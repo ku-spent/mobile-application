@@ -1,10 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:spent/model/news.dart';
+import 'package:spent/ui/widgets/card_base.dart';
 
-class WebViewBottom extends StatelessWidget {
-  const WebViewBottom({Key key}) : super(key: key);
+class WebViewBottom extends StatefulWidget {
+  final News news;
+
+  WebViewBottom({Key key, @required this.news}) : super(key: key);
+
+  @override
+  _WebViewBottomState createState() => _WebViewBottomState();
+}
+
+class _WebViewBottomState extends State<WebViewBottom> {
+  News _news;
+  bool _isBookmarked = false;
+  LikeStatus _likeStatus = LikeStatus.none;
+
+  @override
+  void initState() {
+    super.initState();
+    _news = widget.news;
+  }
+
+  void _onClickLike() {
+    setState(() {
+      _likeStatus =
+          _likeStatus == LikeStatus.like ? LikeStatus.none : LikeStatus.like;
+    });
+  }
+
+  void _onClickDislike() {
+    setState(() {
+      _likeStatus = _likeStatus == LikeStatus.dislike
+          ? LikeStatus.none
+          : LikeStatus.dislike;
+    });
+  }
+
+  void _onClickBookmark() {
+    setState(() {
+      _isBookmarked = !_isBookmarked;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget _buildIcon(
+        {Function onPressed, Icon inActive, Icon active, bool isActive}) {
+      return IconButton(
+        color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+        onPressed: onPressed,
+        icon: isActive ? active : inActive,
+      );
+    }
+
     return BottomAppBar(
       child: Container(
         decoration: BoxDecoration(
@@ -18,26 +67,29 @@ class WebViewBottom extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: Icon(Icons.thumb_up_alt_outlined),
-                onPressed: () => {},
-                color: Theme.of(context).hintColor,
+              _buildIcon(
+                isActive: _likeStatus == LikeStatus.like,
+                active: Icon(Icons.thumb_up),
+                inActive: Icon(Icons.thumb_up_outlined),
+                onPressed: _onClickLike,
               ),
               Container(
                 width: 28,
               ),
-              IconButton(
-                icon: Icon(Icons.thumb_down_alt_outlined),
-                onPressed: () => {},
-                color: Theme.of(context).hintColor,
+              _buildIcon(
+                isActive: _likeStatus == LikeStatus.dislike,
+                active: Icon(Icons.thumb_down),
+                inActive: Icon(Icons.thumb_down_outlined),
+                onPressed: _onClickDislike,
               ),
               Container(
                 width: 28,
               ),
-              IconButton(
-                icon: Icon(Icons.bookmark_outline),
-                onPressed: () => {},
-                color: Theme.of(context).hintColor,
+              _buildIcon(
+                isActive: _isBookmarked,
+                active: Icon(Icons.bookmark),
+                inActive: Icon(Icons.bookmark_outline),
+                onPressed: _onClickBookmark,
               ),
               Container(
                 width: 28,
@@ -45,7 +97,7 @@ class WebViewBottom extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () => {},
-                color: Theme.of(context).hintColor,
+                color: Colors.grey,
               )
             ],
           ),

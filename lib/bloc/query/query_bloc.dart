@@ -41,7 +41,7 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
       final feeds = await feedRepository.fetchFeeds(
           from: 0, size: fetchSize, query: query, queryField: queryField);
       final hasMore = feeds.length >= fetchSize;
-      yield QueryFeedLoaded(feeds: feeds, hasMore: hasMore);
+      yield QueryFeedLoaded(feeds: feeds, hasMore: hasMore, query: query);
     } catch (_) {
       yield QueryFeedError();
     }
@@ -58,7 +58,8 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
             queryField: queryField);
         yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
-            : QueryFeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
+            : QueryFeedLoaded(
+                feeds: curState.feeds + feeds, hasMore: true, query: query);
       }
     } catch (_) {
       yield QueryFeedError();
@@ -72,7 +73,7 @@ class QueryFeed extends Bloc<QueryFeedEvent, QueryFeedState> {
       if (curState is QueryFeedLoaded) {
         final feeds = await feedRepository.fetchFeeds(
             from: 0, size: fetchSize, query: query, queryField: queryField);
-        yield QueryFeedLoaded(feeds: feeds, hasMore: true);
+        yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
       }
       if (callback != null) callback();
     } catch (_) {

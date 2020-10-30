@@ -15,15 +15,23 @@ class QueryFeedInitial extends QueryFeedState {
 class QueryFeedLoaded extends QueryFeedState {
   final List<News> feeds;
   final bool hasMore;
+  final String query;
 
-  const QueryFeedLoaded({@required this.feeds, @required this.hasMore});
+  const QueryFeedLoaded({
+    @required this.feeds,
+    @required this.hasMore,
+    @required this.query,
+  });
 
   @override
-  List<Object> get props => [feeds, hasMore];
+  List<Object> get props => [feeds, hasMore, query];
 
-  QueryFeedLoaded copyWith({List<News> feeds, bool hasMore}) {
+  QueryFeedLoaded copyWith({List<News> feeds, bool hasMore, String query}) {
     return QueryFeedLoaded(
-        feeds: feeds ?? this.feeds, hasMore: hasMore ?? this.hasMore);
+      feeds: feeds ?? this.feeds,
+      hasMore: hasMore ?? this.hasMore,
+      query: query,
+    );
   }
 }
 

@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-      print(state);
       if (state is FeedInitial) {
         return Center(child: CircularProgressIndicator());
       } else if (state is FeedLoaded) {
@@ -73,6 +72,7 @@ class _HomePageState extends State<HomePage> {
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: ListView.separated(
+            addAutomaticKeepAlives: true,
             padding: const EdgeInsets.all(16),
             itemCount:
                 state.hasMore ? state.feeds.length + 1 : state.feeds.length,
