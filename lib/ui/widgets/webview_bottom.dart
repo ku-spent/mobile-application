@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spent/model/news.dart';
-import 'package:spent/ui/widgets/card_base.dart';
+import 'package:spent/model/news_action.dart';
 
 class WebViewBottom extends StatefulWidget {
   final News news;
@@ -14,7 +14,7 @@ class WebViewBottom extends StatefulWidget {
 class _WebViewBottomState extends State<WebViewBottom> {
   News _news;
   bool _isBookmarked = false;
-  LikeStatus _likeStatus = LikeStatus.none;
+  String _likeStatus = NewsAction.noneLike;
 
   @override
   void initState() {
@@ -24,16 +24,17 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
   void _onClickLike() {
     setState(() {
-      _likeStatus =
-          _likeStatus == LikeStatus.like ? LikeStatus.none : LikeStatus.like;
+      _likeStatus = _likeStatus == NewsAction.like
+          ? NewsAction.noneLike
+          : NewsAction.like;
     });
   }
 
   void _onClickDislike() {
     setState(() {
-      _likeStatus = _likeStatus == LikeStatus.dislike
-          ? LikeStatus.none
-          : LikeStatus.dislike;
+      _likeStatus = _likeStatus == NewsAction.dislike
+          ? NewsAction.noneLike
+          : NewsAction.dislike;
     });
   }
 
@@ -68,7 +69,7 @@ class _WebViewBottomState extends State<WebViewBottom> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildIcon(
-                isActive: _likeStatus == LikeStatus.like,
+                isActive: _likeStatus == NewsAction.like,
                 active: Icon(Icons.thumb_up),
                 inActive: Icon(Icons.thumb_up_outlined),
                 onPressed: _onClickLike,
@@ -77,7 +78,7 @@ class _WebViewBottomState extends State<WebViewBottom> {
                 width: 28,
               ),
               _buildIcon(
-                isActive: _likeStatus == LikeStatus.dislike,
+                isActive: _likeStatus == NewsAction.dislike,
                 active: Icon(Icons.thumb_down),
                 inActive: Icon(Icons.thumb_down_outlined),
                 onPressed: _onClickDislike,

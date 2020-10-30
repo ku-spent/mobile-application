@@ -5,13 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/bloc/query/query_bloc.dart';
 import 'package:spent/model/category.dart';
 import 'package:spent/model/news.dart';
+import 'package:spent/model/news_action.dart';
 import 'package:spent/model/news_source.dart';
 import 'package:spent/ui/pages/query_page.dart';
 import 'package:spent/ui/pages/webview.dart';
 import 'package:spent/ui/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
-enum LikeStatus { like, dislike, none }
 
 class CardBase extends StatefulWidget {
   final News news;
@@ -33,7 +32,8 @@ class _CardBaseState extends State<CardBase>
     with SingleTickerProviderStateMixin {
   News _news;
   bool _isBookmarked = false;
-  LikeStatus _likeStatus = LikeStatus.none;
+  String _likeStatus = NewsAction.noneLike;
+  NewsAction _newsAction = NewsAction(likeStatus: 'like');
 
   @override
   void initState() {
@@ -84,16 +84,17 @@ class _CardBaseState extends State<CardBase>
 
   void _onClickLike() {
     setState(() {
-      _likeStatus =
-          _likeStatus == LikeStatus.like ? LikeStatus.none : LikeStatus.like;
+      _likeStatus = _likeStatus == NewsAction.like
+          ? NewsAction.noneLike
+          : NewsAction.like;
     });
   }
 
   void _onClickDislike() {
     setState(() {
-      _likeStatus = _likeStatus == LikeStatus.dislike
-          ? LikeStatus.none
-          : LikeStatus.dislike;
+      _likeStatus = _likeStatus == NewsAction.dislike
+          ? NewsAction.noneLike
+          : NewsAction.dislike;
     });
   }
 
@@ -229,13 +230,13 @@ class _CardBaseState extends State<CardBase>
                       ),
                       Row(children: [
                         _buildIcon(
-                          isActive: _likeStatus == LikeStatus.like,
+                          isActive: _likeStatus == NewsAction.like,
                           active: Icon(Icons.thumb_up),
                           inActive: Icon(Icons.thumb_up_outlined),
                           onPressed: _onClickLike,
                         ),
                         _buildIcon(
-                          isActive: _likeStatus == LikeStatus.dislike,
+                          isActive: _likeStatus == NewsAction.dislike,
                           active: Icon(Icons.thumb_down),
                           inActive: Icon(Icons.thumb_down_outlined),
                           onPressed: _onClickDislike,
