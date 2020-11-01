@@ -11,7 +11,15 @@ class News extends Equatable {
   final String category;
 
   @override
-  List<Object> get props => [url];
+  List<Object> get props => [
+        url,
+        title,
+        summary,
+        image,
+        source,
+        pubDate,
+        category,
+      ];
 
   const News({
     @required this.url,

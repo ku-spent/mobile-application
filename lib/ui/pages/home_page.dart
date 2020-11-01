@@ -68,18 +68,19 @@ class _HomePageState extends State<HomePage> {
         }
         return SmartRefresher(
           enablePullDown: true,
+          enablePullUp: state.hasMore,
           header: WaterDropMaterialHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: ListView.separated(
+            physics: BouncingScrollPhysics(),
             addAutomaticKeepAlives: true,
             padding: const EdgeInsets.all(16),
-            itemCount:
-                state.hasMore ? state.feeds.length + 1 : state.feeds.length,
-            itemBuilder: (BuildContext context, int index) =>
-                index >= state.feeds.length
-                    ? BottomLoader()
-                    : CardBase(news: state.feeds[index]),
+            itemCount: state.feeds.length,
+            itemBuilder: (BuildContext context, int index) => CardBase(
+              news: state.feeds[index],
+              key: UniqueKey(),
+            ),
             separatorBuilder: (BuildContext context, int index) => SizedBox(
               height: 8,
             ),
