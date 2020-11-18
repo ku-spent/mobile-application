@@ -38,8 +38,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
       } else if (curState is FeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(
-            from: curState.feeds.length, size: fetchSize);
+        final feeds = await _getNewsFeedUseCase.call(from: curState.feeds.length, size: fetchSize);
         yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
             : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
@@ -49,8 +48,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
   }
 
-  Stream<FeedState> _mapRefreshLoadedFeedState(
-      RefreshFeedCallback callback) async* {
+  Stream<FeedState> _mapRefreshLoadedFeedState(RefreshFeedCallback callback) async* {
     try {
       final curState = state;
       if (curState is FeedLoaded) {
@@ -64,9 +62,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   @override
-  Stream<Transition<FeedEvent, FeedState>> transformEvents(
-      Stream<FeedEvent> events, transitionFn) {
-    return super.transformEvents(
-        events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
+  Stream<Transition<FeedEvent, FeedState>> transformEvents(Stream<FeedEvent> events, transitionFn) {
+    return super.transformEvents(events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
   }
 }

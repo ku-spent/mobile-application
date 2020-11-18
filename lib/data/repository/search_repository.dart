@@ -8,6 +8,5 @@ class SearchRepository {
 
   SearchRepository(this._searchDataSource);
 
-  Future<List<SearchItem>> getSearchResults(String query) async =>
-      _searchDataSource.getSearchItems(query);
+  Future<List<SearchItem>> getSearchResults(String query) async => _searchDataSource.getSearchItems(query);
 }

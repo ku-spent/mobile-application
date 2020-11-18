@@ -21,8 +21,7 @@ class _WebViewPageState extends State<WebViewPage> {
   }
 
   Future<String> _getUrl() async {
-    return Future.delayed(
-        const Duration(milliseconds: 400), () => widget.news.url);
+    return Future.delayed(const Duration(milliseconds: 400), () => widget.news.url);
   }
 
   void _loadFinished(controller, String url) async {
@@ -37,26 +36,21 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.news.url,
-            style: TextStyle(fontSize: 14, color: Colors.white)),
-        bottom: _isLoaded
-            ? null
-            : MyLinearProgressIndicator(backgroundColor: Colors.purple[200]),
+        title: Text(widget.news.url, style: TextStyle(fontSize: 14, color: Colors.white)),
+        bottom: _isLoaded ? null : MyLinearProgressIndicator(backgroundColor: Colors.purple[200]),
       ),
       body: Container(
           color: Colors.white,
           child: FutureBuilder(
             future: _getUrl(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) => snapshot
-                    .hasData
+            builder: (BuildContext context, AsyncSnapshot snapshot) => snapshot.hasData
                 ? Stack(
                     children: [
                       InAppWebView(
                         initialUrl: snapshot.data,
                         onLoadStop: _loadFinished,
-                        initialOptions: InAppWebViewGroupOptions(
-                            crossPlatform:
-                                InAppWebViewOptions(javaScriptEnabled: false)),
+                        initialOptions:
+                            InAppWebViewGroupOptions(crossPlatform: InAppWebViewOptions(javaScriptEnabled: false)),
                       ),
                       IgnorePointer(
                           ignoring: true,
@@ -71,10 +65,7 @@ class _WebViewPageState extends State<WebViewPage> {
                           ))
                     ],
                   )
-                : Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.white),
+                : Container(width: double.infinity, height: double.infinity, color: Colors.white),
           )),
       bottomNavigationBar: WebViewBottom(
         news: widget.news,
@@ -85,8 +76,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
 const double _kMyLinearProgressIndicatorHeight = 6.0;
 
-class MyLinearProgressIndicator extends LinearProgressIndicator
-    implements PreferredSizeWidget {
+class MyLinearProgressIndicator extends LinearProgressIndicator implements PreferredSizeWidget {
   MyLinearProgressIndicator({
     Key key,
     double value,

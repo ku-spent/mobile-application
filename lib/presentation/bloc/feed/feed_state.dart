@@ -27,8 +27,7 @@ class FeedLoaded extends FeedState {
   List<Object> get props => [feeds, hasMore];
 
   FeedLoaded copyWith({List<News> feeds, bool hasMore}) {
-    return FeedLoaded(
-        feeds: feeds ?? this.feeds, hasMore: hasMore ?? this.hasMore);
+    return FeedLoaded(feeds: feeds ?? this.feeds, hasMore: hasMore ?? this.hasMore);
   }
 }
 

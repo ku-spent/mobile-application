@@ -24,17 +24,13 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
   void _onClickLike() {
     setState(() {
-      _likeStatus = _likeStatus == NewsAction.like
-          ? NewsAction.noneLike
-          : NewsAction.like;
+      _likeStatus = _likeStatus == NewsAction.like ? NewsAction.noneLike : NewsAction.like;
     });
   }
 
   void _onClickDislike() {
     setState(() {
-      _likeStatus = _likeStatus == NewsAction.dislike
-          ? NewsAction.noneLike
-          : NewsAction.dislike;
+      _likeStatus = _likeStatus == NewsAction.dislike ? NewsAction.noneLike : NewsAction.dislike;
     });
   }
 
@@ -46,8 +42,7 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildIcon(
-        {Function onPressed, Icon inActive, Icon active, bool isActive}) {
+    Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
       return IconButton(
         color: isActive ? Theme.of(context).primaryColor : Colors.grey,
         onPressed: onPressed,
@@ -57,10 +52,7 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
     return BottomAppBar(
       child: Container(
-        decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(
-                    width: 1, color: Theme.of(context).dividerColor))),
+        decoration: BoxDecoration(border: Border(top: BorderSide(width: 1, color: Theme.of(context).dividerColor))),
         height: 48.0,
         child: Padding(
           padding: EdgeInsets.only(left: 32, right: 32),

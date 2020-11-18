@@ -71,8 +71,7 @@ class SearchItemBuilder extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return BlocBuilder<SearchBloc, SearchState>(
-        builder: (BuildContext context, SearchState state) {
+    return BlocBuilder<SearchBloc, SearchState>(builder: (BuildContext context, SearchState state) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -106,8 +105,7 @@ class SearchItemBuilder extends StatelessWidget {
                         ),
                         Text(
                           result.description,
-                          style: textTheme.caption
-                              .copyWith(color: Colors.grey.shade600),
+                          style: textTheme.caption.copyWith(color: Colors.grey.shade600),
                         ),
                       ],
                     ),

@@ -14,8 +14,7 @@ class SearchItem extends Equatable {
   final String type;
   final String description;
 
-  const SearchItem(
-      {@required this.value, @required this.type, @required this.description});
+  const SearchItem({@required this.value, @required this.type, @required this.description});
 
   @override
   List<Object> get props => [value, type, description];

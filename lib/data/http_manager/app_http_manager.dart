@@ -41,8 +41,7 @@ class AppHttpManager implements HttpManager {
       print('Api Post request url $url, with $body');
       final response = await http
           .post(_queryBuilder(url, query),
-              body: body != null ? json.encode(body) : null,
-              headers: _headerBuilder(headers))
+              body: body != null ? json.encode(body) : null, headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {
@@ -60,8 +59,7 @@ class AppHttpManager implements HttpManager {
     try {
       print('Api Put request url $url, with $body');
       final response = await http
-          .put(_queryBuilder(url, query),
-              body: json.encode(body), headers: _headerBuilder(headers))
+          .put(_queryBuilder(url, query), body: json.encode(body), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {

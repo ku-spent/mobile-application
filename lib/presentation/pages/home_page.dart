@@ -7,8 +7,7 @@ import 'package:spent/presentation/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
   final ScrollController scrollController;
-  HomePage({Key key, this.title, @required this.scrollController})
-      : super(key: key);
+  HomePage({Key key, this.title, @required this.scrollController}) : super(key: key);
 
   final String title;
 
@@ -51,8 +50,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRefresh() async {
-    _feedBloc.add(
-        RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
+    _feedBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
   }
 
   @override

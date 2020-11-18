@@ -13,7 +13,6 @@ class GetNewsFeedUseCase {
     String queryField = '_',
     String query,
   }) async {
-    return _newsRepository.getNews(
-        from: from, size: size, queryField: queryField, query: query);
+    return _newsRepository.getNews(from: from, size: size, queryField: queryField, query: query);
   }
 }

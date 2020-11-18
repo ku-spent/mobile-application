@@ -24,8 +24,7 @@ class Category {
   ];
 
   static Map<String, String> newsCategoryCover = {
-    localNews:
-        'https://ttgasia.2017.ttgasia.com/wp-content/uploads/sites/2/2018/01/loie-walking-street-tourists.jpg',
+    localNews: 'https://ttgasia.2017.ttgasia.com/wp-content/uploads/sites/2/2018/01/loie-walking-street-tourists.jpg',
     politics:
         'https://images.unsplash.com/photo-1520452112805-c6692c840af0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1273&q=80',
     sport:

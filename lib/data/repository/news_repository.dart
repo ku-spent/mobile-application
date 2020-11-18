@@ -14,7 +14,6 @@ class NewsRepository {
     String queryField,
     String query,
   }) async {
-    return _newsDataSource.getFeeds(
-        from: from, size: size, queryField: queryField, query: query);
+    return _newsDataSource.getFeeds(from: from, size: size, queryField: queryField, query: query);
   }
 }

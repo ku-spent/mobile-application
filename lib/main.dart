@@ -27,13 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<FeedBloc>(
-            create: (BuildContext context) => getIt<FeedBloc>()),
-        BlocProvider<NavigationBloc>(
-            create: (BuildContext context) =>
-                getIt<NavigationBloc>(param1: _pageController)),
-        BlocProvider<SearchBloc>(
-            create: (BuildContext context) => getIt<SearchBloc>()),
+        BlocProvider<FeedBloc>(create: (BuildContext context) => getIt<FeedBloc>()),
+        BlocProvider<NavigationBloc>(create: (BuildContext context) => getIt<NavigationBloc>(param1: _pageController)),
+        BlocProvider<SearchBloc>(create: (BuildContext context) => getIt<SearchBloc>()),
         BlocProvider<QueryFeedBloc>(
           create: (BuildContext context) => getIt<QueryFeedBloc>(),
         )

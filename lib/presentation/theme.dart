@@ -18,8 +18,7 @@ class MyTheme {
   BuildContext context;
   MyTheme({this.context});
 
-  static MaterialColor get _mainColor =>
-      MaterialColor(mainColor[900].value, mainColor);
+  static MaterialColor get _mainColor => MaterialColor(mainColor[900].value, mainColor);
 
   ThemeData get mainTheme => ThemeData(
       primarySwatch: _mainColor,

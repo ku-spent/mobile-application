@@ -9,5 +9,4 @@ final GetIt getIt = GetIt.instance;
   preferRelativeImports: true, // default
   asExtension: false, // default
 )
-void configureInjection(String environment) =>
-    $initGetIt(getIt, environment: environment);
+void configureInjection(String environment) => $initGetIt(getIt, environment: environment);

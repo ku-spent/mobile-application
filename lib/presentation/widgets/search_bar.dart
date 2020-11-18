@@ -87,8 +87,7 @@ class _SearchBarState extends State<SearchBar> {
     }
 
     Widget _buildResults({List<SearchItem> results, String type}) {
-      final List<SearchItem> typeResults =
-          results.where((item) => item.type == type).toList();
+      final List<SearchItem> typeResults = results.where((item) => item.type == type).toList();
       OnClickItem _onClick;
 
       if (type == SearchItem.category)

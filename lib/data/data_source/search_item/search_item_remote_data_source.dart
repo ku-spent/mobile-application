@@ -12,8 +12,7 @@ class SearchRemoteDataSource implements SearchItemDataSource {
   @override
   Future<List<SearchItem>> getSearchItems(String query) async {
     final results = _fuse.search(query);
-    final formatted = Future.delayed(const Duration(milliseconds: 300),
-        () => results.map((r) => r.item).toList());
+    final formatted = Future.delayed(const Duration(milliseconds: 300), () => results.map((r) => r.item).toList());
     print(formatted);
     return formatted;
   }

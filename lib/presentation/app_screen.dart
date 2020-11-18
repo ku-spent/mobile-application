@@ -25,8 +25,7 @@ class AppScreen extends StatelessWidget {
   }
 
   void _onClickSearch(context) {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => SearchPage()));
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => SearchPage()));
   }
 
   @override
@@ -39,11 +38,7 @@ class AppScreen extends StatelessWidget {
               PageName[state.selectedPage],
               style: GoogleFonts.kanit(),
             ),
-            actions: [
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => _onClickSearch(context))
-            ],
+            actions: [IconButton(icon: Icon(Icons.search), onPressed: () => _onClickSearch(context))],
           ),
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,

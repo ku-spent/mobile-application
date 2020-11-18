@@ -47,15 +47,13 @@ class _QueryPageState extends State<QueryPage> {
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () {
       _sourceBloc = BlocProvider.of<QueryFeedBloc>(context);
-      _sourceBloc.add(
-          InitialQueryFeed(query: widget.query, queryField: widget.queryField));
+      _sourceBloc.add(InitialQueryFeed(query: widget.query, queryField: widget.queryField));
     });
   }
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
-    final minScroll =
-        _scrollController.position.minScrollExtent + _minScrollThreshold;
+    final minScroll = _scrollController.position.minScrollExtent + _minScrollThreshold;
     final currentScroll = _scrollController.position.pixels;
 
     if (currentScroll > minScroll && _isShowFloatingAction == false) {
@@ -99,10 +97,8 @@ class _QueryPageState extends State<QueryPage> {
             onPressed: _scrollToTop,
             child: Icon(Icons.arrow_upward_rounded)),
       ),
-      body:
-          BlocBuilder<QueryFeedBloc, QueryFeedState>(builder: (context, state) {
-        if (BlocProvider.of<QueryFeedBloc>(context).query != widget.query ||
-            state is QueryFeedInitial) {
+      body: BlocBuilder<QueryFeedBloc, QueryFeedState>(builder: (context, state) {
+        if (BlocProvider.of<QueryFeedBloc>(context).query != widget.query || state is QueryFeedInitial) {
           return Center(child: CircularProgressIndicator());
         } else if (state is QueryFeedLoaded) {
           return CustomScrollView(
@@ -166,14 +162,11 @@ class _QueryPageState extends State<QueryPage> {
                       sliver: SliverList(
                         delegate: SliverChildListDelegate(
                           List.generate(
-                            state.hasMore
-                                ? state.feeds.length + 1
-                                : state.feeds.length,
+                            state.hasMore ? state.feeds.length + 1 : state.feeds.length,
                             (index) => index >= state.feeds.length
                                 ? BottomLoader()
                                 : Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 4),
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                                     child: CardBase(
                                       news: state.feeds[index],
                                       canClickSource: false,
@@ -197,9 +190,7 @@ class _QueryPageState extends State<QueryPage> {
 class QueryPageOptions {
   static const String block = "ซ่อนเนื้อหาจากแหล่งข่าวนี้";
 
-  static const Map<String, Icon> icons = {
-    block: Icon(Icons.block, size: 24, color: Colors.black54)
-  };
+  static const Map<String, Icon> icons = {block: Icon(Icons.block, size: 24, color: Colors.black54)};
 
   static const List<String> choices = <String>[
     block,

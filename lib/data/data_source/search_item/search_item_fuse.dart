@@ -9,12 +9,8 @@ import 'package:spent/domain/model/search_item.dart';
 class SearchItemFuse {
   Fuzzy<SearchItem> fuse;
 
-  List<SearchItem> _mapToFuzzy(
-      {List<String> items, String type, String description}) {
-    return items
-        .map((item) =>
-            SearchItem(value: item, type: type, description: description))
-        .toList();
+  List<SearchItem> _mapToFuzzy({List<String> items, String type, String description}) {
+    return items.map((item) => SearchItem(value: item, type: type, description: description)).toList();
   }
 
   SearchItemFuse() {
@@ -31,10 +27,7 @@ class SearchItemFuse {
     );
     fuse = Fuzzy(catogoryList + sourceList,
         options: FuzzyOptions(
-          keys: [
-            WeightedKey<SearchItem>(
-                name: 'value', getter: (item) => item.value, weight: 1)
-          ],
+          keys: [WeightedKey<SearchItem>(name: 'value', getter: (item) => item.value, weight: 1)],
           shouldNormalize: true,
           isCaseSensitive: false,
           shouldSort: false,

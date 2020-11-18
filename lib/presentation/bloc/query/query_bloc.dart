@@ -35,13 +35,11 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
     }
   }
 
-  bool __hasMore(QueryFeedState state) =>
-      state is QueryFeedLoaded && state.hasMore;
+  bool __hasMore(QueryFeedState state) => state is QueryFeedLoaded && state.hasMore;
 
   Stream<QueryFeedState> _mapInitialLoadedQueryFeedState() async* {
     try {
-      final feeds = await _getNewsFeedUseCase.call(
-          from: 0, size: fetchSize, query: query, queryField: queryField);
+      final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
       final hasMore = feeds.length >= fetchSize;
       yield QueryFeedLoaded(feeds: feeds, hasMore: hasMore, query: query);
     } catch (_) {
@@ -54,27 +52,21 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
       final curState = state;
       if (curState is QueryFeedLoaded) {
         final feeds = await _getNewsFeedUseCase.call(
-            from: curState.feeds.length,
-            size: fetchSize,
-            query: query,
-            queryField: queryField);
+            from: curState.feeds.length, size: fetchSize, query: query, queryField: queryField);
         yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
-            : QueryFeedLoaded(
-                feeds: curState.feeds + feeds, hasMore: true, query: query);
+            : QueryFeedLoaded(feeds: curState.feeds + feeds, hasMore: true, query: query);
       }
     } catch (_) {
       yield QueryFeedError();
     }
   }
 
-  Stream<QueryFeedState> _mapRefreshLoadedQueryFeedState(
-      RefreshFeedCallback callback) async* {
+  Stream<QueryFeedState> _mapRefreshLoadedQueryFeedState(RefreshFeedCallback callback) async* {
     try {
       final curState = state;
       if (curState is QueryFeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(
-            from: 0, size: fetchSize, query: query, queryField: queryField);
+        final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
         yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
       }
       if (callback != null) callback();
@@ -84,10 +76,8 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
   }
 
   @override
-  Stream<Transition<QueryFeedEvent, QueryFeedState>> transformEvents(
-      Stream<QueryFeedEvent> events, transitionFn) {
-    return super.transformEvents(
-        events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
+  Stream<Transition<QueryFeedEvent, QueryFeedState>> transformEvents(Stream<QueryFeedEvent> events, transitionFn) {
+    return super.transformEvents(events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
   }
 }
 

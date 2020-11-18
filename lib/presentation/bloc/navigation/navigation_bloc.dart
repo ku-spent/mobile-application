@@ -14,8 +14,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
 
   bool _isNavigating = false;
 
-  NavigationBloc(@factoryParam this.pageController)
-      : super(NavigationInitial());
+  NavigationBloc(@factoryParam this.pageController) : super(NavigationInitial());
 
   int _getIndex(NavItem item) => NavItem.values.indexWhere((e) => e == item);
 
@@ -28,9 +27,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       if (event.destination != state.selectedPage) {
         int index = _getIndex(event.destination);
         if (index >= 0) {
-          pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 150),
-              curve: Curves.easeOut);
+          pageController.animateToPage(index, duration: const Duration(milliseconds: 150), curve: Curves.easeOut);
         }
         yield NavigationState(event.destination, index);
       }

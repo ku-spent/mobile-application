@@ -28,8 +28,7 @@ class CardBase extends StatefulWidget {
   _CardBaseState createState() => _CardBaseState();
 }
 
-class _CardBaseState extends State<CardBase>
-    with SingleTickerProviderStateMixin {
+class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin {
   News _news;
   bool _isBookmarked = false;
   String _likeStatus = NewsAction.noneLike;
@@ -84,17 +83,13 @@ class _CardBaseState extends State<CardBase>
 
   void _onClickLike() {
     setState(() {
-      _likeStatus = _likeStatus == NewsAction.like
-          ? NewsAction.noneLike
-          : NewsAction.like;
+      _likeStatus = _likeStatus == NewsAction.like ? NewsAction.noneLike : NewsAction.like;
     });
   }
 
   void _onClickDislike() {
     setState(() {
-      _likeStatus = _likeStatus == NewsAction.dislike
-          ? NewsAction.noneLike
-          : NewsAction.dislike;
+      _likeStatus = _likeStatus == NewsAction.dislike ? NewsAction.noneLike : NewsAction.dislike;
     });
   }
 
@@ -104,8 +99,7 @@ class _CardBaseState extends State<CardBase>
     });
   }
 
-  Widget _buildIcon(
-      {Function onPressed, Icon inActive, Icon active, bool isActive}) {
+  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
     return IconButton(
       color: isActive ? Theme.of(context).primaryColor : Colors.grey,
       onPressed: onPressed,
@@ -185,8 +179,7 @@ class _CardBaseState extends State<CardBase>
                               placeholder: (context, url) => Container(
                                 color: Colors.black26,
                               ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                               width: double.infinity,
                               height: 200,
                               fit: BoxFit.cover,

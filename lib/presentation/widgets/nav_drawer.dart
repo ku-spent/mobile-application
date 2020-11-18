@@ -56,16 +56,14 @@ class NavDrawer extends StatelessWidget {
                     title: Text('การติดตาม'),
                     leading: Icon(Icons.rss_feed_rounded),
                     selected: state.selectedPage == NavItem.page_following,
-                    onTap: () =>
-                        _handleItemClick(context, NavItem.page_following),
+                    onTap: () => _handleItemClick(context, NavItem.page_following),
                     contentPadding: _listPadding,
                   ),
                   ListTile(
                     title: Text('ที่บันทึกไว้'),
                     leading: Icon(Icons.bookmark),
                     selected: state.selectedPage == NavItem.page_bookmark,
-                    onTap: () =>
-                        {_handleItemClick(context, NavItem.page_bookmark)},
+                    onTap: () => {_handleItemClick(context, NavItem.page_bookmark)},
                     contentPadding: _listPadding,
                   ),
                   ListTile(

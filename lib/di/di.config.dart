@@ -34,18 +34,14 @@ GetIt $initGetIt(
 }) {
   final gh = GetItHelper(get, environment, environmentFilter);
   gh.factory<HttpManager>(() => AppHttpManager());
-  gh.factoryParam<NavigationBloc, PageController, dynamic>(
-      (pageController, _) => NavigationBloc(pageController));
+  gh.factoryParam<NavigationBloc, PageController, dynamic>((pageController, _) => NavigationBloc(pageController));
   gh.factory<NewsDataSource>(() => NewsRemoteDataSource(get<HttpManager>()));
   gh.factory<NewsRepository>(() => NewsRepository(get<NewsDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
-  gh.factory<GetNewsFeedUseCase>(
-      () => GetNewsFeedUseCase(get<NewsRepository>()));
+  gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factory<QueryFeedBloc>(() => QueryFeedBloc(get<GetNewsFeedUseCase>()));
-  gh.factory<SearchItemDataSource>(
-      () => SearchRemoteDataSource(get<SearchItemFuse>()));
-  gh.factory<SearchRepository>(
-      () => SearchRepository(get<SearchItemDataSource>()));
+  gh.factory<SearchItemDataSource>(() => SearchRemoteDataSource(get<SearchItemFuse>()));
+  gh.factory<SearchRepository>(() => SearchRepository(get<SearchItemDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
   gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
