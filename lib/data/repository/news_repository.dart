@@ -6,7 +6,7 @@ import 'package:spent/domain/model/news.dart';
 class NewsRepository {
   final NewsDataSource _newsDataSource;
 
-  NewsRepository(this._newsDataSource);
+  const NewsRepository(this._newsDataSource);
 
   Future<List<News>> getNews({
     int from,

@@ -23,12 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  amazon_cognito_identity_dart_2: ^0.1.18
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
   cached_network_image: ^2.3.3
   equatable: ^1.2.5
   flutter_bloc: ^6.1.0
   flutter_inappwebview: ^4.0.0+4
+  flutter_signin_button: ^1.1.0
   flutter_svg: ^0.19.0
   fuzzy: ^0.2.3
   get_it: ^5.0.1
@@ -36,17 +38,19 @@ dependencies:
   http: ^0.12.2
   implicitly_animated_reorderable_list: ^0.3.0
   injectable: ^1.0.5
+  json_serializable: ^3.5.0
   material_floating_search_bar: ^0.2.2
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
+  shared_preferences: ^0.5.12+4
   timeago: ^2.0.27
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.10.4
-  injectable_generator: ^1.0.6
   flutter_native_splash: ^0.1.9
+  injectable_generator: ^1.0.6
 
 flutter_native_splash:
   image: assets/images/logo.png

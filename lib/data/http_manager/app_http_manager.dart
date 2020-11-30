@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:spent/core/constants.dart';
@@ -15,7 +16,7 @@ const timeout = Duration(seconds: 3);
 class AppHttpManager implements HttpManager {
   @override
   Future get({
-    String url,
+    @required String url,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
@@ -32,16 +33,19 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> post({
-    String url,
+    @required String url,
+    String endpoint,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
     try {
       print('Api Post request url $url, with $body');
+      print(_headerBuilder(headers));
+      print(_queryBuilder(url, query, endpoint: endpoint));
       final response = await http
-          .post(_queryBuilder(url, query),
-              body: body != null ? json.encode(body) : null, headers: _headerBuilder(headers))
+          .post(_queryBuilder(url, query, endpoint: endpoint),
+              body: body != null ? body : null, headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {
@@ -51,7 +55,7 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> put({
-    String url,
+    @required String url,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
@@ -69,7 +73,7 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> delete({
-    String url,
+    @required String url,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
@@ -85,19 +89,18 @@ class AppHttpManager implements HttpManager {
   }
 
   Map<String, String> _headerBuilder(Map<String, String> headers) {
-    final headers = <String, String>{};
-    headers[HttpHeaders.acceptHeader] = 'application/json';
-    headers[HttpHeaders.contentTypeHeader] = 'application/json';
+    final baseHeaders = <String, String>{};
+    baseHeaders[HttpHeaders.acceptHeader] = 'application/json';
+    baseHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
     if (headers != null && headers.isNotEmpty) {
-      headers.forEach((key, value) {
-        headers[key] = value;
-      });
+      return headers;
     }
-    return headers;
+    return baseHeaders;
   }
 
-  String _queryBuilder(String path, Map<String, dynamic> query) {
-    final buffer = StringBuffer()..write(endpoint + path);
+  String _queryBuilder(String path, Map<String, dynamic> query, {String endpoint}) {
+    final curEndpoint = endpoint == null ? ENDPOINT : endpoint;
+    final buffer = StringBuffer()..write(curEndpoint + path);
     if (query != null) {
       if (query.isNotEmpty) {
         buffer.write('?');
@@ -110,7 +113,7 @@ class AppHttpManager implements HttpManager {
   }
 
   dynamic _returnResponse(http.Response response) {
-    final responseJson = json.decode(utf8.decode(response.bodyBytes))['data'];
+    final responseJson = json.decode(utf8.decode(response.bodyBytes));
     // json.decode(response.body.toString());
     if (response.statusCode >= 200 && response.statusCode <= 299) {
       print('Api response success with $responseJson');

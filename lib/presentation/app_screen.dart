@@ -15,9 +15,8 @@ import 'package:spent/presentation/widgets/nav_drawer.dart';
 
 class AppScreen extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
-  final PageController pageController;
 
-  AppScreen({Key key, @required this.pageController}) : super(key: key);
+  AppScreen({Key key}) : super(key: key);
 
   void _onPageChanged(BuildContext context, int index) {
     NavItem item = NavItem.values[index];
@@ -43,7 +42,7 @@ class AppScreen extends StatelessWidget {
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: PageView(
-            controller: pageController,
+            controller: BlocProvider.of<NavigationBloc>(context).pageController,
             onPageChanged: (int index) => _onPageChanged(context, index),
             children: [
               HomePage(

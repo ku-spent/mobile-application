@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/http_manager.dart';
@@ -19,7 +17,7 @@ class NewsRemoteDataSource implements NewsDataSource {
     String query,
   }) async {
     try {
-      final data = await _httpManager.get(
+      final response = await _httpManager.get(
         url: '/feed',
         query: {
           'from': from.toString(),
@@ -28,7 +26,7 @@ class NewsRemoteDataSource implements NewsDataSource {
           'query': query,
         },
       );
-      List items = data['hits'];
+      List items = response['data']['hits'];
       return items.map((e) => News.fromJson(e['_source'])).toList();
     } catch (e) {
       print(e);

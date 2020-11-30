@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({Key key}) : super(key: key);
@@ -22,29 +23,30 @@ class NavDrawer extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.only(top: 56.0),
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/images/icon-logo.svg',
-                          semanticsLabel: 'Acme Logo',
-                          height: 44,
-                          width: 44,
-                        ),
-                        Container(
-                          width: 12,
-                        ),
-                        Text(
-                          'SPENT',
-                          style: TextStyle(color: Colors.black87, fontSize: 24),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 32,
-                  ),
+                  NavDrawerAccountHeader(),
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  //   child: Row(
+                  //     children: [
+                  //       SvgPicture.asset(
+                  //         'assets/images/icon-logo.svg',
+                  //         semanticsLabel: 'Acme Logo',
+                  //         height: 44,
+                  //         width: 44,
+                  //       ),
+                  //       Container(
+                  //         width: 12,
+                  //       ),
+                  //       Text(
+                  //         'SPENT',
+                  //         style: TextStyle(color: Colors.black87, fontSize: 24),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Container(
+                  //   height: 32,
+                  // ),
                   ListTile(
                     title: Text('หน้าแรก'),
                     leading: Icon(Icons.home),

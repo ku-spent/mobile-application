@@ -7,6 +7,7 @@ abstract class HttpManager {
 
   Future<dynamic> post({
     String url,
+    String endpoint,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
