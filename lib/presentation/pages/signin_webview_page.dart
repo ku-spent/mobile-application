@@ -15,9 +15,12 @@ class SigninWebviewPage extends StatefulWidget {
 
 class _SigninWebviewPageState extends State<SigninWebviewPage> {
   SigninBloc _signinBloc;
+
   static const String url = AUTH_ENDPOINT +
       "/authorize?identity_provider=Google&redirect_uri=" +
-      "myapp://&response_type=CODE&client_id=4mj6hk0jnb4jmjdisonmkprq33&scope=email%20openid%20profile%20aws.cognito.signin.user.admin";
+      "myapp://&response_type=CODE&client_id=" +
+      AWS_COGNITO_CLIENT_ID +
+      "&scope=email%20openid%20profile%20aws.cognito.signin.user.admin";
 
   @override
   void initState() {
@@ -51,6 +54,7 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
           Navigator.pop(context);
         }
       },
+      cubit: _signinBloc,
       child: Scaffold(
         appBar: AppBar(),
         body: InAppWebView(

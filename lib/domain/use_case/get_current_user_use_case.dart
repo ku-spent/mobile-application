@@ -1,16 +1,20 @@
 import 'package:injectable/injectable.dart';
+import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/domain/model/user.dart';
 
 @injectable
 class GetCurrentUserUseCase {
+  final AuthenticationRepository _authenticationRepository;
+
+  const GetCurrentUserUseCase(this._authenticationRepository);
+
   Future<User> call() async {
-    return Future.delayed(
-      const Duration(milliseconds: 500),
-      () => User(
-        email: 'test@hotmail.com',
-        name: 'test user',
-        picture: 'testpic',
-      ),
-    );
+    try {
+      final token = await _authenticationRepository.getToken();
+      final user = await _authenticationRepository.getUserFromToken(token);
+      return user;
+    } catch (err) {
+      print(err);
+    }
   }
 }

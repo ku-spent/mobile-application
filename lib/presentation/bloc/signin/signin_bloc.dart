@@ -29,6 +29,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
   }
 
   Stream<SigninState> _mapInitialSigninToState(InitialSignin event) async* {
+    print('initial');
     yield SigninInitial();
   }
 

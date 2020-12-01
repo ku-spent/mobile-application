@@ -1,9 +1,10 @@
 import 'package:injectable/injectable.dart';
+import 'package:spent/core/constants.dart';
 import 'package:spent/data/data_source/authentication/authentication_data_source.dart';
 import 'package:spent/data/http_manager/http_manager.dart';
 import 'package:spent/domain/model/token.dart';
 
-@Injectable(as: AuthenticationDataSource)
+@injectable
 class AuthenticationRemoteDataSource implements AuthenticationDataSource {
   final HttpManager _httpManager;
 
@@ -12,8 +13,8 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
   @override
   Future<Token> getToken({String authCode}) async {
     final response = await _httpManager.post(
-      endpoint: 'https://spent.auth.ap-southeast-1.amazoncognito.com',
-      url: '/oauth2/token',
+      endpoint: AUTH_ENDPOINT,
+      url: '/token',
       body: {},
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       query: {

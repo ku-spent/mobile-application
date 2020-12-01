@@ -9,16 +9,13 @@ class UserSignInWithAuthCodeUseCase {
   const UserSignInWithAuthCodeUseCase(this._authenticationRepository);
 
   Future<User> call(String authCode) async {
-    final token = await _authenticationRepository.getToken(authCode);
-    final user = await _authenticationRepository.getUserFromToken(token);
-    return user;
-    // return Future.delayed(
-    //   const Duration(milliseconds: 500),
-    //   () => User(
-    //     email: 'test@hotmail.com',
-    //     name: 'test user',
-    //     picture: 'testpic',
-    //   ),
-    // );
+    try {
+      final token = await _authenticationRepository.getToken(authCode: authCode);
+      final user = await _authenticationRepository.getUserFromToken(token);
+      await _authenticationRepository.saveTokenToStorage(token);
+      return user;
+    } catch (err) {
+      print(err);
+    }
   }
 }
