@@ -12,6 +12,7 @@ class WelcomePage extends StatelessWidget {
       Navigator.push(context, CupertinoPageRoute(builder: (context) => SigninWebviewPage()));
     }
 
+    print('build');
     return Scaffold(
       body: Center(
         child: Column(

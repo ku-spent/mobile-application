@@ -15,7 +15,6 @@ class AuthenticationRepository {
 
   Future<Token> getToken({String authCode}) async {
     final localToken = await _authenticationLocalDataSource.getToken();
-    print(localToken);
     if (localToken != null) return localToken;
 
     final token = await _authenticationRemoteDataSource.getToken(authCode: authCode);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:spent/core/constants.dart';
+import 'package:spent/di/di.dart';
 import 'package:spent/presentation/app_screen.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 
@@ -30,7 +31,7 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
   }
 
   void navigateOnSuccess(BuildContext context) {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => AppScreen()));
+    // Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => AppScreen()));
   }
 
   Future<ShouldOverrideUrlLoadingAction> shouldOverrideUrlLoading(
@@ -50,13 +51,13 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
   Widget build(BuildContext context) {
     return BlocListener<SigninBloc, SigninState>(
       listener: (context, state) {
-        if (state is SigninError) {
+        print(state);
+        if (state is SigninError || state is SigninSuccess) {
           Navigator.pop(context);
         }
       },
       cubit: _signinBloc,
       child: Scaffold(
-        appBar: AppBar(),
         body: InAppWebView(
           initialUrl: url,
           shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) =>

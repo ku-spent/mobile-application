@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/presentation/app_screen.dart';
@@ -49,7 +50,6 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-        print(state);
         if (state is AuthenticationAuthenticated) {
           return AppScreen();
         } else if (state is AuthenticationUnAuthenticated) {
