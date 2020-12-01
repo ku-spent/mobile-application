@@ -14,7 +14,7 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
   Future<Token> getToken({String authCode}) async {
     final response = await _httpManager.post(
       endpoint: AUTH_ENDPOINT,
-      url: '/token',
+      path: '/token',
       body: {},
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       query: {

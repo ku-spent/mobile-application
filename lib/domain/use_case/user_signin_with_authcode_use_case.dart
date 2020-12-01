@@ -12,6 +12,7 @@ class UserSignInWithAuthCodeUseCase {
     try {
       final token = await _authenticationRepository.getToken(authCode: authCode);
       final user = await _authenticationRepository.getUserFromToken(token);
+      await user.cognitoUser.cacheTokens();
       await _authenticationRepository.saveTokenToStorage(token);
       return user;
     } catch (err) {

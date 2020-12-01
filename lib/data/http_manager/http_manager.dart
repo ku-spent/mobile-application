@@ -1,12 +1,12 @@
 abstract class HttpManager {
   Future<dynamic> get({
-    String url,
+    String path,
     Map<String, dynamic> query,
     Map<String, String> headers,
   });
 
   Future<dynamic> post({
-    String url,
+    String path,
     String endpoint,
     Map body,
     Map<String, dynamic> query,
@@ -14,14 +14,14 @@ abstract class HttpManager {
   });
 
   Future<dynamic> put({
-    String url,
+    String path,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
   });
 
   Future<dynamic> delete({
-    String url,
+    String path,
     Map<String, dynamic> query,
     Map<String, String> headers,
   });

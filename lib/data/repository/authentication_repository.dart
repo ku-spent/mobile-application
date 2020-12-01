@@ -40,13 +40,29 @@ class AuthenticationRepository {
       refreshToken: refreshToken,
     );
     final cognitoUser = CognitoUser(null, userPool, signInUserSession: session);
+    final user = await _getUserFromCognitoUser(cognitoUser);
+    return user;
+  }
+
+  Future<User> getUserFromSession(Token token) async {
+    final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
+    final cognitoUser = await userPool.getCurrentUser();
+    // final cognitoUser = CognitoUser(null, userPool);
+    // final refreskToken = CognitoRefreshToken(token.refreshToken);
+    // await cognitoUser.refreshSession(refreskToken);
+    final user = await _getUserFromCognitoUser(cognitoUser);
+    return user;
+  }
+
+  Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
     Map<String, String> attMap = {'name': '', 'email': '', 'picture': ''};
-    for (CognitoUserAttribute attribute in await cognitoUser.getUserAttributes()) {
+    final userAttributes = await cognitoUser.getUserAttributes();
+    for (CognitoUserAttribute attribute in userAttributes) {
       if (attMap.containsKey(attribute.name)) {
         attMap[attribute.name] = attribute.value;
       }
     }
-    final User user = User.fromJson(attMap);
+    final User user = User.fromJson(attMap, cognitoUser);
     return user;
   }
 }

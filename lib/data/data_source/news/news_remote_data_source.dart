@@ -18,7 +18,7 @@ class NewsRemoteDataSource implements NewsDataSource {
   }) async {
     try {
       final response = await _httpManager.get(
-        url: '/feed',
+        path: '/feed',
         query: {
           'from': from.toString(),
           'size': size.toString(),

@@ -16,14 +16,14 @@ const timeout = Duration(seconds: 3);
 class AppHttpManager implements HttpManager {
   @override
   Future get({
-    @required String url,
+    @required String path,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
     try {
-      print('Api Get request url $url');
+      print('Api Get request path $path');
       final response = await http
-          .get(_queryBuilder(url, query), headers: _headerBuilder(headers))
+          .get(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {
@@ -33,18 +33,18 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> post({
-    @required String url,
+    @required String path,
     String endpoint,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
     try {
-      print('Api Post request url $url, with $body');
+      print('Api Post request path $path, with $body');
       print(_headerBuilder(headers));
-      print(_queryBuilder(url, query, endpoint: endpoint));
+      print(_queryBuilder(path, query, endpoint: endpoint));
       final response = await http
-          .post(_queryBuilder(url, query, endpoint: endpoint),
+          .post(_queryBuilder(path, query, endpoint: endpoint),
               body: body != null ? body : null, headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
@@ -55,15 +55,15 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> put({
-    @required String url,
+    @required String path,
     Map body,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
     try {
-      print('Api Put request url $url, with $body');
+      print('Api Put request path $path, with $body');
       final response = await http
-          .put(_queryBuilder(url, query), body: json.encode(body), headers: _headerBuilder(headers))
+          .put(_queryBuilder(path, query), body: json.encode(body), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {
@@ -73,14 +73,14 @@ class AppHttpManager implements HttpManager {
 
   @override
   Future<dynamic> delete({
-    @required String url,
+    @required String path,
     Map<String, dynamic> query,
     Map<String, String> headers,
   }) async {
     try {
-      print('Api Delete request url $url');
+      print('Api Delete request path $path');
       final response = await http
-          .delete(_queryBuilder(url, query), headers: _headerBuilder(headers))
+          .delete(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
     } on Exception catch (_) {
