@@ -6,6 +6,8 @@ import 'package:spent/domain/model/token.dart';
 import 'package:spent/domain/model/user.dart';
 import 'package:spent/core/constants.dart';
 
+final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
+
 @injectable
 class AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
@@ -30,7 +32,6 @@ class AuthenticationRepository {
   }
 
   Future<User> getUserFromToken(Token token) async {
-    final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
     final idToken = CognitoIdToken(token.idToken);
     final accessToken = CognitoAccessToken(token.accessToken);
     final refreshToken = CognitoRefreshToken(token.refreshToken);
@@ -44,25 +45,20 @@ class AuthenticationRepository {
     return user;
   }
 
-  Future<User> getUserFromSession(Token token) async {
-    final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
-    final cognitoUser = await userPool.getCurrentUser();
-    // final cognitoUser = CognitoUser(null, userPool);
-    // final refreskToken = CognitoRefreshToken(token.refreshToken);
-    // await cognitoUser.refreshSession(refreskToken);
+  Future<User> getUserFromSession() async {
+    final token = await getToken();
+    if (token == null) return null;
+
+    final cognitoUser = CognitoUser(null, userPool);
+    final refreskToken = CognitoRefreshToken(token.refreshToken);
+    await cognitoUser.refreshSession(refreskToken);
     final user = await _getUserFromCognitoUser(cognitoUser);
     return user;
   }
 
   Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
-    Map<String, String> attMap = {'name': '', 'email': '', 'picture': ''};
     final userAttributes = await cognitoUser.getUserAttributes();
-    for (CognitoUserAttribute attribute in userAttributes) {
-      if (attMap.containsKey(attribute.name)) {
-        attMap[attribute.name] = attribute.value;
-      }
-    }
-    final User user = User.fromJson(attMap, cognitoUser);
+    final User user = User.fromCognitoAttributes(userAttributes);
     return user;
   }
 }

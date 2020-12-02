@@ -9,10 +9,8 @@ class UserSignOutUseCase {
 
   Future<void> call() async {
     try {
-      final token = await _authenticationRepository.getToken();
-      final user = await _authenticationRepository.getUserFromSession(token);
-
-      await user.cognitoUser.signOut();
+      // final user = await _authenticationRepository.getUserFromSession();
+      // await user.cognitoUser.signOut();
       await _authenticationRepository.removeTokenFromStorage();
     } catch (err) {
       print(err);

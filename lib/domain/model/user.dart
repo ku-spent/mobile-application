@@ -5,16 +5,22 @@ class User extends Equatable {
   final String name;
   final String email;
   final String picture;
-  final CognitoUser cognitoUser;
+  // final CognitoUser cognitoUser;
 
-  User({this.name, this.email, this.picture, this.cognitoUser});
+  User({this.name, this.email, this.picture});
 
-  factory User.fromJson(Map<String, String> user, CognitoUser cognitoUser) {
+  factory User.fromCognitoAttributes(List<CognitoUserAttribute> cognitoAttributes) {
+    Map<String, String> user = {'name': '', 'email': '', 'picture': ''};
+    for (CognitoUserAttribute attribute in cognitoAttributes) {
+      if (user.containsKey(attribute.name)) {
+        user[attribute.name] = attribute.value;
+      }
+    }
     return User(
       name: user['name'] ?? '',
       email: user['email'] ?? '',
       picture: user['picture'] ?? '',
-      cognitoUser: cognitoUser,
+      // cognitoUser: cognitoUser,
     );
   }
 

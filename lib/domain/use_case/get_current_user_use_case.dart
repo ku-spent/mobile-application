@@ -10,8 +10,7 @@ class GetCurrentUserUseCase {
 
   Future<User> call() async {
     try {
-      final token = await _authenticationRepository.getToken();
-      final user = await _authenticationRepository.getUserFromSession(token);
+      final user = await _authenticationRepository.getUserFromSession();
       return user;
     } catch (err) {
       print(err);

@@ -39,7 +39,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       if (currentUser != null) {
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
-        await _userSignoutUseCase.call();
         yield AuthenticationUnAuthenticated();
       }
     } catch (e) {
