@@ -24,14 +24,14 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   FloatingSearchBarController _controller;
+  SearchBloc _searchBloc;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller;
-    Future.delayed(Duration.zero, () {
-      BlocProvider.of<SearchBloc>(context).add(SearchChange(''));
-    });
+    _searchBloc = BlocProvider.of<SearchBloc>(context);
+    _searchBloc.add(SearchChange(''));
   }
 
   void _onSumitted(String query) {}
@@ -80,27 +80,27 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
+  void _onQueryChanged(String query) {
+    _searchBloc.add(SearchChange(query));
+  }
+
+  Widget _buildResults({List<SearchItem> results, String type}) {
+    final List<SearchItem> typeResults = results.where((item) => item.type == type).toList();
+    OnClickItem _onClick;
+
+    if (type == SearchItem.category)
+      _onClick = _onClickCategoryItem;
+    else if (type == SearchItem.source) _onClick = _onClickSourceItem;
+
+    return SearchItemBuilder(
+      results: typeResults,
+      title: type,
+      onClick: (String query) => _onClick(context, query),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    void _onQueryChanged(String query) {
-      BlocProvider.of<SearchBloc>(context).add(SearchChange(query));
-    }
-
-    Widget _buildResults({List<SearchItem> results, String type}) {
-      final List<SearchItem> typeResults = results.where((item) => item.type == type).toList();
-      OnClickItem _onClick;
-
-      if (type == SearchItem.category)
-        _onClick = _onClickCategoryItem;
-      else if (type == SearchItem.source) _onClick = _onClickSourceItem;
-
-      return SearchItemBuilder(
-        results: typeResults,
-        title: type,
-        onClick: (String query) => _onClick(context, query),
-      );
-    }
-
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (BuildContext context, SearchState state) {
         return FloatingSearchAppBar(

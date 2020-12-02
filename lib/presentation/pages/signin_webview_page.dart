@@ -48,6 +48,9 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
       },
       cubit: _signinBloc,
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('Signin'),
+        ),
         body: InAppWebView(
           initialUrl: url,
           shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) =>
