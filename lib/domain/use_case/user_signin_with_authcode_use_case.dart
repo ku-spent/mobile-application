@@ -10,10 +10,8 @@ class UserSignInWithAuthCodeUseCase {
 
   Future<User> call(String authCode) async {
     try {
-      final token = await _authenticationRepository.getToken(authCode: authCode);
+      final token = await _authenticationRepository.getTokenFromAuthCoe(authCode: authCode);
       final user = await _authenticationRepository.getUserFromToken(token);
-      await _authenticationRepository.saveTokenToStorage(token);
-
       return user;
     } catch (err) {
       print(err);

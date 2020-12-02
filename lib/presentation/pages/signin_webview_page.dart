@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:spent/core/constants.dart';
-import 'package:spent/di/di.dart';
-import 'package:spent/presentation/app_screen.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 
 class SigninWebviewPage extends StatefulWidget {
@@ -30,18 +28,11 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
     _signinBloc.add(InitialSignin());
   }
 
-  void navigateOnSuccess(BuildContext context) {
-    // Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => AppScreen()));
-  }
-
   Future<ShouldOverrideUrlLoadingAction> shouldOverrideUrlLoading(
       ShouldOverrideUrlLoadingRequest shouldOverrideUrlLoadingRequest, BuildContext context) async {
     if (shouldOverrideUrlLoadingRequest.url.startsWith("myapp://?code=")) {
       String code = shouldOverrideUrlLoadingRequest.url.substring("myapp://?code=".length).replaceAll('#', '');
-      _signinBloc.add(SignInWithFederatedCognitoAuthCode(
-        authCode: code,
-        onSuccess: () => navigateOnSuccess(context),
-      ));
+      _signinBloc.add(SignInWithFederatedCognitoAuthCode(authCode: code));
       return ShouldOverrideUrlLoadingAction.CANCEL;
     }
     return ShouldOverrideUrlLoadingAction.ALLOW;
@@ -51,7 +42,6 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
   Widget build(BuildContext context) {
     return BlocListener<SigninBloc, SigninState>(
       listener: (context, state) {
-        print(state);
         if (state is SigninError || state is SigninSuccess) {
           Navigator.pop(context);
         }

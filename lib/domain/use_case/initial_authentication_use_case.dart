@@ -2,14 +2,15 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
 
 @injectable
-class UserSignOutUseCase {
+class InitialAuthenticationUseCase {
   final AuthenticationRepository _authenticationRepository;
 
-  const UserSignOutUseCase(this._authenticationRepository);
+  InitialAuthenticationUseCase(this._authenticationRepository);
 
-  Future<void> call() async {
+  Future<bool> call() async {
     try {
-      await _authenticationRepository.signOut();
+      final isValid = await _authenticationRepository.init();
+      return isValid;
     } catch (err) {
       print(err);
     }

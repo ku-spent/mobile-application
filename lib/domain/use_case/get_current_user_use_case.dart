@@ -6,11 +6,11 @@ import 'package:spent/domain/model/user.dart';
 class GetCurrentUserUseCase {
   final AuthenticationRepository _authenticationRepository;
 
-  const GetCurrentUserUseCase(this._authenticationRepository);
+  GetCurrentUserUseCase(this._authenticationRepository);
 
   Future<User> call() async {
     try {
-      final user = await _authenticationRepository.getUserFromSession();
+      final user = await _authenticationRepository.getCurrentUser();
       return user;
     } catch (err) {
       print(err);

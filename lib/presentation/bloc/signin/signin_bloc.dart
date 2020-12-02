@@ -39,9 +39,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
       final user = await _userSignInWithAuthCodeUseCase.call(event.authCode);
       if (user != null) {
         _authenticationBloc.add(UserSignedIn(user: user));
-        if (event.onSuccess != null) event.onSuccess();
         yield SigninSuccess();
-        // yield SigninInitial();
       } else {
         yield SigninError(error: 'Something very weird just happened');
       }

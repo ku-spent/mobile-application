@@ -5,7 +5,6 @@ class User extends Equatable {
   final String name;
   final String email;
   final String picture;
-  // final CognitoUser cognitoUser;
 
   User({this.name, this.email, this.picture});
 
@@ -20,7 +19,6 @@ class User extends Equatable {
       name: user['name'] ?? '',
       email: user['email'] ?? '',
       picture: user['picture'] ?? '',
-      // cognitoUser: cognitoUser,
     );
   }
 

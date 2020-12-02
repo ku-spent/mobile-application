@@ -4,12 +4,11 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/domain/model/token.dart';
 
-// @Injectable(as: AuthenticationDataSource)
 @injectable
 class AuthenticationLocalDataSource {
   static const String tokenKey = 'token';
 
-  const AuthenticationLocalDataSource();
+  AuthenticationLocalDataSource();
 
   Future<Token> getToken({String authCode}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

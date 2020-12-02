@@ -13,9 +13,8 @@ class InitialSignin extends SigninEvent {}
 
 class SignInWithFederatedCognitoAuthCode extends SigninEvent {
   final String authCode;
-  final SignInOnSuccess onSuccess;
 
-  const SignInWithFederatedCognitoAuthCode({@required this.authCode, this.onSuccess});
+  const SignInWithFederatedCognitoAuthCode({@required this.authCode});
 
   @override
   List<Object> get props => [authCode];

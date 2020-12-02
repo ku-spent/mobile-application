@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spent/presentation/widgets/bottom_navbar.dart';
 
 class FollowingPage extends StatefulWidget {
   FollowingPage({Key key}) : super(key: key);
