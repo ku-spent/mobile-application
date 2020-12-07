@@ -1,9 +1,12 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:spent/core/constants.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SigninWebviewPage extends StatefulWidget {
   SigninWebviewPage({Key key}) : super(key: key);
@@ -14,6 +17,7 @@ class SigninWebviewPage extends StatefulWidget {
 
 class _SigninWebviewPageState extends State<SigninWebviewPage> {
   SigninBloc _signinBloc;
+  final Completer<WebViewController> _webViewController = Completer<WebViewController>();
 
   static const String url = AUTH_ENDPOINT +
       "/authorize?identity_provider=Google&redirect_uri=" +
@@ -24,18 +28,20 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
   @override
   void initState() {
     super.initState();
+    // CookieManager().clearCookies();
+    // Enable hybrid composition.
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     _signinBloc = BlocProvider.of<SigninBloc>(context);
     _signinBloc.add(InitialSignin());
   }
 
-  Future<ShouldOverrideUrlLoadingAction> shouldOverrideUrlLoading(
-      ShouldOverrideUrlLoadingRequest shouldOverrideUrlLoadingRequest, BuildContext context) async {
-    if (shouldOverrideUrlLoadingRequest.url.startsWith("myapp://?code=")) {
-      String code = shouldOverrideUrlLoadingRequest.url.substring("myapp://?code=".length).replaceAll('#', '');
+  Future<NavigationDecision> shouldOverrideUrlLoading(NavigationRequest request, BuildContext context) async {
+    if (request.url.startsWith("myapp://?code=")) {
+      String code = request.url.substring("myapp://?code=".length).replaceAll('#', '');
       _signinBloc.add(SignInWithFederatedCognitoAuthCode(authCode: code));
-      return ShouldOverrideUrlLoadingAction.CANCEL;
+      return NavigationDecision.prevent;
     }
-    return ShouldOverrideUrlLoadingAction.ALLOW;
+    return NavigationDecision.navigate;
   }
 
   @override
@@ -51,17 +57,16 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
         appBar: AppBar(
           title: Text('Signin'),
         ),
-        body: InAppWebView(
+        body: WebView(
           initialUrl: url,
-          shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) =>
-              shouldOverrideUrlLoading(shouldOverrideUrlLoadingRequest, context),
-          initialOptions: InAppWebViewGroupOptions(
-            crossPlatform: InAppWebViewOptions(
-              useShouldOverrideUrlLoading: true,
-              userAgent: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) ' +
-                  'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36',
-            ),
-          ),
+          userAgent: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) ' +
+              'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _webViewController.complete(webViewController);
+          },
+          navigationDelegate: (request) => shouldOverrideUrlLoading(request, context),
+          gestureNavigationEnabled: true,
         ),
       ),
     );

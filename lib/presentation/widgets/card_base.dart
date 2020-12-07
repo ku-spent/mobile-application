@@ -7,8 +7,8 @@ import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
+import 'package:spent/presentation/pages/news_webview.dart';
 import 'package:spent/presentation/pages/query_page.dart';
-import 'package:spent/presentation/pages/webview.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -41,15 +41,13 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   }
 
   void _goToLink(BuildContext context) async {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      Navigator.push(
-          context,
-          CupertinoPageRoute(
-              maintainState: false,
-              builder: (context) => WebViewPage(
-                    news: _news,
-                  )));
-    });
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            maintainState: false,
+            builder: (context) => NewsWebview(
+                  news: _news,
+                )));
   }
 
   void _goToQuerySourcePage(BuildContext context) {
