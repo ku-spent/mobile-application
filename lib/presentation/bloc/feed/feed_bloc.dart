@@ -43,7 +43,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
             ? curState.copyWith(hasMore: false)
             : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
       }
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield FeedError();
     }
   }

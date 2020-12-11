@@ -1,12 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/core/constants.dart';
 import 'package:spent/data/data_source/authentication/authentication_data_source.dart';
-import 'package:spent/data/http_manager/http_manager.dart';
+import 'package:spent/data/http_manager/app_http_manager.dart';
 import 'package:spent/domain/model/token.dart';
 
 @injectable
 class AuthenticationRemoteDataSource implements AuthenticationDataSource {
-  final HttpManager _httpManager;
+  final AppHttpManager _httpManager;
 
   const AuthenticationRemoteDataSource(this._httpManager);
 
@@ -19,7 +19,7 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       query: {
         'grant_type': 'authorization_code',
-        'client_id': '4mj6hk0jnb4jmjdisonmkprq33',
+        'client_id': AWS_COGNITO_CLIENT_ID,
         'code': authCode,
         'redirect_uri': 'myapp://'
       },

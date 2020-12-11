@@ -11,9 +11,10 @@ import 'package:spent/domain/exceptions/app_exceptions.dart';
 
 const timeout = Duration(seconds: 3);
 
-@Injectable(as: HttpManager)
-@Singleton(as: HttpManager)
+@singleton
 class AppHttpManager implements HttpManager {
+  String accessToken;
+
   @override
   Future get({
     @required String path,
@@ -22,6 +23,7 @@ class AppHttpManager implements HttpManager {
   }) async {
     try {
       print('Api Get request path $path');
+      print(_queryBuilder(path, query));
       final response = await http
           .get(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
@@ -41,8 +43,6 @@ class AppHttpManager implements HttpManager {
   }) async {
     try {
       print('Api Post request path $path, with $body');
-      print(_headerBuilder(headers));
-      print(_queryBuilder(path, query, endpoint: endpoint));
       final response = await http
           .post(_queryBuilder(path, query, endpoint: endpoint),
               body: body != null ? body : null, headers: _headerBuilder(headers))
@@ -92,7 +92,10 @@ class AppHttpManager implements HttpManager {
     final baseHeaders = <String, String>{};
     baseHeaders[HttpHeaders.acceptHeader] = 'application/json';
     baseHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
+    baseHeaders[HttpHeaders.authorizationHeader] = accessToken;
+
     if (headers != null && headers.isNotEmpty) {
+      headers[HttpHeaders.authorizationHeader] = accessToken;
       return headers;
     }
     return baseHeaders;
@@ -109,7 +112,9 @@ class AppHttpManager implements HttpManager {
         if (value != null) buffer.write('$key=$value&');
       });
     }
-    return buffer.toString();
+    final queryString = buffer.toString();
+    final lastIndex = queryString.length - 1;
+    return queryString[lastIndex] == '&' ? queryString.substring(0, lastIndex) : queryString;
   }
 
   dynamic _returnResponse(http.Response response) {

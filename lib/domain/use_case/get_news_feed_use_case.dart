@@ -1,11 +1,14 @@
 import 'package:injectable/injectable.dart';
+import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/data/repository/news_repository.dart';
 import 'package:spent/domain/model/news.dart';
 
 @injectable
 class GetNewsFeedUseCase {
   final NewsRepository _newsRepository;
-  GetNewsFeedUseCase(this._newsRepository);
+  final AuthenticationRepository _authenticationRepository;
+
+  const GetNewsFeedUseCase(this._newsRepository, this._authenticationRepository);
 
   Future<List<News>> call({
     int from = 0,
@@ -13,6 +16,7 @@ class GetNewsFeedUseCase {
     String queryField = '_',
     String query,
   }) async {
-    return _newsRepository.getNews(from: from, size: size, queryField: queryField, query: query);
+    // final isValidSession = await _authenticationRepository.isValidSession();
+    return _newsRepository.getNewsFromRemote(from, size, queryField, query);
   }
 }

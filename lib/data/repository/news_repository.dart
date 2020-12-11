@@ -1,19 +1,18 @@
 import 'package:injectable/injectable.dart';
-import 'package:spent/data/data_source/news/news_data_source.dart';
+import 'package:spent/data/data_source/news/news_remote_data_source.dart';
 import 'package:spent/domain/model/news.dart';
 
 @injectable
 class NewsRepository {
-  final NewsDataSource _newsDataSource;
+  final NewsRemoteDataSource _newsRemoteDataSource;
+  const NewsRepository(this._newsRemoteDataSource);
 
-  const NewsRepository(this._newsDataSource);
-
-  Future<List<News>> getNews({
+  Future<List<News>> getNewsFromRemote(
     int from,
     int size,
     String queryField,
     String query,
-  }) async {
-    return _newsDataSource.getFeeds(from: from, size: size, queryField: queryField, query: query);
+  ) async {
+    return _newsRemoteDataSource.getFeeds(from, size, queryField, query);
   }
 }

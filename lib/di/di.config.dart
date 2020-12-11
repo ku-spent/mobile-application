@@ -17,10 +17,8 @@ import '../data/repository/authentication_repository.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
-import '../data/http_manager/http_manager.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
-import '../data/data_source/news/news_data_source.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
 import '../presentation/bloc/query/query_bloc.dart';
@@ -46,41 +44,42 @@ GetIt $initGetIt(
   final gh = GetItHelper(get, environment, environmentFilter);
   gh.factory<AuthenticationLocalDataSource>(
       () => AuthenticationLocalDataSource());
-  gh.factory<HttpManager>(() => AppHttpManager());
-  gh.factory<NewsDataSource>(() => NewsRemoteDataSource(get<HttpManager>()));
-  gh.factory<NewsRepository>(() => NewsRepository(get<NewsDataSource>()));
-  gh.factory<SearchItemFuse>(() => SearchItemFuse());
-  gh.factoryParam<UserStorage, SharedPreferences, dynamic>(
-      (_prefs, _) => UserStorage(_prefs));
   gh.factory<AuthenticationRemoteDataSource>(
-      () => AuthenticationRemoteDataSource(get<HttpManager>()));
+      () => AuthenticationRemoteDataSource(get<AppHttpManager>()));
   gh.factory<GetCurrentUserUseCase>(
       () => GetCurrentUserUseCase(get<AuthenticationRepository>()));
-  gh.factory<GetNewsFeedUseCase>(
-      () => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factory<InitialAuthenticationUseCase>(
       () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
+  gh.factory<NewsRemoteDataSource>(
+      () => NewsRemoteDataSource(get<AppHttpManager>()));
+  gh.factory<NewsRepository>(() => NewsRepository(get<NewsRemoteDataSource>()));
+  gh.factory<SearchItemFuse>(() => SearchItemFuse());
+  gh.factory<UserSignInWithAuthCodeUseCase>(
+      () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
+  gh.factory<UserSignOutUseCase>(
+      () => UserSignOutUseCase(get<AuthenticationRepository>()));
+  gh.factoryParam<UserStorage, SharedPreferences, dynamic>(
+      (_prefs, _) => UserStorage(_prefs));
+  gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(
+      get<NewsRepository>(), get<AuthenticationRepository>()));
+  gh.factoryParam<NavigationBloc, PageController, dynamic>(
+      (pageController, _) =>
+          NavigationBloc(pageController, get<AuthenticationBloc>()));
   gh.factory<QueryFeedBloc>(() => QueryFeedBloc(get<GetNewsFeedUseCase>()));
   gh.factory<SearchItemDataSource>(
       () => SearchRemoteDataSource(get<SearchItemFuse>()));
   gh.factory<SearchRepository>(
       () => SearchRepository(get<SearchItemDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
-  gh.factory<UserSignInWithAuthCodeUseCase>(
-      () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
-  gh.factory<UserSignOutUseCase>(
-      () => UserSignOutUseCase(get<AuthenticationRepository>()));
-  gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
-  gh.factoryParam<NavigationBloc, PageController, dynamic>(
-      (pageController, _) =>
-          NavigationBloc(pageController, get<AuthenticationBloc>()));
-  gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
   gh.factory<SigninBloc>(() => SigninBloc(
       get<UserSignInWithAuthCodeUseCase>(), get<AuthenticationBloc>()));
+  gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
+  gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
 
   // Eager singletons must be registered in the right order
-  gh.singleton<AuthenticationRepository>(
-      AuthenticationRepository(get<AuthenticationRemoteDataSource>()));
+  gh.singleton<AppHttpManager>(AppHttpManager());
+  gh.singleton<AuthenticationRepository>(AuthenticationRepository(
+      get<AuthenticationRemoteDataSource>(), get<AppHttpManager>()));
   gh.singleton<AuthenticationBloc>(AuthenticationBloc(
     get<GetCurrentUserUseCase>(),
     get<UserSignOutUseCase>(),
