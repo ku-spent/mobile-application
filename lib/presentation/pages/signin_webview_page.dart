@@ -36,6 +36,7 @@ class _SigninWebviewPageState extends State<SigninWebviewPage> {
   }
 
   Future<NavigationDecision> shouldOverrideUrlLoading(NavigationRequest request, BuildContext context) async {
+    print(request.url);
     if (request.url.startsWith("myapp://?code=")) {
       String code = request.url.substring("myapp://?code=".length).replaceAll('#', '');
       _signinBloc.add(SignInWithFederatedCognitoAuthCode(authCode: code));

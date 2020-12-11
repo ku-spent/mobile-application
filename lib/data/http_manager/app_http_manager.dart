@@ -24,6 +24,7 @@ class AppHttpManager implements HttpManager {
     try {
       print('Api Get request path $path');
       print(_queryBuilder(path, query));
+      print(_headerBuilder(headers));
       final response = await http
           .get(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
@@ -43,6 +44,8 @@ class AppHttpManager implements HttpManager {
   }) async {
     try {
       print('Api Post request path $path, with $body');
+      print(_queryBuilder(path, query, endpoint: endpoint));
+      print(_headerBuilder(headers));
       final response = await http
           .post(_queryBuilder(path, query, endpoint: endpoint),
               body: body != null ? body : null, headers: _headerBuilder(headers))
@@ -92,10 +95,11 @@ class AppHttpManager implements HttpManager {
     final baseHeaders = <String, String>{};
     baseHeaders[HttpHeaders.acceptHeader] = 'application/json';
     baseHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
-    baseHeaders[HttpHeaders.authorizationHeader] = accessToken;
+
+    if (accessToken != null) baseHeaders['Authorization'] = accessToken;
 
     if (headers != null && headers.isNotEmpty) {
-      headers[HttpHeaders.authorizationHeader] = accessToken;
+      if (accessToken != null) headers['Authorization'] = accessToken;
       return headers;
     }
     return baseHeaders;

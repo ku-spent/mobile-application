@@ -12,6 +12,7 @@ class UserSignInWithAuthCodeUseCase {
     try {
       final token = await _authenticationRepository.getTokenFromAuthCoe(authCode: authCode);
       final user = await _authenticationRepository.getUserFromToken(token);
+      await _authenticationRepository.setRemoteAuthFromSession();
       return user;
     } catch (err) {
       print(err);
