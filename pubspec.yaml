@@ -46,6 +46,26 @@ dependencies:
   timeago: ^2.0.27
   webview_flutter: ^1.0.7
 
+  # path: ../amplify-flutter-1/packages/amplify_auth_plugin_interface
+  # ref: hostedui2
+  amplify_core:
+    # git:
+    # url: https://github.com/haverchuck/amplify-flutter-1.git
+    path: ../amplify-flutter-1/packages/amplify_core
+    # ref: hostedui2
+  # amplify_analytics_pinpoint:
+  #   # git:
+  #   # url: https://github.com/haverchuck/amplify-flutter-1.git
+  #   path: ../amplify-flutter-1/packages/amplify_analytics_pinpoint
+  #   # ref: hostedui2
+  amplify_auth_cognito:
+    # git:
+    # url: https://github.com/haverchuck/amplify-flutter-1.git
+    path: ../amplify-flutter-1/packages/amplify_auth_cognito
+    # ref: hostedui2
+  amplify_auth_plugin_interface:
+    path: ../amplify-flutter-1/packages/amplify_auth_plugin_interface
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

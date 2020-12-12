@@ -15,6 +15,48 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.18"
+  amplify_analytics_plugin_interface:
+    dependency: transitive
+    description:
+      path: "../amplify-flutter-1/packages/amplify_analytics_plugin_interface"
+      relative: true
+    source: path
+    version: "0.0.1-dev.3"
+  amplify_auth_cognito:
+    dependency: "direct main"
+    description:
+      path: "../amplify-flutter-1/packages/amplify_auth_cognito"
+      relative: true
+    source: path
+    version: "0.0.1-dev.3"
+  amplify_auth_plugin_interface:
+    dependency: "direct main"
+    description:
+      path: "../amplify-flutter-1/packages/amplify_auth_plugin_interface"
+      relative: true
+    source: path
+    version: "0.0.1-dev.3"
+  amplify_core:
+    dependency: "direct main"
+    description:
+      path: "../amplify-flutter-1/packages/amplify_core"
+      relative: true
+    source: path
+    version: "0.0.1-dev.3"
+  amplify_core_plugin_interface:
+    dependency: transitive
+    description:
+      path: "../amplify-flutter-1/packages/amplify_core_plugin_interface"
+      relative: true
+    source: path
+    version: "0.0.1-dev.3"
+  amplify_storage_plugin_interface:
+    dependency: transitive
+    description:
+      name: amplify_storage_plugin_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-dev.4"
   analyzer:
     dependency: transitive
     description:

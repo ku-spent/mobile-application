@@ -1,6 +1,10 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_auth_plugin_interface/amplify_auth_plugin_interface.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/presentation/app_screen.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/pages/welcome_page.dart';
@@ -16,9 +20,30 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   AnimationController _animationController;
   Animation<double> _animation;
 
+  bool _amplifyConfigured = false;
+  Amplify amplifyInstance = Amplify();
+
+  void _configureAmplify() async {
+    // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
+    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+    amplifyInstance.addPlugin(authPlugins: [authPlugin]);
+
+    // Once Plugins are added, configure Amplify
+    await amplifyInstance.configure(amplifyconfig);
+    print((await Amplify.Auth.fetchAuthSession()).isSignedIn);
+    try {
+      setState(() {
+        _amplifyConfigured = true;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _configureAmplify();
     BlocProvider.of<AuthenticationBloc>(context).add(InitialUser());
     _animationController = AnimationController(
       vsync: this,
