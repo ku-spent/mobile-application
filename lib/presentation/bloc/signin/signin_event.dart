@@ -11,6 +11,10 @@ typedef SignInOnSuccess = void Function();
 
 class InitialSignin extends SigninEvent {}
 
+class SignInWithHostedUi extends SigninEvent {
+  const SignInWithHostedUi();
+}
+
 class SignInWithFederatedCognitoAuthCode extends SigninEvent {
   final String authCode;
 

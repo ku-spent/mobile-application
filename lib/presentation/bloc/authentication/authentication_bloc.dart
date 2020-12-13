@@ -42,6 +42,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       final currentUser = await _getCurrentUserUseCase.call();
       if (currentUser != null) {
+        print(currentUser.email);
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
         yield AuthenticationUnAuthenticated();

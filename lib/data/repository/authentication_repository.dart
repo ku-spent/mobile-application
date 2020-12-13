@@ -1,7 +1,9 @@
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
-import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';
 import 'package:spent/data/data_source/user_storage/user_storage.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
@@ -18,6 +20,9 @@ class AuthenticationRepository {
   final AuthenticationRemoteDataSource _authenticationRemoteDataSource;
   final AppHttpManager _httpManager;
 
+  bool _amplifyConfigured = false;
+  Amplify amplifyInstance = Amplify();
+
   CognitoUserPool _userPool;
   CognitoUser _cognitoUser;
   CognitoUserSession _session;
@@ -25,6 +30,26 @@ class AuthenticationRepository {
   AuthenticationRepository(this._authenticationRemoteDataSource, this._httpManager);
 
   Future<bool> init() async {
+    await _configureAmplify();
+    await _configureCognitoUser();
+    return _amplifyConfigured = true;
+    // return _session.isValid();
+
+    // final isSignedIn = authSession.isSignedIn;
+    // return isSignedIn;
+  }
+
+  Future<void> _configureAmplify() async {
+    // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
+    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+    amplifyInstance.addPlugin(authPlugins: [authPlugin]);
+
+    // Once Plugins are added, configure Amplify
+    await amplifyInstance.configure(amplifyconfig);
+    _amplifyConfigured = true;
+  }
+
+  Future<void> _configureCognitoUser() async {
     _userPool = userPool;
     final prefs = await SharedPreferences.getInstance();
     final storage = getIt<UserStorage>(param1: prefs);
@@ -35,25 +60,10 @@ class AuthenticationRepository {
       return false;
     }
     _session = await _cognitoUser.getSession();
-    await setRemoteAuthFromSession();
-    return _session.isValid();
   }
 
   Future<void> setRemoteAuthFromSession() async {
     _httpManager.accessToken = _session.accessToken.getJwtToken();
-  }
-
-  Future<AwsSigV4Client> getAwsSigV4Client() async {
-    if (!isValidSession()) return null;
-    await credentials.getAwsCredentials(_session.getIdToken().getJwtToken());
-    final awsSigV4Client = AwsSigV4Client(
-      credentials.accessKeyId,
-      credentials.secretAccessKey,
-      ENDPOINT,
-      sessionToken: credentials.sessionToken,
-      region: AWS_REGION,
-    );
-    return awsSigV4Client;
   }
 
   bool isValidSession() {
@@ -70,8 +80,6 @@ class AuthenticationRepository {
 
   /// Get existing user from session with his/her attributes
   Future<User> getCurrentUser() async {
-    if (!isValidSession()) return null;
-
     final attributes = await _cognitoUser.getUserAttributes();
     if (attributes == null) {
       return null;
@@ -97,21 +105,21 @@ class AuthenticationRepository {
     );
 
     _cognitoUser = CognitoUser(idToken.jwtToken, userPool, signInUserSession: _session, storage: _userPool.storage);
-    await _cognitoUser.cacheTokens();
+
     final user = await _getUserFromCognitoUser(_cognitoUser);
     return user;
   }
 
-  Future<void> signOut() async {
-    if (_cognitoUser != null) {
-      return _cognitoUser.signOut();
-    }
+  Future<void> cacheToken() async {
+    await _cognitoUser.cacheTokens();
   }
 
-  Future<User> getUserFromSession(Token token) async {
-    final cognitoUser = await userPool.getCurrentUser();
-    final user = await _getUserFromCognitoUser(cognitoUser);
-    return user;
+  Future<void> signOut() async {
+    if (_cognitoUser != null) {
+      await _cognitoUser.signOut();
+    }
+    _session.invalidateToken();
+    await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
   }
 
   Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
@@ -119,4 +127,24 @@ class AuthenticationRepository {
     final User user = User.fromCognitoAttributes(userAttributes);
     return user;
   }
+
+  // Future<AwsSigV4Client> getAwsSigV4Client() async {
+  //   if (!isValidSession()) return null;
+  //   await credentials.getAwsCredentials(_session.getIdToken().getJwtToken());
+  //   final awsSigV4Client = AwsSigV4Client(
+  //     credentials.accessKeyId,
+  //     credentials.secretAccessKey,
+  //     ENDPOINT,
+  //     sessionToken: credentials.sessionToken,
+  //     region: AWS_REGION,
+  //   );
+  //   return awsSigV4Client;
+  // }
+
+  // Future<User> getUserFromSession(Token token) async {
+  //   final cognitoUser = await userPool.getCurrentUser();
+  //   final user = await _getUserFromCognitoUser(cognitoUser);
+  //   return user;
+  // }
+
 }

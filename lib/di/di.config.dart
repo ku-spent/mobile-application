@@ -29,6 +29,7 @@ import '../data/data_source/search_item/search_item_remote_data_source.dart';
 import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
+import '../domain/use_case/user_signin_with_amplify_use_case.dart';
 import '../domain/use_case/user_signin_with_authcode_use_case.dart';
 import '../domain/use_case/user_signout_use_case.dart';
 import '../data/data_source/user_storage/user_storage.dart';
@@ -54,6 +55,8 @@ GetIt $initGetIt(
       () => NewsRemoteDataSource(get<AppHttpManager>()));
   gh.factory<NewsRepository>(() => NewsRepository(get<NewsRemoteDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
+  gh.factory<UserSignInWithAmplifyUseCase>(
+      () => UserSignInWithAmplifyUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignInWithAuthCodeUseCase>(
       () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignOutUseCase>(
@@ -72,7 +75,10 @@ GetIt $initGetIt(
       () => SearchRepository(get<SearchItemDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
   gh.factory<SigninBloc>(() => SigninBloc(
-      get<UserSignInWithAuthCodeUseCase>(), get<AuthenticationBloc>()));
+        get<UserSignInWithAuthCodeUseCase>(),
+        get<AuthenticationBloc>(),
+        get<UserSignInWithAmplifyUseCase>(),
+      ));
   gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
 
