@@ -19,7 +19,6 @@ class UserSignInWithAmplifyUseCase {
       else {
         final CognitoAuthSession cognitoAuthSession =
             await Amplify.Auth.fetchAuthSession(options: CognitoSessionOptions(getAWSCredentials: true));
-        print(cognitoAuthSession.userPoolTokens.idToken);
         final token = Token(
           idToken: cognitoAuthSession.userPoolTokens.idToken,
           accessToken: cognitoAuthSession.userPoolTokens.accessToken,

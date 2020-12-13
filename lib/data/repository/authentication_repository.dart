@@ -1,4 +1,5 @@
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
+import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
@@ -32,7 +33,7 @@ class AuthenticationRepository {
   Future<bool> init() async {
     await _configureAmplify();
     await _configureCognitoUser();
-    return _amplifyConfigured = true;
+    return _amplifyConfigured;
     // return _session.isValid();
 
     // final isSignedIn = authSession.isSignedIn;
@@ -134,7 +135,7 @@ class AuthenticationRepository {
   //   final awsSigV4Client = AwsSigV4Client(
   //     credentials.accessKeyId,
   //     credentials.secretAccessKey,
-  //     ENDPOINT,
+  //     'https://8ovk4f09tf.execute-api.ap-southeast-1.amazonaws.com/dev',
   //     sessionToken: credentials.sessionToken,
   //     region: AWS_REGION,
   //   );
