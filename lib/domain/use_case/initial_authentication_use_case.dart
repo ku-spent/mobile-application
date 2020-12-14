@@ -24,8 +24,9 @@ class InitialAuthenticationUseCase {
           accessToken: cognitoAuthSession.userPoolTokens.accessToken,
           refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
         );
-        _authenticationRepository.setUserSessionFromToken(token);
+        await _authenticationRepository.setUserSessionFromToken(token);
         final user = await _authenticationRepository.getUserFromSession();
+        print('user $user');
         if (user != null) {
           await _authenticationRepository.cacheToken();
           await _authenticationRepository.setRemoteAuthFromSession();

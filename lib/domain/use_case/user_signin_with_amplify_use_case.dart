@@ -24,7 +24,7 @@ class UserSignInWithAmplifyUseCase {
           accessToken: cognitoAuthSession.userPoolTokens.accessToken,
           refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
         );
-        _authenticationRepository.setUserSessionFromToken(token);
+        await _authenticationRepository.setUserSessionFromToken(token);
         final user = await _authenticationRepository.getUserFromSession();
         if (user != null) {
           await _authenticationRepository.cacheToken();

@@ -119,7 +119,7 @@ class AuthenticationRepository {
     return user;
   }
 
-  void setUserSessionFromToken(Token token) async {
+  Future<void> setUserSessionFromToken(Token token) async {
     final idToken = CognitoIdToken(token.idToken);
     final accessToken = CognitoAccessToken(token.accessToken);
     final refreshToken = CognitoRefreshToken(token.refreshToken);
