@@ -1,9 +1,8 @@
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
@@ -15,6 +14,7 @@ import 'package:spent/presentation/pages/news_webview.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
+// import 'package:url_launcher/url_launcher.dart';
 
 class CardBase extends StatefulWidget {
   final News news;
@@ -48,13 +48,40 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
 
   void _goToLink(BuildContext context) async {
     _userEventBloc.add(ReadNewsEvent(news: _news));
-    Navigator.push(
-        context,
-        CupertinoPageRoute(
-            maintainState: false,
-            builder: (context) => NewsWebview(
-                  news: _news,
-                )));
+    await launch(
+      _news.url,
+      option: CustomTabsOption(
+        toolbarColor: Theme.of(context).primaryColor,
+        enableDefaultShare: true,
+        enableUrlBarHiding: false,
+        showPageTitle: true,
+        animation: CustomTabsAnimation.slideIn(),
+        extraCustomTabs: const <String>[
+          // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+          'org.mozilla.firefox',
+          // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+          'com.microsoft.emmx',
+        ],
+      ),
+    );
+    // Navigator.push(
+    //   context,
+    //   CupertinoPageRoute(
+    //     builder: (context) => NewsWebview(
+    //       news: _news,
+    //     ),
+    //   ),
+    // );
+    // try {
+    //   final url = _news.url;
+    //   if (await canLaunch(url)) {
+    //     await launch(url, forceWebView: true);
+    //   } else {
+    //     throw 'Could not launch $url';
+    //   }
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    // }
   }
 
   void _goToQuerySourcePage(BuildContext context) {
