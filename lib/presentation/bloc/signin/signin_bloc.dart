@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:spent/domain/use_case/identify_user_use_case.dart';
 import 'package:spent/domain/use_case/user_signin_with_amplify_use_case.dart';
 import 'package:spent/domain/use_case/user_signin_with_authcode_use_case.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
@@ -13,11 +14,11 @@ part 'signin_state.dart';
 
 @injectable
 class SigninBloc extends Bloc<SigninEvent, SigninState> {
-  final UserSignInWithAuthCodeUseCase _userSignInWithAuthCodeUseCase;
   final UserSignInWithAmplifyUseCase _userSignInWithAmplifyUseCase;
+  final IdentifyUserUseCase _identifyUserUseCase;
   final AuthenticationBloc _authenticationBloc;
 
-  SigninBloc(this._userSignInWithAuthCodeUseCase, this._authenticationBloc, this._userSignInWithAmplifyUseCase)
+  SigninBloc(this._authenticationBloc, this._userSignInWithAmplifyUseCase, this._identifyUserUseCase)
       : super(SigninInitial());
 
   @override
@@ -40,6 +41,7 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
     try {
       final user = await _userSignInWithAmplifyUseCase();
       if (user != null) {
+        await _identifyUserUseCase();
         _authenticationBloc.add(UserSignedIn(user: user));
         yield SigninSuccess();
       } else {

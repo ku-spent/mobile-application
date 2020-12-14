@@ -1,12 +1,16 @@
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
+import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/news_webview.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
@@ -32,15 +36,18 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   News _news;
   bool _isBookmarked = false;
   String _likeStatus = NewsAction.noneLike;
+  UserEventBloc _userEventBloc;
   NewsAction _newsAction = NewsAction(likeStatus: 'like');
 
   @override
   void initState() {
     super.initState();
+    _userEventBloc = BlocProvider.of<UserEventBloc>(context);
     _news = widget.news;
   }
 
   void _goToLink(BuildContext context) async {
+    _userEventBloc.add(ReadNewsEvent(news: _news));
     Navigator.push(
         context,
         CupertinoPageRoute(
@@ -107,147 +114,149 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        shadowColor: Theme.of(context).primaryColorLight,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          child: Container(
-            width: 360,
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IgnorePointer(
-                      ignoring: !widget.canClickSource,
-                      child: InkWell(
-                        splashColor: Colors.blue.withAlpha(30),
-                        onTap: () => _goToQuerySourcePage(context),
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          child: Row(
-                            children: [
-                              SourceIcon(
-                                source: _news.source,
-                              ),
-                              Container(
-                                width: 12,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _news.source,
-                                    style: GoogleFonts.kanit(
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    timeago.format(_news.pubDate, locale: 'th'),
-                                    style: Theme.of(context).textTheme.caption,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    _buildIcon(
-                      isActive: _isBookmarked,
-                      active: Icon(Icons.bookmark),
-                      inActive: Icon(Icons.bookmark_outline),
-                      onPressed: _onClickBookmark,
-                    ),
-                  ],
-                ),
-                InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () => _goToLink(context),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.only(top: 8, bottom: 16),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              imageUrl: _news.image,
-                              placeholder: (context, url) => Container(
-                                color: Colors.black26,
-                              ),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
-                              width: double.infinity,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          )),
-                      Text(
-                        _news.title,
-                        style: Theme.of(context).textTheme.headline6,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        _news.summary,
-                        style: Theme.of(context).textTheme.bodyText2,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Row(
+    return BlocBuilder<UserEventBloc, UserEventState>(
+      builder: (context, state) => Container(
+        child: Card(
+          shadowColor: Theme.of(context).primaryColorLight,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            child: Container(
+              width: 360,
+              padding: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
+              child: Column(
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IgnorePointer(
-                        ignoring: !widget.canClickCategory,
+                        ignoring: !widget.canClickSource,
                         child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
-                          onTap: () => _goToQueryCategoryPage(context),
-                          child: Text(
-                            '#' + _news.category,
-                            style: GoogleFonts.kanit(
-                              color: Theme.of(context).primaryColor,
+                          onTap: () => _goToQuerySourcePage(context),
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            child: Row(
+                              children: [
+                                SourceIcon(
+                                  source: _news.source,
+                                ),
+                                Container(
+                                  width: 12,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _news.source,
+                                      style: GoogleFonts.kanit(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      timeago.format(_news.pubDate, locale: 'th'),
+                                      style: Theme.of(context).textTheme.caption,
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                      Row(children: [
-                        _buildIcon(
-                          isActive: _likeStatus == NewsAction.like,
-                          active: Icon(Icons.thumb_up),
-                          inActive: Icon(Icons.thumb_up_outlined),
-                          onPressed: _onClickLike,
-                        ),
-                        _buildIcon(
-                          isActive: _likeStatus == NewsAction.dislike,
-                          active: Icon(Icons.thumb_down),
-                          inActive: Icon(Icons.thumb_down_outlined),
-                          onPressed: _onClickDislike,
-                        ),
-                      ]),
+                      _buildIcon(
+                        isActive: _isBookmarked,
+                        active: Icon(Icons.bookmark),
+                        inActive: Icon(Icons.bookmark_outline),
+                        onPressed: _onClickBookmark,
+                      ),
                     ],
                   ),
-                )
-              ],
+                  InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () => _goToLink(context),
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.only(top: 8, bottom: 16),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                imageUrl: _news.image,
+                                placeholder: (context, url) => Container(
+                                  color: Colors.black26,
+                                ),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            )),
+                        Text(
+                          _news.title,
+                          style: Theme.of(context).textTheme.headline6,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          _news.summary,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IgnorePointer(
+                          ignoring: !widget.canClickCategory,
+                          child: InkWell(
+                            splashColor: Colors.blue.withAlpha(30),
+                            onTap: () => _goToQueryCategoryPage(context),
+                            child: Text(
+                              '#' + _news.category,
+                              style: GoogleFonts.kanit(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(children: [
+                          _buildIcon(
+                            isActive: _likeStatus == NewsAction.like,
+                            active: Icon(Icons.thumb_up),
+                            inActive: Icon(Icons.thumb_up_outlined),
+                            onPressed: _onClickLike,
+                          ),
+                          _buildIcon(
+                            isActive: _likeStatus == NewsAction.dislike,
+                            active: Icon(Icons.thumb_down),
+                            inActive: Icon(Icons.thumb_down_outlined),
+                            onPressed: _onClickDislike,
+                          ),
+                        ]),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColorLight.withOpacity(.08),
-            blurRadius: 16.0,
-          ),
-        ],
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColorLight.withOpacity(.08),
+              blurRadius: 16.0,
+            ),
+          ],
+        ),
       ),
     );
   }

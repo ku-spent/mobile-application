@@ -17,6 +17,7 @@ import '../data/repository/authentication_repository.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
+import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
@@ -29,6 +30,8 @@ import '../data/data_source/search_item/search_item_remote_data_source.dart';
 import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
+import '../presentation/bloc/user_event/user_event_bloc.dart';
+import '../data/repository/user_event_repository.dart';
 import '../domain/use_case/user_signin_with_amplify_use_case.dart';
 import '../domain/use_case/user_signin_with_authcode_use_case.dart';
 import '../domain/use_case/user_signout_use_case.dart';
@@ -49,12 +52,15 @@ GetIt $initGetIt(
       () => AuthenticationRemoteDataSource(get<AppHttpManager>()));
   gh.factory<GetCurrentUserUseCase>(
       () => GetCurrentUserUseCase(get<AuthenticationRepository>()));
+  gh.factory<IdentifyUserUseCase>(
+      () => IdentifyUserUseCase(get<AuthenticationRepository>()));
   gh.factory<InitialAuthenticationUseCase>(
       () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
   gh.factory<NewsRemoteDataSource>(
       () => NewsRemoteDataSource(get<AppHttpManager>()));
   gh.factory<NewsRepository>(() => NewsRepository(get<NewsRemoteDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
+  gh.factory<UserEventRepository>(() => UserEventRepository());
   gh.factory<UserSignInWithAmplifyUseCase>(
       () => UserSignInWithAmplifyUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignInWithAuthCodeUseCase>(
@@ -75,9 +81,9 @@ GetIt $initGetIt(
       () => SearchRepository(get<SearchItemDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
   gh.factory<SigninBloc>(() => SigninBloc(
-        get<UserSignInWithAuthCodeUseCase>(),
         get<AuthenticationBloc>(),
         get<UserSignInWithAmplifyUseCase>(),
+        get<IdentifyUserUseCase>(),
       ));
   gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
@@ -86,10 +92,12 @@ GetIt $initGetIt(
   gh.singleton<AppHttpManager>(AppHttpManager());
   gh.singleton<AuthenticationRepository>(AuthenticationRepository(
       get<AuthenticationRemoteDataSource>(), get<AppHttpManager>()));
+  gh.singleton<UserEventBloc>(UserEventBloc());
   gh.singleton<AuthenticationBloc>(AuthenticationBloc(
     get<GetCurrentUserUseCase>(),
     get<UserSignOutUseCase>(),
     get<InitialAuthenticationUseCase>(),
+    get<IdentifyUserUseCase>(),
   ));
   return get;
 }

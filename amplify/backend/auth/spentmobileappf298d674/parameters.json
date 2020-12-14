@@ -1,41 +1,59 @@
 {
-  "identityPoolName": "spentmobileappf298d674_identitypool_f298d674",
-  "allowUnauthenticatedIdentities": false,
-  "resourceNameTruncated": "spentmf298d674",
-  "userPoolName": "spentmobileappf298d674_userpool_f298d674",
-  "autoVerifiedAttributes": ["email"],
-  "mfaConfiguration": "OFF",
-  "mfaTypes": ["SMS Text Message"],
-  "smsAuthenticationMessage": "Your authentication code is {####}",
-  "smsVerificationMessage": "Your verification code is {####}",
-  "emailVerificationSubject": "Your verification code",
-  "emailVerificationMessage": "Your verification code is {####}",
-  "defaultPasswordPolicy": false,
-  "passwordPolicyMinLength": 8,
-  "passwordPolicyCharacters": [],
-  "requiredAttributes": ["email"],
-  "userpoolClientGenerateSecret": true,
-  "userpoolClientRefreshTokenValidity": 30,
-  "userpoolClientWriteAttributes": ["email"],
-  "userpoolClientReadAttributes": ["email"],
-  "userpoolClientLambdaRole": "spentmf298d674_userpoolclient_lambda_role",
-  "userpoolClientSetAttributes": false,
-  "sharedId": "f298d674",
-  "resourceName": "spentmobileappf298d674",
-  "authSelections": "identityPoolAndUserPool",
-  "authRoleArn": {
-    "Fn::GetAtt": ["AuthRole", "Arn"]
-  },
-  "unauthRoleArn": {
-    "Fn::GetAtt": ["UnauthRole", "Arn"]
-  },
-  "useDefault": "defaultSocial",
-  "hostedUI": true,
-  "hostedUIDomainName": "spentmobileappf298d674-f298d674",
-  "authProvidersUserPool": ["Google"],
-  "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\",\"picture\":\"picture\",\"name\":\"name\"}}]",
-  "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"myapp://callback/\"],\"LogoutURLs\":[\"myapp://signout/\"]}",
-  "userPoolGroupList": [],
-  "serviceName": "Cognito",
-  "dependsOn": []
+    "identityPoolName": "spentmobileappf298d674_identitypool_f298d674",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "spentmf298d674",
+    "userPoolName": "spentmobileappf298d674_userpool_f298d674",
+    "autoVerifiedAttributes": [
+        "email"
+    ],
+    "mfaConfiguration": "OFF",
+    "mfaTypes": [
+        "SMS Text Message"
+    ],
+    "smsAuthenticationMessage": "Your authentication code is {####}",
+    "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
+    "defaultPasswordPolicy": false,
+    "passwordPolicyMinLength": 8,
+    "passwordPolicyCharacters": [],
+    "requiredAttributes": [
+        "email"
+    ],
+    "userpoolClientGenerateSecret": true,
+    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+        "email"
+    ],
+    "userpoolClientReadAttributes": [
+        "email"
+    ],
+    "userpoolClientLambdaRole": "spentmf298d674_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": false,
+    "sharedId": "f298d674",
+    "resourceName": "spentmobileappf298d674",
+    "authSelections": "identityPoolAndUserPool",
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    },
+    "unauthRoleArn": {
+        "Fn::GetAtt": [
+            "UnauthRole",
+            "Arn"
+        ]
+    },
+    "useDefault": "defaultSocial",
+    "hostedUI": true,
+    "hostedUIDomainName": "spentmobileappf298d674-f298d674",
+    "authProvidersUserPool": [
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\",\"picture\":\"picture\",\"name\":\"name\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"myapp://callback/\"],\"LogoutURLs\":[\"myapp://signout/\"]}",
+    "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "dependsOn": []
 }

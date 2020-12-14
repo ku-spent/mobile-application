@@ -24,7 +24,7 @@ class AppHttpManager implements HttpManager {
     try {
       print('Api Get request path $path');
       print(_queryBuilder(path, query));
-      print(_headerBuilder(headers));
+      // print(_headerBuilder(headers));
       final response = await http
           .get(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
@@ -45,7 +45,7 @@ class AppHttpManager implements HttpManager {
     try {
       print('Api Post request path $path, with $body');
       print(_queryBuilder(path, query, endpoint: endpoint));
-      print(_headerBuilder(headers));
+      // print(_headerBuilder(headers));
       final response = await http
           .post(_queryBuilder(path, query, endpoint: endpoint),
               body: body != null ? body : null, headers: _headerBuilder(headers))

@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/user.dart';
 import 'package:spent/domain/use_case/get_current_user_use_case.dart';
+import 'package:spent/domain/use_case/identify_user_use_case.dart';
 import 'package:spent/domain/use_case/initial_authentication_use_case.dart';
 import 'package:spent/domain/use_case/user_signout_use_case.dart';
 
@@ -16,9 +17,11 @@ part 'authentication_state.dart';
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   final GetCurrentUserUseCase _getCurrentUserUseCase;
   final UserSignOutUseCase _userSignoutUseCase;
+  final IdentifyUserUseCase _identifyUserUseCase;
   final InitialAuthenticationUseCase _initialAuthenticationUseCase;
 
-  AuthenticationBloc(this._getCurrentUserUseCase, this._userSignoutUseCase, this._initialAuthenticationUseCase)
+  AuthenticationBloc(this._getCurrentUserUseCase, this._userSignoutUseCase, this._initialAuthenticationUseCase,
+      this._identifyUserUseCase)
       : super(AuthenticationInitial());
 
   @override
@@ -42,7 +45,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       final currentUser = await _getCurrentUserUseCase.call();
       if (currentUser != null) {
-        print(currentUser.email);
+        await _identifyUserUseCase();
         yield AuthenticationAuthenticated(user: currentUser);
       } else {
         yield AuthenticationUnAuthenticated();

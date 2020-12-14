@@ -43,7 +43,32 @@ const amplifyconfig = ''' {
                         },
                         "authenticationFlowType": "USER_SRP_AUTH"
                     }
+                },
+                "PinpointAnalytics": {
+                    "Default": {
+                        "AppId": "d5ab8b3e1788464cbc67948ab042fbcc",
+                        "Region": "ap-southeast-1"
+                    }
+                },
+                "PinpointTargeting": {
+                    "Default": {
+                        "Region": "ap-southeast-1"
+                    }
                 }
+            }
+        }
+    },
+    "analytics": {
+        "plugins": {
+            "awsPinpointAnalyticsPlugin": {
+                "pinpointAnalytics": {
+                    "appId": "d5ab8b3e1788464cbc67948ab042fbcc",
+                    "region": "ap-southeast-1"
+                },
+                "pinpointTargeting": {
+                    "region": "ap-southeast-1"
+                },
+                "autoFlushEventsInterval": 10000
             }
         }
     }

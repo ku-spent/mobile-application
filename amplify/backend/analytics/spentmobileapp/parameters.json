@@ -1,0 +1,21 @@
+{
+    "appName": "spentmobileapp",
+    "roleName": "pinpointLambdaRole5d7135b2",
+    "cloudformationPolicyName": "cloudformationPolicy5d7135b2",
+    "cloudWatchPolicyName": "cloudWatchPolicy5d7135b2",
+    "pinpointPolicyName": "pinpointPolicy5d7135b2",
+    "authPolicyName": "pinpoint_amplify_5d7135b2",
+    "unauthPolicyName": "pinpoint_amplify_5d7135b2",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

@@ -53,10 +53,10 @@ dependencies:
     # url: https://github.com/haverchuck/amplify-flutter-1.git
     path: ../amplify-flutter-1/packages/amplify_core
     # ref: hostedui2
-  # amplify_analytics_pinpoint:
-  #   # git:
-  #   # url: https://github.com/haverchuck/amplify-flutter-1.git
-  #   path: ../amplify-flutter-1/packages/amplify_analytics_pinpoint
+  amplify_analytics_pinpoint:
+    # git:
+    # url: https://github.com/haverchuck/amplify-flutter-1.git
+    path: ../amplify-flutter-1/packages/amplify_analytics_pinpoint
   #   # ref: hostedui2
   amplify_auth_cognito:
     # git:

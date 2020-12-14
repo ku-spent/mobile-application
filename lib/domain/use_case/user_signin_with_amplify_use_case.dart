@@ -24,8 +24,12 @@ class UserSignInWithAmplifyUseCase {
           accessToken: cognitoAuthSession.userPoolTokens.accessToken,
           refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
         );
-        final user = await _authenticationRepository.getUserFromToken(token);
-        if (user != null) await _authenticationRepository.cacheToken();
+        _authenticationRepository.setUserSessionFromToken(token);
+        final user = await _authenticationRepository.getUserFromSession();
+        if (user != null) {
+          await _authenticationRepository.cacheToken();
+          await _authenticationRepository.setRemoteAuthFromSession();
+        }
         return user;
       }
     } catch (err) {

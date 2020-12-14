@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
+import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 import 'package:spent/presentation/theme.dart';
 
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SigninBloc>(
           create: (BuildContext context) => getIt<SigninBloc>(),
+        ),
+        BlocProvider<UserEventBloc>(
+          create: (BuildContext context) => getIt<UserEventBloc>(),
         ),
       ],
       child: MaterialApp(

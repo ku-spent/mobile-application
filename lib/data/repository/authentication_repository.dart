@@ -1,5 +1,6 @@
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
 import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
@@ -43,7 +44,9 @@ class AuthenticationRepository {
   Future<void> _configureAmplify() async {
     // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    amplifyInstance.addPlugin(authPlugins: [authPlugin]);
+    AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
+
+    amplifyInstance.addPlugin(authPlugins: [authPlugin], analyticsPlugins: [analyticsPlugin]);
 
     // Once Plugins are added, configure Amplify
     await amplifyInstance.configure(amplifyconfig);
@@ -94,7 +97,29 @@ class AuthenticationRepository {
     return token;
   }
 
-  Future<User> getUserFromToken(Token token) async {
+  // Future<User> getUserFromToken(Token token) async {
+  //   final idToken = CognitoIdToken(token.idToken);
+  //   final accessToken = CognitoAccessToken(token.accessToken);
+  //   final refreshToken = CognitoRefreshToken(token.refreshToken);
+
+  //   _session = CognitoUserSession(
+  //     idToken,
+  //     accessToken,
+  //     refreshToken: refreshToken,
+  //   );
+
+  //   _cognitoUser = CognitoUser(idToken.jwtToken, userPool, signInUserSession: _session, storage: _userPool.storage);
+
+  //   final user = await _getUserFromCognitoUser(_cognitoUser);
+  //   return user;
+  // }
+
+  Future<User> getUserFromSession() async {
+    final user = await _getUserFromCognitoUser(_cognitoUser);
+    return user;
+  }
+
+  void setUserSessionFromToken(Token token) async {
     final idToken = CognitoIdToken(token.idToken);
     final accessToken = CognitoAccessToken(token.accessToken);
     final refreshToken = CognitoRefreshToken(token.refreshToken);
@@ -106,9 +131,6 @@ class AuthenticationRepository {
     );
 
     _cognitoUser = CognitoUser(idToken.jwtToken, userPool, signInUserSession: _session, storage: _userPool.storage);
-
-    final user = await _getUserFromCognitoUser(_cognitoUser);
-    return user;
   }
 
   Future<void> cacheToken() async {

@@ -11,7 +11,8 @@ class UserSignInWithAuthCodeUseCase {
   Future<User> call(String authCode) async {
     try {
       final token = await _authenticationRepository.getTokenFromAuthCoe(authCode: authCode);
-      final user = await _authenticationRepository.getUserFromToken(token);
+      _authenticationRepository.setUserSessionFromToken(token);
+      final user = await _authenticationRepository.getUserFromSession();
       await _authenticationRepository.setRemoteAuthFromSession();
       return user;
     } catch (err) {
