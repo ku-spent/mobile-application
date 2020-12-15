@@ -13,8 +13,8 @@ class NavDrawerAccountHeader extends StatelessWidget {
       builder: (context, state) {
         if (state is AuthenticationAuthenticated) {
           return UserAccountsDrawerHeader(
-            accountName: Text(state.user.name, style: GoogleFonts.kanit(color: Colors.black)),
-            accountEmail: Text(state.user.email, style: GoogleFonts.kanit(color: Colors.black)),
+            accountName: Text(state.user.name, style: GoogleFonts.kanit(color: Colors.black87, fontSize: 16.0)),
+            accountEmail: Text(state.user.email, style: GoogleFonts.kanit(color: Colors.black54)),
             decoration: BoxDecoration(
               color: Colors.white,
             ),

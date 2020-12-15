@@ -52,7 +52,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<FeedState> _mapRefreshLoadedFeedState(RefreshFeedCallback callback) async* {
     try {
       final curState = state;
-      if (curState is FeedLoaded) {
+      if (curState is FeedLoaded || curState is FeedError) {
         final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
       }

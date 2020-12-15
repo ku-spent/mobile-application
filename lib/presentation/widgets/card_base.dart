@@ -13,6 +13,8 @@ import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+part 'card_base.part.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class CardBase extends StatefulWidget {
@@ -121,127 +123,17 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
     return BlocBuilder<UserEventBloc, UserEventState>(
       builder: (context, state) => Container(
         child: Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           shadowColor: Theme.of(context).primaryColorLight,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             child: Container(
-              width: 360,
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        splashColor: Colors.blue.withAlpha(30),
-                        onTap: () => _goToQuerySourcePage(context),
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          child: Row(
-                            children: [
-                              SourceIcon(
-                                source: _news.source,
-                              ),
-                              Container(
-                                width: 12,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _news.source,
-                                    style: GoogleFonts.kanit(
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    timeago.format(_news.pubDate, locale: 'th'),
-                                    style: Theme.of(context).textTheme.caption,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      _buildIcon(
-                        isActive: _isBookmarked,
-                        active: Icon(Icons.bookmark),
-                        inActive: Icon(Icons.bookmark_outline),
-                        onPressed: _onClickBookmark,
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () => _goToLink(context),
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: EdgeInsets.only(top: 8, bottom: 16),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                imageUrl: _news.image,
-                                placeholder: (context, url) => Container(
-                                  color: Colors.black26,
-                                ),
-                                errorWidget: (context, url, error) => Icon(Icons.error),
-                                width: double.infinity,
-                                height: 200,
-                                fit: BoxFit.cover,
-                              ),
-                            )),
-                        Text(
-                          _news.title,
-                          style: Theme.of(context).textTheme.headline6,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          _news.summary,
-                          style: Theme.of(context).textTheme.bodyText2,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          splashColor: Colors.blue.withAlpha(30),
-                          onTap: () => _goToQueryCategoryPage(context),
-                          child: Text(
-                            '#' + _news.category,
-                            style: GoogleFonts.kanit(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        Row(children: [
-                          _buildIcon(
-                            isActive: _likeStatus == NewsAction.like,
-                            active: Icon(Icons.thumb_up),
-                            inActive: Icon(Icons.thumb_up_outlined),
-                            onPressed: _onClickLike,
-                          ),
-                          _buildIcon(
-                            isActive: _likeStatus == NewsAction.dislike,
-                            active: Icon(Icons.thumb_down),
-                            inActive: Icon(Icons.thumb_down_outlined),
-                            onPressed: _onClickDislike,
-                          ),
-                        ]),
-                      ],
-                    ),
-                  )
+                  _buildHeader(),
+                  _buildPicture(),
+                  _buildContent(),
                 ],
               ),
             ),

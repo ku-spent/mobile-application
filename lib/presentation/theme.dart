@@ -21,7 +21,9 @@ class MyTheme {
   static MaterialColor get _mainColor => MaterialColor(mainColor[900].value, mainColor);
 
   ThemeData get mainTheme => ThemeData(
-      primarySwatch: _mainColor,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      textTheme: GoogleFonts.kanitTextTheme(Theme.of(context).textTheme));
+        primarySwatch: _mainColor,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: GoogleFonts.kanitTextTheme(Theme.of(context).textTheme),
+        // textButtonTheme: TextButtonThemeData(style: GoogleFonts.kanitTextTheme()),
+      );
 }

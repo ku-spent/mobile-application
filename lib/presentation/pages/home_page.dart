@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HomePage extends StatefulWidget {
   final ScrollController scrollController;
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           child: ListView.separated(
             physics: BouncingScrollPhysics(),
             addAutomaticKeepAlives: true,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: state.feeds.length,
             itemBuilder: (BuildContext context, int index) => CardBase(
               news: state.feeds[index],
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       } else if (state is FeedError) {
-        return Center(child: Text('Something went wrong!'));
+        return RetryError(callback: _onRefresh);
       }
     });
   }
