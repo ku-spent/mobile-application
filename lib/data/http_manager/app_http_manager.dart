@@ -9,14 +9,14 @@ import 'package:spent/core/constants.dart';
 import 'package:spent/data/http_manager/http_manager.dart';
 import 'package:spent/domain/exceptions/app_exceptions.dart';
 
-const timeout = Duration(seconds: 3);
+const timeout = Duration(seconds: 10);
 
 @singleton
 class AppHttpManager implements HttpManager {
   String accessToken;
 
   @override
-  Future get({
+  Future<dynamic> get({
     @required String path,
     Map<String, dynamic> query,
     Map<String, String> headers,
@@ -29,7 +29,8 @@ class AppHttpManager implements HttpManager {
           .get(_queryBuilder(path, query), headers: _headerBuilder(headers))
           .timeout(timeout, onTimeout: () => throw TimeoutException());
       return _returnResponse(response);
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      print(e);
       throw NetworkException();
     }
   }

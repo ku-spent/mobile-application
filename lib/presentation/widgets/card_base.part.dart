@@ -47,29 +47,28 @@ extension CardBaseMethod on _CardBaseState {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildBottom() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.only(left: 4, right: 16),
       child: Column(
         children: [
-          Text(
-            _news.title,
-            style: Theme.of(context).textTheme.headline6,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          Text(
-            _news.summary,
-            style: Theme.of(context).textTheme.bodyText2,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Row(children: [
+                _buildIcon(
+                  isActive: _likeStatus == NewsAction.like,
+                  active: Icon(Icons.favorite),
+                  inActive: Icon(Icons.favorite_outline),
+                  onPressed: _onClickLike,
+                ),
+                // _buildIcon(
+                //   isActive: _likeStatus == NewsAction.dislike,
+                //   active: Icon(Icons.thumb_down),
+                //   inActive: Icon(Icons.thumb_down_outlined),
+                //   onPressed: _onClickDislike,
+                // ),
+              ]),
               InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () => _goToQueryCategoryPage(context),
@@ -80,20 +79,6 @@ extension CardBaseMethod on _CardBaseState {
                   ),
                 ),
               ),
-              Row(children: [
-                _buildIcon(
-                  isActive: _likeStatus == NewsAction.like,
-                  active: Icon(Icons.thumb_up),
-                  inActive: Icon(Icons.thumb_up_outlined),
-                  onPressed: _onClickLike,
-                ),
-                _buildIcon(
-                  isActive: _likeStatus == NewsAction.dislike,
-                  active: Icon(Icons.thumb_down),
-                  inActive: Icon(Icons.thumb_down_outlined),
-                  onPressed: _onClickDislike,
-                ),
-              ]),
             ],
           )
         ],
@@ -101,7 +86,7 @@ extension CardBaseMethod on _CardBaseState {
     );
   }
 
-  Widget _buildPicture() {
+  Widget _buildContent() {
     return InkWell(
       splashColor: Colors.blue.withAlpha(30),
       onTap: () => _goToLink(context),
@@ -122,6 +107,28 @@ extension CardBaseMethod on _CardBaseState {
                   fit: BoxFit.cover,
                 ),
               )),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Text(
+                  _news.title,
+                  style: Theme.of(context).textTheme.headline6,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  _news.summary,
+                  style: Theme.of(context).textTheme.bodyText2,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

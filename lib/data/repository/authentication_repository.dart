@@ -35,10 +35,6 @@ class AuthenticationRepository {
     await _configureAmplify();
     await _configureCognitoUser();
     return _amplifyConfigured;
-    // return _session.isValid();
-
-    // final isSignedIn = authSession.isSignedIn;
-    // return isSignedIn;
   }
 
   Future<void> _configureAmplify() async {

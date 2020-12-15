@@ -132,8 +132,8 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
               child: Column(
                 children: [
                   _buildHeader(),
-                  _buildPicture(),
                   _buildContent(),
+                  _buildBottom(),
                 ],
               ),
             ),
