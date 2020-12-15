@@ -69,8 +69,8 @@ GetIt $initGetIt(
       () => UserSignOutUseCase(get<AuthenticationRepository>()));
   gh.factoryParam<UserStorage, SharedPreferences, dynamic>(
       (_prefs, _) => UserStorage(_prefs));
-  gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(
-      get<NewsRepository>(), get<AuthenticationRepository>()));
+  gh.factory<GetNewsFeedUseCase>(
+      () => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
       (pageController, _) =>
           NavigationBloc(pageController, get<AuthenticationBloc>()));

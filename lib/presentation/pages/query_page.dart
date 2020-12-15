@@ -169,8 +169,6 @@ class _QueryPageState extends State<QueryPage> {
                                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                                     child: CardBase(
                                       news: state.feeds[index],
-                                      canClickSource: false,
-                                      canClickCategory: false,
                                     ),
                                   ),
                           ),

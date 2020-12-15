@@ -10,7 +10,6 @@ import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
-import 'package:spent/presentation/pages/news_webview.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,14 +17,10 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class CardBase extends StatefulWidget {
   final News news;
-  final bool canClickSource;
-  final bool canClickCategory;
 
   CardBase({
     Key key,
     @required this.news,
-    this.canClickSource = true,
-    this.canClickCategory = true,
   }) : super(key: key);
 
   @override
@@ -64,24 +59,6 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
         ],
       ),
     );
-    // Navigator.push(
-    //   context,
-    //   CupertinoPageRoute(
-    //     builder: (context) => NewsWebview(
-    //       news: _news,
-    //     ),
-    //   ),
-    // );
-    // try {
-    //   final url = _news.url;
-    //   if (await canLaunch(url)) {
-    //     await launch(url, forceWebView: true);
-    //   } else {
-    //     throw 'Could not launch $url';
-    //   }
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
   }
 
   void _goToQuerySourcePage(BuildContext context) {
@@ -155,38 +132,35 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IgnorePointer(
-                        ignoring: !widget.canClickSource,
-                        child: InkWell(
-                          splashColor: Colors.blue.withAlpha(30),
-                          onTap: () => _goToQuerySourcePage(context),
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            child: Row(
-                              children: [
-                                SourceIcon(
-                                  source: _news.source,
-                                ),
-                                Container(
-                                  width: 12,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _news.source,
-                                      style: GoogleFonts.kanit(
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                      InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () => _goToQuerySourcePage(context),
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          child: Row(
+                            children: [
+                              SourceIcon(
+                                source: _news.source,
+                              ),
+                              Container(
+                                width: 12,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _news.source,
+                                    style: GoogleFonts.kanit(
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    Text(
-                                      timeago.format(_news.pubDate, locale: 'th'),
-                                      style: Theme.of(context).textTheme.caption,
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                  Text(
+                                    timeago.format(_news.pubDate, locale: 'th'),
+                                    style: Theme.of(context).textTheme.caption,
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -241,16 +215,13 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IgnorePointer(
-                          ignoring: !widget.canClickCategory,
-                          child: InkWell(
-                            splashColor: Colors.blue.withAlpha(30),
-                            onTap: () => _goToQueryCategoryPage(context),
-                            child: Text(
-                              '#' + _news.category,
-                              style: GoogleFonts.kanit(
-                                color: Theme.of(context).primaryColor,
-                              ),
+                        InkWell(
+                          splashColor: Colors.blue.withAlpha(30),
+                          onTap: () => _goToQueryCategoryPage(context),
+                          child: Text(
+                            '#' + _news.category,
+                            style: GoogleFonts.kanit(
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
