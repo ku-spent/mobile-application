@@ -51,6 +51,7 @@ class AuthenticationRepository {
     // Once Plugins are added, configure Amplify
     await amplifyInstance.configure(amplifyconfig);
     _amplifyConfigured = true;
+    print('configured amplify');
   }
 
   Future<void> _configureCognitoUser() async {
@@ -59,11 +60,17 @@ class AuthenticationRepository {
     final storage = getIt<UserStorage>(param1: prefs);
     _userPool.storage = storage;
 
-    _cognitoUser = await _userPool.getCurrentUser();
-    if (_cognitoUser == null) {
-      return false;
-    }
-    _session = await _cognitoUser.getSession();
+    final CognitoAuthSession cognitoAuthSession = await Amplify.Auth.fetchAuthSession(
+      options: CognitoSessionOptions(getAWSCredentials: true),
+    );
+
+    final token = Token(
+      idToken: cognitoAuthSession.userPoolTokens.idToken,
+      accessToken: cognitoAuthSession.userPoolTokens.accessToken,
+      refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
+    );
+    await setUserSessionFromToken(token);
+    print('configured cognitoUser');
   }
 
   Future<void> setRemoteAuthFromSession() async {
@@ -96,23 +103,6 @@ class AuthenticationRepository {
     final token = await _authenticationRemoteDataSource.getToken(authCode: authCode);
     return token;
   }
-
-  // Future<User> getUserFromToken(Token token) async {
-  //   final idToken = CognitoIdToken(token.idToken);
-  //   final accessToken = CognitoAccessToken(token.accessToken);
-  //   final refreshToken = CognitoRefreshToken(token.refreshToken);
-
-  //   _session = CognitoUserSession(
-  //     idToken,
-  //     accessToken,
-  //     refreshToken: refreshToken,
-  //   );
-
-  //   _cognitoUser = CognitoUser(idToken.jwtToken, userPool, signInUserSession: _session, storage: _userPool.storage);
-
-  //   final user = await _getUserFromCognitoUser(_cognitoUser);
-  //   return user;
-  // }
 
   Future<User> getUserFromSession() async {
     final user = await _getUserFromCognitoUser(_cognitoUser);

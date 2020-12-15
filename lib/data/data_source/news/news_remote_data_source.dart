@@ -17,6 +17,8 @@ class NewsRemoteDataSource implements NewsDataSource {
         query: Map.from({
           'from': from.toString(),
           'size': size.toString(),
+          'queryField': queryField,
+          'query': query,
         }),
       );
       List items = response['data']['hits'];
