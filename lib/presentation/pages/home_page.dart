@@ -32,8 +32,6 @@ class _HomePageState extends State<HomePage> {
     _feedBloc = BlocProvider.of<FeedBloc>(context);
     Future.delayed(Duration.zero, () async {
       _fetchFeeds();
-      Todo todo = Todo(name: 'tesa', description: 'afsdf');
-      await Amplify.DataStore.save(todo);
     });
   }
 

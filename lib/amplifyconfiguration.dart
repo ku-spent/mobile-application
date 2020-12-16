@@ -44,6 +44,15 @@ const amplifyconfig = ''' {
                         "authenticationFlowType": "USER_SRP_AUTH"
                     }
                 },
+                "AppSync": {
+                    "Default": {
+                        "ApiUrl": "https://s2apq4l5ujfpddjjak5jinbhyq.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                        "Region": "ap-southeast-1",
+                        "AuthMode": "API_KEY",
+                        "ApiKey": "da2-5f5tgmlcqjczlmxnb4nt3v3btq",
+                        "ClientDatabasePrefix": "testapi_API_KEY"
+                    }
+                },
                 "PinpointAnalytics": {
                     "Default": {
                         "AppId": "d5ab8b3e1788464cbc67948ab042fbcc",
@@ -67,8 +76,20 @@ const amplifyconfig = ''' {
                 },
                 "pinpointTargeting": {
                     "region": "ap-southeast-1"
-                },
-                "autoFlushEventsInterval": 10000
+                }
+            }
+        }
+    },
+    "api": {
+        "plugins": {
+            "awsAPIPlugin": {
+                "testapi": {
+                    "endpointType": "GraphQL",
+                    "endpoint": "https://s2apq4l5ujfpddjjak5jinbhyq.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                    "region": "ap-southeast-1",
+                    "authorizationType": "API_KEY",
+                    "apiKey": "da2-5f5tgmlcqjczlmxnb4nt3v3btq"
+                }
             }
         }
     }
