@@ -18,51 +18,65 @@ packages:
   amplify_analytics_pinpoint:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter-1/packages/amplify_analytics_pinpoint"
+      path: "../amplify-flutter/packages/amplify_analytics_pinpoint"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   amplify_analytics_plugin_interface:
     dependency: transitive
     description:
-      path: "../amplify-flutter-1/packages/amplify_analytics_plugin_interface"
+      path: "../amplify-flutter/packages/amplify_analytics_plugin_interface"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   amplify_auth_cognito:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter-1/packages/amplify_auth_cognito"
+      path: "../amplify-flutter/packages/amplify_auth_cognito"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   amplify_auth_plugin_interface:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter-1/packages/amplify_auth_plugin_interface"
+      path: "../amplify-flutter/packages/amplify_auth_plugin_interface"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   amplify_core:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter-1/packages/amplify_core"
+      path: "../amplify-flutter/packages/amplify_core"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
   amplify_core_plugin_interface:
     dependency: transitive
     description:
-      path: "../amplify-flutter-1/packages/amplify_core_plugin_interface"
+      path: "../amplify-flutter/packages/amplify_core_plugin_interface"
       relative: true
     source: path
-    version: "0.0.1-dev.3"
+    version: "0.0.1-dev.4"
+  amplify_datastore:
+    dependency: "direct main"
+    description:
+      path: "../amplify-flutter/packages/amplify_datastore"
+      relative: true
+    source: path
+    version: "0.0.1-dev.4"
+  amplify_datastore_plugin_interface:
+    dependency: transitive
+    description:
+      path: "../amplify-flutter/packages/amplify_datastore_plugin_interface"
+      relative: true
+    source: path
+    version: "0.0.1-dev.4"
   amplify_storage_plugin_interface:
     dependency: transitive
     description:
-      name: amplify_storage_plugin_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../amplify-flutter/packages/amplify_storage_plugin_interface"
+      relative: true
+    source: path
     version: "0.0.1-dev.4"
   analyzer:
     dependency: transitive
@@ -267,6 +281,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.9"
+  date_time_format:
+    dependency: transitive
+    description:
+      name: date_time_format
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   dio:
     dependency: transitive
     description:

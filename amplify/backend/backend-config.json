@@ -12,5 +12,6 @@
       "service": "Pinpoint",
       "providerPlugin": "awscloudformation"
     }
-  }
+  },
+  "api": {}
 }

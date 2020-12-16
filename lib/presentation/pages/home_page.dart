@@ -1,7 +1,9 @@
+import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:spent/models/Todo.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
@@ -28,8 +30,10 @@ class _HomePageState extends State<HomePage> {
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _feedBloc = BlocProvider.of<FeedBloc>(context);
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       _fetchFeeds();
+      Todo todo = Todo(name: 'tesa', description: 'afsdf');
+      await Amplify.DataStore.save(todo);
     });
   }
 

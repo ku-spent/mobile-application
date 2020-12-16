@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.spent">
+    package="com.example.spent"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -7,9 +8,10 @@
          FlutterApplication and put your custom class here. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="spent"
-        android:icon="@mipmap/ic_launcher">
+    tools:replace="android:name"
+    android:name="io.flutter.app.FlutterApplication"
+    android:label="spent"
+    android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

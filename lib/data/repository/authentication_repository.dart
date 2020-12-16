@@ -1,8 +1,8 @@
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
-import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
 import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/amplifyconfiguration.dart';
@@ -13,6 +13,7 @@ import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/token.dart';
 import 'package:spent/domain/model/user.dart';
 import 'package:spent/core/constants.dart';
+import 'package:spent/models/ModelProvider.dart';
 
 final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
 final credentials = CognitoCredentials(AWS_IDENTITY_POOL_ID, userPool);
@@ -41,11 +42,20 @@ class AuthenticationRepository {
     // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
+    AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
 
-    amplifyInstance.addPlugin(authPlugins: [authPlugin], analyticsPlugins: [analyticsPlugin]);
+    amplifyInstance.addPlugin(
+      authPlugins: [authPlugin],
+      analyticsPlugins: [analyticsPlugin],
+      dataStorePlugins: [datastorePlugin],
+    );
 
     // Once Plugins are added, configure Amplify
-    await amplifyInstance.configure(amplifyconfig);
+    amplifyInstance.configure(amplifyconfig);
+
+    // Todo todo = Todo(name: 'test name', description: 'test');
+    // await Amplify.DataStore.save(todo);
+
     _amplifyConfigured = true;
     print('configured amplify');
   }

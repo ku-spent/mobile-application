@@ -23,14 +23,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  amplify_analytics_pinpoint:
-    path: ../amplify-flutter-1/packages/amplify_analytics_pinpoint
   amplify_auth_cognito:
-    path: ../amplify-flutter-1/packages/amplify_auth_cognito
+    path: ../amplify-flutter/packages/amplify_auth_cognito
   amplify_auth_plugin_interface:
-    path: ../amplify-flutter-1/packages/amplify_auth_plugin_interface
+    path: ../amplify-flutter/packages/amplify_auth_plugin_interface
   amplify_core:
-    path: ../amplify-flutter-1/packages/amplify_core
+    path: ../amplify-flutter/packages/amplify_core
+  amplify_datastore:
+    path: ../amplify-flutter/packages/amplify_datastore
+  amplify_analytics_pinpoint:
+    path: ../amplify-flutter/packages/amplify_analytics_pinpoint
   amazon_cognito_identity_dart_2: ^0.1.18
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
@@ -55,6 +57,7 @@ dependencies:
   timeago: ^2.0.27
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7
+  # amplify_datastore: '<1.0.0'
 
 dev_dependencies:
   flutter_test:
