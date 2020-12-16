@@ -9,7 +9,7 @@ extension CardBaseMethod on _CardBaseState {
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => _goToQuerySourcePage(context),
           child: Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.only(left: 12, top: 8, bottom: 8, right: 8),
             child: Row(
               children: [
                 SourceIcon(

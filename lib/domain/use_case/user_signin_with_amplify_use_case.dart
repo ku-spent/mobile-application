@@ -2,7 +2,6 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
-import 'package:spent/domain/model/token.dart';
 import 'package:spent/domain/model/user.dart';
 
 @injectable
@@ -17,14 +16,15 @@ class UserSignInWithAmplifyUseCase {
       if (!isSuccess)
         return null;
       else {
-        final CognitoAuthSession cognitoAuthSession =
-            await Amplify.Auth.fetchAuthSession(options: CognitoSessionOptions(getAWSCredentials: true));
-        final token = Token(
-          idToken: cognitoAuthSession.userPoolTokens.idToken,
-          accessToken: cognitoAuthSession.userPoolTokens.accessToken,
-          refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
-        );
-        await _authenticationRepository.setUserSessionFromToken(token);
+        await _authenticationRepository.init();
+        // final CognitoAuthSession cognitoAuthSession =
+        //     await Amplify.Auth.fetchAuthSession(options: CognitoSessionOptions(getAWSCredentials: true));
+        // final token = Token(
+        //   idToken: cognitoAuthSession.userPoolTokens.idToken,
+        //   accessToken: cognitoAuthSession.userPoolTokens.accessToken,
+        //   refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
+        // );
+        // await _authenticationRepository.setUserSessionFromToken(token);
         final user = await _authenticationRepository.getUserFromSession();
         if (user != null) {
           await _authenticationRepository.cacheToken();
