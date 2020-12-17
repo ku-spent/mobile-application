@@ -59,6 +59,7 @@ class AuthenticationRepository {
           break;
         case "SIGNED_OUT":
           {
+            Amplify.DataStore.clear();
             print("USER IS SIGNED OUT");
           }
           break;
@@ -70,12 +71,7 @@ class AuthenticationRepository {
       }
     });
 
-    // Once Plugins are added, configure Amplify
     amplifyInstance.configure(amplifyconfig);
-
-    // Todo todo = Todo(name: 'test name', description: 'test');
-    // await Amplify.DataStore.save(todo);
-
     _amplifyConfigured = true;
     print('configured amplify');
   }
