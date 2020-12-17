@@ -24,15 +24,15 @@ dependencies:
   flutter:
     sdk: flutter
   amplify_auth_cognito:
-    path: ../amplify-flutter/packages/amplify_auth_cognito
+    path: lib/amplify-flutter/packages/amplify_auth_cognito
   amplify_auth_plugin_interface:
-    path: ../amplify-flutter/packages/amplify_auth_plugin_interface
+    path: lib/amplify-flutter/packages/amplify_auth_plugin_interface
   amplify_core:
-    path: ../amplify-flutter/packages/amplify_core
+    path: lib/amplify-flutter/packages/amplify_core
   amplify_datastore:
-    path: ../amplify-flutter/packages/amplify_datastore
+    path: lib/amplify-flutter/packages/amplify_datastore
   amplify_analytics_pinpoint:
-    path: ../amplify-flutter/packages/amplify_analytics_pinpoint
+    path: lib/amplify-flutter/packages/amplify_analytics_pinpoint
   amazon_cognito_identity_dart_2: ^0.1.18
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
