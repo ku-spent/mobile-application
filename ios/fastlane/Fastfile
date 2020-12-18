@@ -18,6 +18,17 @@ default_platform(:ios)
 platform :ios do
   desc "New iOS build for Counter Demo app"
     lane :ios_beta_app do
+        disable_automatic_code_signing
+        update_project_provisioning(
+            xcodeproj: "Project.xcodeproj",
+            profile: "com.fastlane.example.#{options[:id]}.mobileprovision",
+            build_configuration: "development",
+            code_signing_identity: "iPhone Distribution"
+        )
+        update_project_team(
+            path: "Project.xcodeproj",
+            teamid: options[:team_id]
+        )
         build_app(
             scheme: "Runner",
             archive_path: "./build/Runner.xcarchive",
