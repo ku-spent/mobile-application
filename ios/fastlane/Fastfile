@@ -18,14 +18,10 @@ default_platform(:ios)
 platform :ios do
   desc "New iOS build for Counter Demo app"
     lane :ios_beta_app do
-        if options[:release] then
-            # Make sure the working directory does not have uncommitted changes
-            ensure_git_status_clean
-        end
         # Make sure we are building with the XCode version specified in `.xcode-version`
         ensure_xcode_version
       
-        signing_type = (options[:release] ? "appstore" : "development")
+        signing_type = ("development")
           # Make sure we have certs and provisioning profiles
           if is_ci?
             # If running on CI, uses a separate keychain
