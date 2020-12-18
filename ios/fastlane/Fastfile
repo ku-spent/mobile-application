@@ -30,13 +30,13 @@ platform :ios do
         #   end
       
           # Make sure we have dependencies
-          carthage(
-            platform: 'ios',
-            command: 'bootstrap',
-            cache_builds: true,
-          )
+        #   carthage(
+        #     platform: 'ios',
+        #     command: 'bootstrap',
+        #     cache_builds: true,
+        #   )
       
-          disable_automatic_code_signing(path: "myapp.xcodeproj")
+          disable_automatic_code_signing(path: "Runner.xcodeproj")
       
       
         build_app(
@@ -49,7 +49,7 @@ platform :ios do
             output_directory: "./build/Runner"
         )
 
-        enable_automatic_code_signing(path: "myapp.xcodeproj")
+        enable_automatic_code_signing(path: "Runner.xcodeproj")
 
         firebase_app_distribution(
             app: "1:628657338913:ios:d4c96792bce64279a58160",
