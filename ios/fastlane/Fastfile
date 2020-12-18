@@ -22,7 +22,7 @@ platform :ios do
         update_project_provisioning(
             xcodeproj: "Project.xcodeproj",
             profile: "com.fastlane.example.#{options[:id]}.mobileprovision",
-            build_configuration: "development",
+            build_configuration: "Release",
             code_signing_identity: "iPhone Distribution"
         )
         update_project_team(
