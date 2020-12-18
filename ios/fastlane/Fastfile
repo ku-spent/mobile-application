@@ -51,10 +51,10 @@ platform :ios do
             export_method: "development",
             xcargs: {
                 PROVISIONING_PROFILE_SPECIFIER: ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{signing_type}"]
-            }
+            },
             output_directory: "./build/Runner"
         )
-        
+
         enable_automatic_code_signing(path: "myapp.xcodeproj")
 
         firebase_app_distribution(
