@@ -43,9 +43,6 @@ platform :ios do
             scheme: "Runner",
             archive_path: "./build/Runner.xcarchive",
             export_method: "development",
-            xcargs: {
-                PROVISIONING_PROFILE_SPECIFIER: ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{signing_type}"]
-            },
             output_directory: "./build/Runner"
         )
 
