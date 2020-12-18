@@ -18,23 +18,45 @@ default_platform(:ios)
 platform :ios do
   desc "New iOS build for Counter Demo app"
     lane :ios_beta_app do
-        disable_automatic_code_signing
-        update_project_provisioning(
-            xcodeproj: "Project.xcodeproj",
-            profile: "com.fastlane.example.#{options[:id]}.mobileprovision",
-            build_configuration: "Release",
-            code_signing_identity: "iPhone Distribution"
-        )
-        update_project_team(
-            path: "Project.xcodeproj",
-            teamid: options[:team_id]
-        )
+        if options[:release] then
+            # Make sure the working directory does not have uncommitted changes
+            ensure_git_status_clean
+        end
+        # Make sure we are building with the XCode version specified in `.xcode-version`
+        ensure_xcode_version
+      
+        signing_type = (options[:release] ? "appstore" : "development")
+          # Make sure we have certs and provisioning profiles
+          if is_ci?
+            # If running on CI, uses a separate keychain
+            setup_keychain_for_ci(signing_type: signing_type)
+          else
+            # If running on a user's machine, uses the default keychain
+            setup_keychain(signing_type: signing_type)
+          end
+      
+          # Make sure we have dependencies
+          carthage(
+            platform: 'ios',
+            command: 'bootstrap',
+            cache_builds: true,
+          )
+      
+          disable_automatic_code_signing(path: "myapp.xcodeproj")
+      
+      
         build_app(
             scheme: "Runner",
             archive_path: "./build/Runner.xcarchive",
             export_method: "development",
+            xcargs: {
+                PROVISIONING_PROFILE_SPECIFIER: ENV["sigh_#{ENV['APP_IDENTIFIER']}_#{signing_type}"]
+            }
             output_directory: "./build/Runner"
         )
+        
+        enable_automatic_code_signing(path: "myapp.xcodeproj")
+
         firebase_app_distribution(
             app: "1:628657338913:ios:d4c96792bce64279a58160",
             testers: "thitiwat.tha@ku.th, benkulthida@gmail.com",
