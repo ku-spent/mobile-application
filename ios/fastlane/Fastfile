@@ -18,35 +18,14 @@ default_platform(:ios)
 platform :ios do
   desc "New iOS build for Counter Demo app"
     lane :ios_beta_app do
-      
-        signing_type = ("development")
-          # Make sure we have certs and provisioning profiles
-        #   if is_ci?
-        #     # If running on CI, uses a separate keychain
-        #     setup_keychain_for_ci(signing_type: signing_type)
-        #   else
-        #     # If running on a user's machine, uses the default keychain
-        #     setup_keychain(signing_type: signing_type)
-        #   end
-      
-          # Make sure we have dependencies
-        #   carthage(
-        #     platform: 'ios',
-        #     command: 'bootstrap',
-        #     cache_builds: true,
-        #   )
-      
-          disable_automatic_code_signing(path: "Runner.xcodeproj")
-      
-      
+        cert
+        sigh(force: true)
         build_app(
             scheme: "Runner",
             archive_path: "./build/Runner.xcarchive",
             export_method: "development",
             output_directory: "./build/Runner"
         )
-
-        enable_automatic_code_signing(path: "Runner.xcodeproj")
 
         firebase_app_distribution(
             app: "1:628657338913:ios:d4c96792bce64279a58160",
