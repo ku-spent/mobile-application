@@ -4,16 +4,16 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/news.dart';
-import 'package:spent/domain/model/user.dart';
+import 'package:spent/domain/model/User.dart';
 
 @singleton
 class UserStorage {
-  UserStorage();
+  const UserStorage();
 
   Future<void> saveNewsHistory(User user, News news) async {
     final history = History(
       newId: news.id,
-      userId: user.id,
+      // userId: user.id,
       status: HistoryStatus.ACTIVE,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -34,7 +34,7 @@ class UserStorage {
     try {
       History history = (await Amplify.DataStore.query(
         History.classType,
-        where: History.USERID.eq(user.id).and(History.NEWID.eq(news.id)),
+        where: History.USER.eq(user.id).and(History.NEWID.eq(news.id)),
       ))[0];
       print(history);
       return history;
@@ -47,7 +47,7 @@ class UserStorage {
     print(History.CREATEDAT.descending().field);
     final histories = await Amplify.DataStore.query(
       History.classType,
-      where: History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE')),
+      where: History.USER.eq(user.id).and(History.STATUS.eq('ACTIVE')),
       sortBy: [History.UPDATEDAT.descending()],
       // pagination: QueryPagination(page: 0, limit: 3),
     );

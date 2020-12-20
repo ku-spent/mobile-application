@@ -3,7 +3,7 @@ import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/news.dart';
-import 'package:spent/domain/model/user.dart';
+import 'package:spent/domain/model/User.dart';
 
 @injectable
 class SaveUserViewNewsHistoryUseCase {

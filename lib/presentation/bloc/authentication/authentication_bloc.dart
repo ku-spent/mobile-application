@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/user.dart';
+import 'package:spent/domain/model/User.dart';
 import 'package:spent/domain/use_case/get_current_user_use_case.dart';
 import 'package:spent/domain/use_case/identify_user_use_case.dart';
 import 'package:spent/domain/use_case/initial_authentication_use_case.dart';

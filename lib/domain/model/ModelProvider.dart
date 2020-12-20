@@ -15,15 +15,17 @@
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'History.dart';
+import 'User.dart';
 
 export 'History.dart';
 export 'HistoryStatus.dart';
+export 'User.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "2e59aac29a44d1fd2b3a39b9fda62e47";
+  String version = "3a40210b863edc67210ab4d39b2b0b69";
   @override
-  List<ModelSchema> modelSchemas = [History.schema];
+  List<ModelSchema> modelSchemas = [History.schema, User.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;

@@ -89,13 +89,6 @@ const amplifyconfig = ''' {
     "api": {
         "plugins": {
             "awsAPIPlugin": {
-                "SPentAppApi": {
-                    "endpointType": "GraphQL",
-                    "endpoint": "https://ogd3u5lmcfavxee4r6dskn2gsi.appsync-api.ap-southeast-1.amazonaws.com/graphql",
-                    "region": "ap-southeast-1",
-                    "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-                    "apiKey": "da2-yoa3f4hv4nbchde5izwwvn7pju"
-                },
                 "SPENTAppApi": {
                     "endpointType": "GraphQL",
                     "endpoint": "https://ucv6vml3ofggho336s5z2kvuvy.appsync-api.ap-southeast-1.amazonaws.com/graphql",

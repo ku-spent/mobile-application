@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
-import 'package:spent/domain/model/user.dart';
+import 'package:spent/domain/model/User.dart';
 
 @injectable
 class UserSignInWithAuthCodeUseCase {
@@ -12,7 +12,7 @@ class UserSignInWithAuthCodeUseCase {
     try {
       final token = await _authenticationRepository.getTokenFromAuthCoe(authCode: authCode);
       await _authenticationRepository.setUserSessionFromToken(token);
-      final user = await _authenticationRepository.getUserFromSession();
+      final user = await _authenticationRepository.getCurrentUser();
       await _authenticationRepository.setRemoteAuthFromSession();
       return user;
     } catch (err) {

@@ -15,7 +15,7 @@ class InitialAuthenticationUseCase {
       await Future.delayed(const Duration(milliseconds: 400), () => {});
       print('initial authentication usecase $isConfigured');
       if (isConfigured) {
-        final user = await _authenticationRepository.getUserFromSession();
+        final user = await _authenticationRepository.getCurrentUser();
         print('user $user');
         if (user != null) {
           await _authenticationRepository.cacheToken();

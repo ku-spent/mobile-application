@@ -11,7 +11,7 @@ import 'package:spent/data/data_source/local_storage/local_storage.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
 import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/token.dart';
-import 'package:spent/domain/model/user.dart';
+import 'package:spent/domain/model/User.dart';
 import 'package:spent/core/constants.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 
@@ -115,16 +115,50 @@ class AuthenticationRepository {
   /// Get existing user from session with his/her attributes
   Future<User> getCurrentUser() async {
     // cache
-    print(_cognitoUser.username);
     if (_user != null) return _user;
-
-    final attributes = await _cognitoUser.getUserAttributes();
-    if (attributes == null) {
-      return null;
-    }
-    final user = await _getUserFromCognitoUser(_cognitoUser);
+    String userId = _session.idToken.payload['sub'];
+    User user = (await Amplify.DataStore.query(
+      User.classType,
+      where: User.ID.eq(userId),
+    ))[0];
     _user = user;
     return user;
+  }
+
+  Future<bool> hasUser(String userId) async {
+    final users = await Amplify.DataStore.query(
+      User.classType,
+      where: User.ID.eq(userId),
+    );
+    return users.isNotEmpty;
+  }
+
+  String getUserId() {
+    String userId = _session.idToken.payload['sub'];
+    return userId;
+  }
+
+  Future<Map<String, String>> getUserMap() async {
+    final cognitoAttributes = await _cognitoUser.getUserAttributes();
+    Map<String, String> userMap = {'name': '', 'email': '', 'picture': '', 'sub': ''};
+    for (CognitoUserAttribute attribute in cognitoAttributes) {
+      if (userMap.containsKey(attribute.name)) {
+        userMap[attribute.name] = attribute.value;
+      }
+    }
+    return userMap;
+  }
+
+  Future<void> createUser(Map<String, String> userMap) async {
+    final user = User(
+      id: userMap['sub'],
+      name: userMap['name'],
+      email: userMap['email'],
+      picture: userMap['picture'],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    await Amplify.DataStore.save(user);
   }
 
   Future<Token> getTokenFromAuthCoe({String authCode}) async {
@@ -132,10 +166,10 @@ class AuthenticationRepository {
     return token;
   }
 
-  Future<User> getUserFromSession() async {
-    final user = await _getUserFromCognitoUser(_cognitoUser);
-    return user;
-  }
+  // Future<User> getUserFromSession() async {
+  //   final user = await _getUserFromCognitoUser(_cognitoUser);
+  //   return user;
+  // }
 
   Future<void> setUserSessionFromToken(Token token) async {
     final idToken = CognitoIdToken(token.idToken);
@@ -163,11 +197,11 @@ class AuthenticationRepository {
     await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
   }
 
-  Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
-    final userAttributes = await cognitoUser.getUserAttributes();
-    final User user = User.fromCognitoAttributes(userAttributes);
-    return user;
-  }
+  // Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
+  //   final userAttributes = await cognitoUser.getUserAttributes();
+  //   final User user = User.fromCognitoAttributes(userAttributes);
+  //   return user;
+  // }
 
   // Future<AwsSigV4Client> getAwsSigV4Client() async {
   //   if (!isValidSession()) return null;
