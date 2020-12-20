@@ -1,0 +1,6 @@
+type History @model @auth(rules: [{ allow: owner }]) @key(name: "historyByUser", fields: ["userId"]) {
+  id: ID!
+  newId: String!
+  userId: String!
+  createdAt: AWSDateTime
+}

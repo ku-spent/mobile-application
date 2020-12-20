@@ -14,15 +14,15 @@
 */
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'Todo.dart';
+import 'History.dart';
 
-export 'Todo.dart';
+export 'History.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "d56528714da04741e0b1864a4666658a";
+  String version = "fa559b66357fd39a89acb92e777f34f2";
   @override
-  List<ModelSchema> modelSchemas = [Todo.schema];
+  List<ModelSchema> modelSchemas = [History.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;

@@ -15,7 +15,6 @@ import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 part 'card_base.part.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
 class CardBase extends StatefulWidget {
   final News news;
@@ -44,7 +43,6 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   }
 
   void _goToLink(BuildContext context) async {
-    _userEventBloc.add(ReadNewsEvent(news: _news));
     await launch(
       _news.url,
       option: CustomTabsOption(
@@ -54,13 +52,12 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
         showPageTitle: true,
         animation: CustomTabsAnimation.slideIn(),
         extraCustomTabs: const <String>[
-          // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
           'org.mozilla.firefox',
-          // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
           'com.microsoft.emmx',
         ],
       ),
     );
+    _userEventBloc.add(ReadNewsEvent(news: _news));
   }
 
   void _goToQuerySourcePage(BuildContext context) {

@@ -7,13 +7,13 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';
-import 'package:spent/data/data_source/user_storage/user_storage.dart';
+import 'package:spent/data/data_source/local_storage/local_storage.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
 import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/token.dart';
 import 'package:spent/domain/model/user.dart';
 import 'package:spent/core/constants.dart';
-import 'package:spent/models/ModelProvider.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 
 final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
 final credentials = CognitoCredentials(AWS_IDENTITY_POOL_ID, userPool);
@@ -29,6 +29,7 @@ class AuthenticationRepository {
   CognitoUserPool _userPool;
   CognitoUser _cognitoUser;
   CognitoUserSession _session;
+  User _user;
 
   AuthenticationRepository(this._authenticationRemoteDataSource, this._httpManager);
 
@@ -79,7 +80,7 @@ class AuthenticationRepository {
   Future<void> _configureCognitoUser() async {
     _userPool = userPool;
     final prefs = await SharedPreferences.getInstance();
-    final storage = getIt<UserStorage>(param1: prefs);
+    final storage = getIt<LocalStorage>(param1: prefs);
     _userPool.storage = storage;
 
     final CognitoAuthSession cognitoAuthSession = await Amplify.Auth.fetchAuthSession(
@@ -113,11 +114,15 @@ class AuthenticationRepository {
 
   /// Get existing user from session with his/her attributes
   Future<User> getCurrentUser() async {
+    // cache
+    if (_user != null) return _user;
+
     final attributes = await _cognitoUser.getUserAttributes();
     if (attributes == null) {
       return null;
     }
     final user = await _getUserFromCognitoUser(_cognitoUser);
+    _user = user;
     return user;
   }
 

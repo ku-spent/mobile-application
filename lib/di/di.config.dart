@@ -19,19 +19,23 @@ import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
 import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
+import '../data/data_source/local_storage/local_storage.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
 import '../presentation/bloc/query/query_bloc.dart';
+import '../domain/use_case/save_user_view_news_history_use_case.dart';
 import '../presentation/bloc/search/search_bloc.dart';
 import '../data/data_source/search_item/search_item_data_source.dart';
 import '../data/data_source/search_item/search_item_fuse.dart';
 import '../data/data_source/search_item/search_item_remote_data_source.dart';
 import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
+import '../domain/use_case/send_event_view_news_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
 import '../presentation/bloc/user_event/user_event_bloc.dart';
 import '../data/repository/user_event_repository.dart';
+import '../data/repository/user_repository.dart';
 import '../domain/use_case/user_signin_with_amplify_use_case.dart';
 import '../domain/use_case/user_signin_with_authcode_use_case.dart';
 import '../domain/use_case/user_signout_use_case.dart';
@@ -56,10 +60,13 @@ GetIt $initGetIt(
       () => IdentifyUserUseCase(get<AuthenticationRepository>()));
   gh.factory<InitialAuthenticationUseCase>(
       () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
+  gh.factoryParam<LocalStorage, SharedPreferences, dynamic>(
+      (_prefs, _) => LocalStorage(_prefs));
   gh.factory<NewsRemoteDataSource>(
       () => NewsRemoteDataSource(get<AppHttpManager>()));
   gh.factory<NewsRepository>(() => NewsRepository(get<NewsRemoteDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
+  gh.factory<SendEventViewNewsUseCase>(() => SendEventViewNewsUseCase());
   gh.factory<UserEventRepository>(() => UserEventRepository());
   gh.factory<UserSignInWithAmplifyUseCase>(
       () => UserSignInWithAmplifyUseCase(get<AuthenticationRepository>()));
@@ -67,8 +74,6 @@ GetIt $initGetIt(
       () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignOutUseCase>(
       () => UserSignOutUseCase(get<AuthenticationRepository>()));
-  gh.factoryParam<UserStorage, SharedPreferences, dynamic>(
-      (_prefs, _) => UserStorage(_prefs));
   gh.factory<GetNewsFeedUseCase>(
       () => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
@@ -86,18 +91,24 @@ GetIt $initGetIt(
         get<IdentifyUserUseCase>(),
       ));
   gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
+  gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
+      SaveUserViewNewsHistoryUseCase(
+          get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
 
   // Eager singletons must be registered in the right order
   gh.singleton<AppHttpManager>(AppHttpManager());
   gh.singleton<AuthenticationRepository>(AuthenticationRepository(
       get<AuthenticationRemoteDataSource>(), get<AppHttpManager>()));
-  gh.singleton<UserEventBloc>(UserEventBloc());
+  gh.singleton<UserStorage>(UserStorage());
   gh.singleton<AuthenticationBloc>(AuthenticationBloc(
     get<GetCurrentUserUseCase>(),
     get<UserSignOutUseCase>(),
     get<InitialAuthenticationUseCase>(),
     get<IdentifyUserUseCase>(),
   ));
+  gh.singleton<UserRepository>(UserRepository(get<UserStorage>()));
+  gh.singleton<UserEventBloc>(UserEventBloc(
+      get<SendEventViewNewsUseCase>(), get<SaveUserViewNewsHistoryUseCase>()));
   return get;
 }

@@ -1,15 +1,17 @@
-import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
+import 'package:spent/data/data_source/user_storage/user_storage.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/model/user.dart';
 
 @singleton
-class UserStorage {
-  UserStorage();
+class UserRepository {
+  final UserStorage _userStorage;
+
+  const UserRepository(this._userStorage);
 
   Future<History> saveNewsHistory(User user, News news) async {
-    History history = History(newId: news.id, userId: user.id);
-    await Amplify.DataStore.save(history);
+    final history = await _userStorage.saveNewsHistory(user, news);
+    return history;
   }
 }

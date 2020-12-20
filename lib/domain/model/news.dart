@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 
 class News extends Equatable {
+  final String id;
   final String url;
   final String title;
   final String summary;
@@ -12,6 +13,7 @@ class News extends Equatable {
 
   @override
   List<Object> get props => [
+        id,
         url,
         title,
         summary,
@@ -22,6 +24,7 @@ class News extends Equatable {
       ];
 
   const News({
+    @required this.id,
     @required this.url,
     @required this.title,
     @required this.summary,
@@ -33,6 +36,7 @@ class News extends Equatable {
 
   factory News.fromJson(Map<String, dynamic> news) {
     return News(
+      id: news['id'] ?? '',
       url: news['url'] ?? '',
       title: news['title'] ?? '',
       summary: news['summary'] ?? '',

@@ -46,11 +46,17 @@ const amplifyconfig = ''' {
                 },
                 "AppSync": {
                     "Default": {
-                        "ApiUrl": "https://s2apq4l5ujfpddjjak5jinbhyq.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                        "ApiUrl": "https://ogd3u5lmcfavxee4r6dskn2gsi.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                        "Region": "ap-southeast-1",
+                        "AuthMode": "AMAZON_COGNITO_USER_POOLS",
+                        "ClientDatabasePrefix": "SPentAppApi_AMAZON_COGNITO_USER_POOLS"
+                    },
+                    "SPentAppApi_API_KEY": {
+                        "ApiUrl": "https://ogd3u5lmcfavxee4r6dskn2gsi.appsync-api.ap-southeast-1.amazonaws.com/graphql",
                         "Region": "ap-southeast-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-5f5tgmlcqjczlmxnb4nt3v3btq",
-                        "ClientDatabasePrefix": "testapi_API_KEY"
+                        "ApiKey": "da2-yoa3f4hv4nbchde5izwwvn7pju",
+                        "ClientDatabasePrefix": "SPentAppApi_API_KEY"
                     }
                 },
                 "PinpointAnalytics": {
@@ -83,12 +89,12 @@ const amplifyconfig = ''' {
     "api": {
         "plugins": {
             "awsAPIPlugin": {
-                "testapi": {
+                "SPentAppApi": {
                     "endpointType": "GraphQL",
-                    "endpoint": "https://s2apq4l5ujfpddjjak5jinbhyq.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                    "endpoint": "https://ogd3u5lmcfavxee4r6dskn2gsi.appsync-api.ap-southeast-1.amazonaws.com/graphql",
                     "region": "ap-southeast-1",
-                    "authorizationType": "API_KEY",
-                    "apiKey": "da2-5f5tgmlcqjczlmxnb4nt3v3btq"
+                    "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+                    "apiKey": "da2-yoa3f4hv4nbchde5izwwvn7pju"
                 }
             }
         }
