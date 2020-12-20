@@ -31,6 +31,8 @@ dependencies:
     path: ../amplify-flutter/packages/amplify_core
   amplify_datastore:
     path: ../amplify-flutter/packages/amplify_datastore
+  amplify_datastore_plugin_interface:
+    path: ../amplify-flutter/packages/amplify_datastore_plugin_interface
   amplify_analytics_pinpoint:
     path: ../amplify-flutter/packages/amplify_analytics_pinpoint
   amazon_cognito_identity_dart_2: ^0.1.18

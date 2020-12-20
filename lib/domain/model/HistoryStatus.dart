@@ -13,18 +13,4 @@
 * permissions and limitations under the License.
 */
 
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'History.dart';
-
-export 'History.dart';
-export 'HistoryStatus.dart';
-
-class ModelProvider implements ModelProviderInterface {
-  @override
-  String version = "2e59aac29a44d1fd2b3a39b9fda62e47";
-  @override
-  List<ModelSchema> modelSchemas = [History.schema];
-  static final ModelProvider _instance = ModelProvider();
-
-  static ModelProvider get instance => _instance;
-}
+enum HistoryStatus { ACTIVE, DELETED }

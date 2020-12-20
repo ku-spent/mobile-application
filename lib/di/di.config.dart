@@ -17,6 +17,8 @@ import '../data/repository/authentication_repository.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
+import '../domain/use_case/get_view_news_history_use_case.dart';
+import '../presentation/bloc/history/history_bloc.dart';
 import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
 import '../data/data_source/local_storage/local_storage.dart';
@@ -91,6 +93,9 @@ GetIt $initGetIt(
         get<IdentifyUserUseCase>(),
       ));
   gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
+  gh.factory<GetViewNewsHistoryUseCase>(() => GetViewNewsHistoryUseCase(
+      get<AuthenticationRepository>(), get<UserRepository>()));
+  gh.factory<HistoryBloc>(() => HistoryBloc(get<GetViewNewsHistoryUseCase>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
       SaveUserViewNewsHistoryUseCase(
           get<AuthenticationRepository>(), get<UserRepository>()));

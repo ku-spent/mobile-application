@@ -1,8 +1,7 @@
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
+import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/model/user.dart';
 
@@ -15,6 +14,12 @@ class SaveUserViewNewsHistoryUseCase {
 
   Future<void> call(News news) async {
     User user = await _authenticationRepository.getCurrentUser();
-    await _userRepository.saveNewsHistory(user, news);
+    History oldHistory = await _userRepository.getHistoryByNewsId(user, news);
+    if (oldHistory != null) {
+      final newHistory = History();
+      await _userRepository.updateNewsHistory(oldHistory, newHistory);
+    } else {
+      await _userRepository.saveNewsHistory(user, news);
+    }
   }
 }

@@ -14,7 +14,7 @@
     }
   },
   "api": {
-    "SPentAppApi": {
+    "SPENTAppApi": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {

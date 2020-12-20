@@ -8,10 +8,23 @@ import 'package:spent/domain/model/user.dart';
 class UserRepository {
   final UserStorage _userStorage;
 
-  const UserRepository(this._userStorage);
+  UserRepository(this._userStorage);
 
-  Future<History> saveNewsHistory(User user, News news) async {
-    final history = await _userStorage.saveNewsHistory(user, news);
+  Future<void> saveNewsHistory(User user, News news) async {
+    await _userStorage.saveNewsHistory(user, news);
+  }
+
+  Future<void> updateNewsHistory(History oldHistory, History newHistory) async {
+    await _userStorage.updateNewsHistory(oldHistory, newHistory);
+  }
+
+  Future<History> getHistoryByNewsId(User user, News news) async {
+    final history = await _userStorage.getHistoryByNewsId(user, news);
     return history;
+  }
+
+  Future<List<History>> getNewsHistory(User user) async {
+    final histories = await _userStorage.getNewsHistory(user);
+    return histories;
   }
 }

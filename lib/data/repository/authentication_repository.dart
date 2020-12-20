@@ -44,7 +44,6 @@ class AuthenticationRepository {
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
     AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
-
     amplifyInstance.addPlugin(
       authPlugins: [authPlugin],
       analyticsPlugins: [analyticsPlugin],
@@ -73,6 +72,7 @@ class AuthenticationRepository {
     });
 
     amplifyInstance.configure(amplifyconfig);
+    // Amplify.DataStore.clear();
     _amplifyConfigured = true;
     print('configured amplify');
   }
@@ -115,6 +115,7 @@ class AuthenticationRepository {
   /// Get existing user from session with his/her attributes
   Future<User> getCurrentUser() async {
     // cache
+    print(_cognitoUser.username);
     if (_user != null) return _user;
 
     final attributes = await _cognitoUser.getUserAttributes();

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
+import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserEventBloc>(
           create: (BuildContext context) => getIt<UserEventBloc>(),
         ),
+        BlocProvider<HistoryBloc>(
+          create: (BuildContext context) => getIt<HistoryBloc>(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

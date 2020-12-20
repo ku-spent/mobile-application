@@ -1,0 +1,25 @@
+enum HistoryStatus {
+  ACTIVE
+  DELETED
+}
+
+type User @model {
+  id: ID!
+  name: String!
+  email: String!
+  histories: [History] @connection(keyName: "byUser", fields: ["id"])
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type History @model @auth(rules: [{ allow: owner }]) @key(name: "byUser", fields: ["userId", "updatedAt"]) {
+  id: ID!
+  userId: ID!
+  user: User @connection(fields: ["userId"])
+  newId: String!
+  status: HistoryStatus!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+#  @model(queries: null, mutations: null, subscriptions: null) {

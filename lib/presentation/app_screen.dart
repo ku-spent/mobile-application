@@ -8,6 +8,7 @@ import 'package:spent/presentation/pages/bookmark_page.dart';
 
 // Page
 import 'package:spent/presentation/pages/following_page.dart';
+import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/pages/home_page.dart';
 import 'package:spent/presentation/pages/search_page.dart';
 
@@ -56,7 +57,7 @@ class AppScreen extends StatelessWidget {
             children: [
               HomePage(scrollController: _scrollController),
               FollowingPage(),
-              BookmarkPage(),
+              HistoryPage(scrollController: _scrollController),
             ],
           ),
           bottomNavigationBar: BottomNavbar(scrollController: _scrollController),
