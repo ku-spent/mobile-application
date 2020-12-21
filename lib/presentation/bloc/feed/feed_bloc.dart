@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/use_case/cache_news_use_case.dart';
 import 'package:spent/domain/use_case/get_news_feed_use_case.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -15,8 +16,9 @@ part 'feed_state.dart';
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   final int fetchSize = 10;
   final GetNewsFeedUseCase _getNewsFeedUseCase;
+  final CacheNewsUseCase _cacheNewsUseCase;
 
-  FeedBloc(this._getNewsFeedUseCase) : super(FeedInitial());
+  FeedBloc(this._getNewsFeedUseCase, this._cacheNewsUseCase) : super(FeedInitial());
 
   @override
   Stream<FeedState> mapEventToState(
@@ -36,6 +38,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       final curState = state;
       if (curState is FeedInitial) {
         final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
+        await _cacheNewsUseCase(feeds);
         yield FeedLoaded(feeds: feeds, hasMore: true);
       } else if (curState is FeedLoaded) {
         final feeds = await _getNewsFeedUseCase.call(from: curState.feeds.length, size: fetchSize);
@@ -52,7 +55,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Stream<FeedState> _mapRefreshLoadedFeedState(RefreshFeedCallback callback) async* {
     try {
       final curState = state;
-      if (curState is FeedLoaded || curState is FeedError) {
+      if (curState is FeedError) {
+        yield FeedLoading();
+      }
+      if (curState is FeedLoaded) {
         final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
         yield FeedLoaded(feeds: feeds, hasMore: true);
       }

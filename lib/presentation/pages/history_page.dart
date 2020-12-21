@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/di/di.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
+import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     super.dispose();
   }
 
@@ -50,46 +52,46 @@ class _HistoryPageState extends State<HistoryPage> {
     _historyBloc.add(FetchHistory());
   }
 
-  // void _onRefresh() async {
-  //   _historyBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
-  // }
+  void _onRefresh() async {
+    _refreshController.refreshCompleted();
+    // _historyBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HistoryBloc, HistoryState>(
       builder: (context, state) {
-        if (state is HistoryInitial) {
+        if (state is HistoryInitial || state is HistoryLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is HistoryLoaded) {
-          if (state.histories.isEmpty) {
+          if (state.news.isEmpty) {
             return Center(
               child: Text('no histories'),
             );
+          } else {
+            return SmartRefresher(
+              enablePullDown: true,
+              // enablePullUp: state.hasMore,
+              header: WaterDropMaterialHeader(),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              child: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                addAutomaticKeepAlives: true,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                itemCount: state.news.length,
+                itemBuilder: (BuildContext context, int index) => CardBase(
+                  key: UniqueKey(),
+                  news: state.news[index],
+                  showPicture: false,
+                ),
+                separatorBuilder: (BuildContext context, int index) => SizedBox(
+                  height: 8,
+                ),
+                controller: _scrollController,
+              ),
+            );
           }
-          return SmartRefresher(
-            enablePullDown: true,
-            // enablePullUp: state.hasMore,
-            header: WaterDropMaterialHeader(),
-            controller: _refreshController,
-            // onRefresh: _onRefresh,
-            child: ListView.separated(
-              physics: BouncingScrollPhysics(),
-              addAutomaticKeepAlives: true,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              itemCount: state.histories.length,
-              itemBuilder: (BuildContext context, int index) => Container(
-                child: Text(state.histories[index].id),
-              ),
-              //  CardBase(
-              //   news: state.histories[index],
-              //   key: UniqueKey(),
-              // ),
-              separatorBuilder: (BuildContext context, int index) => SizedBox(
-                height: 8,
-              ),
-              controller: _scrollController,
-            ),
-          );
         } else if (state is HistoryLoadError) {
           return RetryError();
         }

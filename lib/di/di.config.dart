@@ -14,8 +14,10 @@ import '../presentation/bloc/authentication/authentication_bloc.dart';
 import '../data/data_source/authentication/authentication_local_data_souce.dart';
 import '../data/data_source/authentication/authentication_remote_data_source.dart';
 import '../data/repository/authentication_repository.dart';
+import '../domain/use_case/cache_news_use_case.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
+import '../domain/use_case/get_news_by_id_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
 import '../domain/use_case/get_view_news_history_use_case.dart';
 import '../presentation/bloc/history/history_bloc.dart';
@@ -76,6 +78,9 @@ GetIt $initGetIt(
       () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignOutUseCase>(
       () => UserSignOutUseCase(get<AuthenticationRepository>()));
+  gh.factory<CacheNewsUseCase>(() => CacheNewsUseCase(get<NewsRepository>()));
+  gh.factory<GetNewsByIdUseCase>(
+      () => GetNewsByIdUseCase(get<NewsRepository>()));
   gh.factory<GetNewsFeedUseCase>(
       () => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
@@ -92,9 +97,13 @@ GetIt $initGetIt(
         get<UserSignInWithAmplifyUseCase>(),
         get<IdentifyUserUseCase>(),
       ));
-  gh.factory<FeedBloc>(() => FeedBloc(get<GetNewsFeedUseCase>()));
+  gh.factory<FeedBloc>(
+      () => FeedBloc(get<GetNewsFeedUseCase>(), get<CacheNewsUseCase>()));
   gh.factory<GetViewNewsHistoryUseCase>(() => GetViewNewsHistoryUseCase(
-      get<AuthenticationRepository>(), get<UserRepository>()));
+        get<AuthenticationRepository>(),
+        get<UserRepository>(),
+        get<NewsRepository>(),
+      ));
   gh.factory<HistoryBloc>(() => HistoryBloc(get<GetViewNewsHistoryUseCase>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
       SaveUserViewNewsHistoryUseCase(

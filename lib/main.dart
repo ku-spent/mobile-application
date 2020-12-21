@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:spent/domain/model/news.dart';
 
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
@@ -14,8 +17,10 @@ import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/di/di.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(NewsAdapter());
   configureInjection(Environment.dev);
   runApp(MyApp());
 }

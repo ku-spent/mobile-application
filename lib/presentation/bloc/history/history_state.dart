@@ -12,12 +12,12 @@ class HistoryInitial extends HistoryState {}
 class HistoryLoading extends HistoryState {}
 
 class HistoryLoaded extends HistoryState {
-  final List<History> histories;
+  final List<News> news;
 
-  const HistoryLoaded(this.histories);
+  const HistoryLoaded(this.news);
 
   @override
-  List<Object> get props => [histories];
+  List<Object> get props => [news];
 }
 
 class HistoryLoadError extends HistoryState {}

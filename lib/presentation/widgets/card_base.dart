@@ -18,10 +18,12 @@ part 'card_base.part.dart';
 
 class CardBase extends StatefulWidget {
   final News news;
+  final bool showPicture;
 
   CardBase({
     Key key,
     @required this.news,
+    this.showPicture = true,
   }) : super(key: key);
 
   @override
@@ -129,7 +131,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
               child: Column(
                 children: [
                   _buildHeader(),
-                  _buildContent(),
+                  _buildContent(widget.showPicture),
                   _buildBottom(),
                 ],
               ),

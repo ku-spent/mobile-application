@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     super.dispose();
   }
 
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-      if (state is FeedInitial) {
+      if (state is FeedInitial || state is FeedLoading) {
         return Center(child: CircularProgressIndicator());
       } else if (state is FeedLoaded) {
         if (state.feeds.isEmpty) {

@@ -13,6 +13,19 @@ type User @model {
   updatedAt: AWSDateTime!
 }
 
+type News @model {
+  id: ID!
+  url: String!
+  title: String!
+  summary: String!
+  image: String!
+  source: String!
+  category: String!
+  pubDate: AWSDateTime!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
 type History @model @auth(rules: [{ allow: owner }]) @key(name: "byUser", fields: ["userId", "updatedAt"]) {
   id: ID!
   userId: ID!

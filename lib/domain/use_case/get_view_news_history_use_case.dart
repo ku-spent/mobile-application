@@ -1,26 +1,39 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
+import 'package:spent/data/repository/news_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/User.dart';
+import 'package:spent/domain/model/news.dart';
 
 @injectable
 class GetViewNewsHistoryUseCase {
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
+  final NewsRepository _newsRepository;
 
-  const GetViewNewsHistoryUseCase(this._authenticationRepository, this._userRepository);
+  const GetViewNewsHistoryUseCase(this._authenticationRepository, this._userRepository, this._newsRepository);
 
-  Future<List<History>> call() async {
+  Future<List<News>> call() async {
     User user = await _authenticationRepository.getCurrentUser();
-    print(user);
     List<History> histories = await _userRepository.getNewsHistory(user);
-    // print(histories.first);
     histories.forEach((elem) {
       final id = elem.id;
       final u = elem.updatedAt.add(Duration(hours: 7));
       print('$id $u');
     });
-    return histories;
+    List<News> news = [];
+    histories.forEach((history) async {
+      final newsId = history.newId;
+      print('get news $newsId');
+      news.add(await _newsRepository.getNewsById(history.newId));
+    });
+    print(news);
+    // final futureNews = histories.map((e) => _newsRepository.getNewsById(e.newId)).toList();
+    // for (Future<News> f in news) {
+    //   print(await f);
+    // }
+
+    return news;
   }
 }

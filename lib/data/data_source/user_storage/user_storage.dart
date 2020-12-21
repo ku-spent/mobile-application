@@ -34,9 +34,8 @@ class UserStorage {
     try {
       History history = (await Amplify.DataStore.query(
         History.classType,
-        where: History.USER.eq(user.id).and(History.NEWID.eq(news.id)),
+        where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id)).and(History.NEWID.eq(news.id)),
       ))[0];
-      print(history);
       return history;
     } catch (err) {
       print(err);

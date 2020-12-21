@@ -86,27 +86,29 @@ extension CardBaseMethod on _CardBaseState {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(bool showPicture) {
     return InkWell(
       splashColor: Colors.blue.withAlpha(30),
       onTap: () => _goToLink(context),
       child: Column(
         children: [
-          Padding(
-              padding: EdgeInsets.only(top: 8, bottom: 16),
-              child: ClipRRect(
-                // borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: _news.image,
-                  placeholder: (context, url) => Container(
-                    color: Colors.black26,
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              )),
+          showPicture
+              ? Padding(
+                  padding: EdgeInsets.only(top: 8, bottom: 16),
+                  child: ClipRRect(
+                    // borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: _news.image,
+                      placeholder: (context, url) => Container(
+                        color: Colors.black26,
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ))
+              : Container(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Column(
