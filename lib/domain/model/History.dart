@@ -38,7 +38,7 @@ class History extends Model {
 
   const History._internal(
       {@required this.id,
-      this.user,
+      @required this.user,
       @required this.newId,
       @required this.status,
       @required this.createdAt,
@@ -46,7 +46,7 @@ class History extends Model {
 
   factory History(
       {@required String id,
-      User user,
+      @required User user,
       @required String newId,
       @required HistoryStatus status,
       @required DateTime createdAt,
@@ -97,7 +97,7 @@ class History extends Model {
 
   History copyWith(
       {@required String id,
-      User user,
+      @required User user,
       @required String newId,
       @required HistoryStatus status,
       @required DateTime createdAt,
@@ -150,7 +150,7 @@ class History extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: History.USER, isRequired: false, targetName: "userId", ofModelName: (User).toString()));
+        key: History.USER, isRequired: true, targetName: "userId", ofModelName: (User).toString()));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: History.NEWID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));

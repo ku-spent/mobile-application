@@ -13,9 +13,13 @@ class GetViewNewsHistoryUseCase {
 
   Future<List<History>> call() async {
     User user = await _authenticationRepository.getCurrentUser();
-    final histories = await _userRepository.getNewsHistory(user);
-    histories.forEach((element) {
-      print(element.createdAt);
+    print(user);
+    List<History> histories = await _userRepository.getNewsHistory(user);
+    // print(histories.first);
+    histories.forEach((elem) {
+      final id = elem.id;
+      final u = elem.updatedAt.add(Duration(hours: 7));
+      print('$id $u');
     });
     return histories;
   }

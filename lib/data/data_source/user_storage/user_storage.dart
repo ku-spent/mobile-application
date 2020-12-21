@@ -13,7 +13,7 @@ class UserStorage {
   Future<void> saveNewsHistory(User user, News news) async {
     final history = History(
       newId: news.id,
-      // userId: user.id,
+      user: user,
       status: HistoryStatus.ACTIVE,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -44,13 +44,13 @@ class UserStorage {
   }
 
   Future<List<History>> getNewsHistory(User user) async {
-    print(History.CREATEDAT.descending().field);
     final histories = await Amplify.DataStore.query(
       History.classType,
-      where: History.USER.eq(user.id).and(History.STATUS.eq('ACTIVE')),
+      where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id)).and(History.STATUS.eq('ACTIVE')),
       sortBy: [History.UPDATEDAT.descending()],
-      // pagination: QueryPagination(page: 0, limit: 3),
     );
+    // sort desc
+    histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
     return histories;
   }

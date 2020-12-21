@@ -16,7 +16,7 @@ type User @model {
 type History @model @auth(rules: [{ allow: owner }]) @key(name: "byUser", fields: ["userId", "updatedAt"]) {
   id: ID!
   userId: ID!
-  user: User @connection(fields: ["userId"])
+  user: User! @connection(fields: ["userId"])
   newId: String!
   status: HistoryStatus!
   createdAt: AWSDateTime!
