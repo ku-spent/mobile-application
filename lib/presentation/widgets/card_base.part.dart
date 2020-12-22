@@ -99,9 +99,7 @@ extension CardBaseMethod on _CardBaseState {
                     // borderRadius: BorderRadius.circular(8),
                     child: CachedNetworkImage(
                       imageUrl: _news.image,
-                      placeholder: (context, url) => Container(
-                        color: Colors.black26,
-                      ),
+                      placeholder: (context, url) => Container(color: Colors.black26),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       width: double.infinity,
                       height: 200,
