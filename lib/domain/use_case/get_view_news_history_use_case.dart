@@ -26,14 +26,9 @@ class GetViewNewsHistoryUseCase {
     histories.forEach((history) async {
       final newsId = history.newId;
       print('get news $newsId');
-      news.add(await _newsRepository.getNewsById(history.newId));
+      News historyNews = await _newsRepository.getNewsById(history.newId);
+      if (historyNews != null) news.add(historyNews);
     });
-    print(news);
-    // final futureNews = histories.map((e) => _newsRepository.getNewsById(e.newId)).toList();
-    // for (Future<News> f in news) {
-    //   print(await f);
-    // }
-
     return news;
   }
 }

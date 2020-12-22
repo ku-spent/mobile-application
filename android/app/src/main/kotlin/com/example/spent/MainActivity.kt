@@ -19,18 +19,4 @@ class MainActivity : FlutterActivity() {
                 }
         }
     }
-
-    // override fun onCreate(savedInstanceState: Bundle?) {
-    //     super.onCreate(savedInstanceState)
-    //     GeneratedPluginRegistrant.registerWith(this)
-
-    //     MethodChannel(flutterView, "com.example/app_retain").apply {
-    //         setMethodCallHandler { method, result ->
-    //             if (method.method == "sendToBackground") {
-    //                 moveTaskToBack(true)
-    //                 result.success(null)
-    //             }
-    //         }
-    //     }
-    // }
 }
