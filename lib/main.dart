@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:move_to_background/move_to_background.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/domain/model/news.dart';
 
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
@@ -21,14 +23,14 @@ import 'package:spent/di/di.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureInjection(Environment.dev);
-  // final dir = await getApplicationDocumentsDirectory();
-  // await Hive.initFlutter(dir.path);
-  // await Hive.openBox(News.boxName);
-  // Hive.registerAdapter(NewsAdapter());
+  Hive.initFlutter();
+  Hive.registerAdapter(NewsAdapter());
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

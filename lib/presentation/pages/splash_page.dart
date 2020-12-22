@@ -6,6 +6,7 @@ import 'package:spent/core/constants.dart';
 import 'package:spent/presentation/app_screen.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/pages/welcome_page.dart';
+import 'package:spent/presentation/widgets/app_retain_widget.dart';
 import 'package:spent/presentation/widgets/logo.dart';
 
 class SplashPage extends StatefulWidget {
@@ -38,52 +39,12 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-  //     // listenWhen: (previous, current) {
-  //     //   print(previous);
-  //     //   print(current);
-  //     //   return true;
-  //     // },
-  //     listener: (context, state) {
-  //       print(state);
-  //       if (state is AuthenticationAuthenticated) {
-  //         Navigator.of(context).pushReplacement(PageRouteBuilder(
-  //             transitionDuration: Duration(milliseconds: 600), pageBuilder: (_, __, ___) => AppScreen()));
-  //       } else if (state is AuthenticationInitial || state is AuthenticationLoading) {
-  //         Navigator.of(context).pushReplacement(PageRouteBuilder(
-  //             transitionDuration: Duration(milliseconds: 600),
-  //             pageBuilder: (_, __, ___) => Scaffold(
-  //                   body: Center(
-  //                     child: Column(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [_buildLogo()],
-  //                     ),
-  //                   ),
-  //                 )));
-  //       } else {
-  //         Navigator.of(context).pushReplacement(PageRouteBuilder(
-  //             transitionDuration: Duration(milliseconds: 600), pageBuilder: (_, __, ___) => WelcomePage()));
-  //       }
-  //     },
-  //     builder: (context, state) => Scaffold(
-  //       body: Center(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [_buildLogo()],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is AuthenticationAuthenticated) {
-          return AppScreen();
+          return AppRetainWidget(child: AppScreen());
         } else if (state is AuthenticationInitial || state is AuthenticationLoading) {
           return Scaffold(
             body: Center(
