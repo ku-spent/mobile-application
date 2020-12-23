@@ -3,6 +3,7 @@ import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/amplifyconfiguration.dart';
@@ -17,6 +18,9 @@ import 'package:spent/domain/model/ModelProvider.dart';
 
 final userPool = CognitoUserPool(AWS_COGNITO_USERPOOL_ID, AWS_COGNITO_CLIENT_ID);
 final credentials = CognitoCredentials(AWS_IDENTITY_POOL_ID, userPool);
+
+final String isLoginKey = 'IS_LOGIN';
+final String userBoxName = 'USER_BOX';
 
 @singleton
 class AuthenticationRepository {
@@ -33,10 +37,13 @@ class AuthenticationRepository {
 
   AuthenticationRepository(this._authenticationRemoteDataSource, this._httpManager);
 
-  Future<bool> init() async {
+  Future<bool> initAmplify() async {
     await _configureAmplify();
-    await _configureCognitoUser();
     return _amplifyConfigured;
+  }
+
+  Future<void> initCognito() async {
+    await _configureCognitoUser();
   }
 
   Future<void> _configureAmplify() async {
@@ -94,6 +101,12 @@ class AuthenticationRepository {
     );
     await setUserSessionFromToken(token);
     print('configured cognitoUser');
+  }
+
+  Future<bool> isLogin() async {
+    final userBox = await Hive.openBox(userBoxName);
+    bool isLogin = userBox.get(isLoginKey);
+    return isLogin;
   }
 
   Future<void> setRemoteAuthFromSession() async {
@@ -186,6 +199,8 @@ class AuthenticationRepository {
   }
 
   Future<void> cacheToken() async {
+    final userBox = await Hive.openBox(userBoxName);
+    await userBox.put(isLoginKey, true);
     await _cognitoUser.cacheTokens();
   }
 
@@ -193,6 +208,8 @@ class AuthenticationRepository {
     if (_cognitoUser != null) {
       await _cognitoUser.signOut();
     }
+    final userBox = await Hive.openBox(userBoxName);
+    await userBox.put(isLoginKey, false);
     _session.invalidateToken();
     await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
   }

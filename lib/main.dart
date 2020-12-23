@@ -7,6 +7,7 @@ import 'package:spent/domain/model/news.dart';
 
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
+import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
@@ -20,7 +21,7 @@ import 'package:spent/di/di.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureInjection(Environment.dev);
-  Hive.initFlutter();
+  await Hive.initFlutter();
   Hive.registerAdapter(NewsAdapter());
   runApp(MyApp());
 }
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<NetworkBloc>(
+          create: (BuildContext context) => getIt<NetworkBloc>(),
+        ),
         BlocProvider<FeedBloc>(
           create: (BuildContext context) => getIt<FeedBloc>(),
         ),

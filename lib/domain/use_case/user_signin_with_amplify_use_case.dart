@@ -16,7 +16,7 @@ class UserSignInWithAmplifyUseCase {
       if (!isSuccess)
         return null;
       else {
-        await _authenticationRepository.init();
+        await _authenticationRepository.initCognito();
         String userId = _authenticationRepository.getUserId();
         bool hasUser = await _authenticationRepository.hasUser(userId);
         if (!hasUser) {
@@ -24,14 +24,6 @@ class UserSignInWithAmplifyUseCase {
           Map<String, String> userMap = await _authenticationRepository.getUserMap();
           await _authenticationRepository.createUser(userMap);
         }
-        // final CognitoAuthSession cognitoAuthSession =
-        //     await Amplify.Auth.fetchAuthSession(options: CognitoSessionOptions(getAWSCredentials: true));
-        // final token = Token(
-        //   idToken: cognitoAuthSession.userPoolTokens.idToken,
-        //   accessToken: cognitoAuthSession.userPoolTokens.accessToken,
-        //   refreshToken: cognitoAuthSession.userPoolTokens.refreshToken,
-        // );
-        // await _authenticationRepository.setUserSessionFromToken(token);
         final user = await _authenticationRepository.getCurrentUser();
         if (user != null) {
           await _authenticationRepository.cacheToken();

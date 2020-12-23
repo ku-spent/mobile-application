@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 import 'package:spent/presentation/widgets/loader.dart';
 import 'package:spent/presentation/widgets/logo.dart';

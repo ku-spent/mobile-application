@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/news.dart';
-import 'package:spent/domain/use_case/cache_news_use_case.dart';
 import 'package:spent/domain/use_case/get_news_feed_use_case.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:spent/presentation/bloc/network/network_bloc.dart';
 
 part 'feed_event.dart';
 part 'feed_state.dart';
@@ -16,9 +16,9 @@ part 'feed_state.dart';
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   final int fetchSize = 10;
   final GetNewsFeedUseCase _getNewsFeedUseCase;
-  final CacheNewsUseCase _cacheNewsUseCase;
+  final NetworkBloc _networkBloc;
 
-  FeedBloc(this._getNewsFeedUseCase, this._cacheNewsUseCase) : super(FeedInitial());
+  FeedBloc(this._getNewsFeedUseCase, this._networkBloc) : super(FeedInitial());
 
   @override
   Stream<FeedState> mapEventToState(
@@ -37,11 +37,18 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     try {
       final curState = state;
       if (curState is FeedInitial) {
-        final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
-        await _cacheNewsUseCase(feeds);
+        final feeds = await _getNewsFeedUseCase.call(
+          from: 0,
+          size: fetchSize,
+          isRemote: _networkBloc.isConnected,
+        );
         yield FeedLoaded(feeds: feeds, hasMore: true);
       } else if (curState is FeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(from: curState.feeds.length, size: fetchSize);
+        final feeds = await _getNewsFeedUseCase.call(
+          from: curState.feeds.length,
+          size: fetchSize,
+          isRemote: _networkBloc.isConnected,
+        );
         yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
             : FeedLoaded(feeds: curState.feeds + feeds, hasMore: true);
@@ -59,7 +66,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         yield FeedLoading();
       }
       if (curState is FeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize);
+        final feeds = await _getNewsFeedUseCase.call(
+          from: 0,
+          size: fetchSize,
+          isRemote: _networkBloc.isConnected,
+        );
         yield FeedLoaded(feeds: feeds, hasMore: true);
       }
       if (callback != null) callback();

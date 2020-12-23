@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/use_case/identify_user_use_case.dart';
 import 'package:spent/domain/use_case/user_signin_with_amplify_use_case.dart';
-import 'package:spent/domain/use_case/user_signin_with_authcode_use_case.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
 part 'signin_event.dart';

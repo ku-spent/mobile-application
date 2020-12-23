@@ -1,10 +1,9 @@
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spent/core/constants.dart';
 import 'package:spent/presentation/app_screen.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
+import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/pages/welcome_page.dart';
 import 'package:spent/presentation/widgets/app_retain_widget.dart';
 import 'package:spent/presentation/widgets/logo.dart';
@@ -23,6 +22,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<NetworkBloc>(context).add(ListenNetworkConnection());
     BlocProvider.of<AuthenticationBloc>(context).add(InitialUser());
     _animationController = AnimationController(
       vsync: this,
@@ -41,23 +41,25 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state is AuthenticationAuthenticated) {
-          return AppRetainWidget(child: AppScreen());
-        } else if (state is AuthenticationInitial || state is AuthenticationLoading) {
-          return Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [_buildLogo()],
+    return BlocBuilder<NetworkBloc, NetworkState>(
+      builder: (context, state) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is AuthenticationAuthenticated) {
+            return AppRetainWidget(child: AppScreen());
+          } else if (state is AuthenticationInitial || state is AuthenticationLoading) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_buildLogo()],
+                ),
               ),
-            ),
-          );
-        } else {
-          return WelcomePage();
-        }
-      },
+            );
+          } else {
+            return WelcomePage();
+          }
+        },
+      ),
     );
   }
 }

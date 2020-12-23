@@ -7,4 +7,8 @@ abstract class NewsDataSource {
     String queryField,
     String query,
   );
+
+  Future<News> getNewsById(
+    String id,
+  );
 }

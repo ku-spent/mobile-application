@@ -30,7 +30,6 @@ class UserStorage {
   }
 
   Future<History> getHistoryByNewsId(User user, News news) async {
-    print('get');
     try {
       History history = (await Amplify.DataStore.query(
         History.classType,

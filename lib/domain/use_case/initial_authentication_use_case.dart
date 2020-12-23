@@ -1,6 +1,5 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
-import 'package:spent/data/repository/user_repository.dart';
 
 @injectable
 class InitialAuthenticationUseCase {
@@ -11,10 +10,13 @@ class InitialAuthenticationUseCase {
   Future<bool> call() async {
     try {
       print('initial authentication');
-      final isConfigured = await _authenticationRepository.init();
+      final isConfigured = await _authenticationRepository.initAmplify();
+      bool isLogin = await _authenticationRepository.isLogin();
+      if (!isLogin) return false;
       await Future.delayed(const Duration(milliseconds: 400), () => {});
       print('initial authentication usecase $isConfigured');
       if (isConfigured) {
+        await _authenticationRepository.initCognito();
         final user = await _authenticationRepository.getCurrentUser();
         print('user $user');
         if (user != null) {
@@ -24,8 +26,10 @@ class InitialAuthenticationUseCase {
       }
       return isConfigured;
     } catch (err) {
-      print(err);
-      // return false;
+      print('login error');
+      // bool isLogin = await _authenticationRepository.isLogin();
+      // print('offline login $isLogin');
+      // return isLogin;
     }
   }
 }

@@ -1,12 +1,14 @@
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:spent/data/data_source/news/news_local_data_source.dart';
 import 'package:spent/data/data_source/news/news_remote_data_source.dart';
 import 'package:spent/domain/model/news.dart';
 
 @injectable
 class NewsRepository {
   final NewsRemoteDataSource _newsRemoteDataSource;
-  const NewsRepository(this._newsRemoteDataSource);
+  final NewsLocalDataSource _newsLocalDataSource;
+
+  const NewsRepository(this._newsRemoteDataSource, this._newsLocalDataSource);
 
   Future<List<News>> getNewsFromRemote(
     int from,
@@ -14,19 +16,28 @@ class NewsRepository {
     String queryField,
     String query,
   ) async {
-    return _newsRemoteDataSource.getFeeds(from, size, queryField, query);
-  }
-
-  Future<News> getNewsById(String id) async {
-    final newsBox = await Hive.openBox<News>(News.boxName);
-    final news = newsBox.get(id);
+    final news = await _newsRemoteDataSource.getFeeds(from, size, queryField, query);
+    await _newsLocalDataSource.cacheNews(news);
     return news;
   }
 
-  Future<void> cacheNews(List<News> newsList) async {
-    final newsBox = await Hive.openBox<News>(News.boxName);
-    newsList.forEach((news) {
-      newsBox.put(news.id, news);
-    });
+  Future<List<News>> getNewsFromLocal(
+    int from,
+    int size,
+    String queryField,
+    String query,
+  ) async {
+    final news = await _newsLocalDataSource.getFeeds(from, size, queryField, query);
+    return news;
+  }
+
+  Future<News> getNewsById(String id) async {
+    try {
+      final news = _newsLocalDataSource.getNewsById(id);
+      return news;
+    } catch (e) {
+      print('getNewsById: $e');
+      return null;
+    }
   }
 }

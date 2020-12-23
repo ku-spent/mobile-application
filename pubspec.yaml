@@ -39,6 +39,8 @@ dependencies:
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
   cached_network_image: ^2.3.3
+  connectivity: ^2.0.2
+  data_connection_checker: ^0.3.4
   equatable: ^1.2.5
   flutter_bloc: ^6.1.0
   flutter_custom_tabs: ^0.6.0
@@ -59,7 +61,6 @@ dependencies:
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
   shared_preferences: ^0.5.4+3
-  sigv4: ^4.1.1
   timeago: ^2.0.27
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7

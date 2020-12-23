@@ -13,8 +13,14 @@ class GetNewsFeedUseCase {
     int size = 5,
     String queryField = '_',
     String query,
+    bool isRemote = false,
   }) async {
-    // final isValidSession = await _authenticationRepository.isValidSession();
-    return _newsRepository.getNewsFromRemote(from, size, queryField, query);
+    if (isRemote) {
+      print('get feed from remote');
+      return _newsRepository.getNewsFromRemote(from, size, queryField, query);
+    } else {
+      print('get feed from local');
+      return _newsRepository.getNewsFromLocal(from, size, queryField, query);
+    }
   }
 }

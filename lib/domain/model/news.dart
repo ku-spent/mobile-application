@@ -67,4 +67,17 @@ class News extends Equatable {
       category: news['category'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'url': url,
+      'title': title,
+      'summary': summary,
+      'image': image,
+      'source': source,
+      'pubDate': pubDate,
+      'category': category,
+    };
+  }
 }

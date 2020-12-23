@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/news.dart';
 import 'package:spent/domain/use_case/get_news_feed_use_case.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:spent/presentation/bloc/network/network_bloc.dart';
 
 part 'query_event.dart';
 part 'query_state.dart';
@@ -15,10 +16,12 @@ part 'query_state.dart';
 class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
   final int fetchSize = 10;
   final GetNewsFeedUseCase _getNewsFeedUseCase;
+  final NetworkBloc _networkBloc;
+
   String query;
   String queryField;
 
-  QueryFeedBloc(this._getNewsFeedUseCase) : super(QueryFeedInitial());
+  QueryFeedBloc(this._getNewsFeedUseCase, this._networkBloc) : super(QueryFeedInitial());
 
   @override
   Stream<QueryFeedState> mapEventToState(
@@ -39,7 +42,13 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
 
   Stream<QueryFeedState> _mapInitialLoadedQueryFeedState() async* {
     try {
-      final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
+      final feeds = await _getNewsFeedUseCase.call(
+        from: 0,
+        size: fetchSize,
+        query: query,
+        queryField: queryField,
+        isRemote: _networkBloc.isConnected,
+      );
       final hasMore = feeds.length >= fetchSize;
       yield QueryFeedLoaded(feeds: feeds, hasMore: hasMore, query: query);
     } catch (_) {
@@ -52,7 +61,12 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
       final curState = state;
       if (curState is QueryFeedLoaded) {
         final feeds = await _getNewsFeedUseCase.call(
-            from: curState.feeds.length, size: fetchSize, query: query, queryField: queryField);
+          from: curState.feeds.length,
+          size: fetchSize,
+          query: query,
+          queryField: queryField,
+          isRemote: _networkBloc.isConnected,
+        );
         yield feeds.isEmpty
             ? curState.copyWith(hasMore: false)
             : QueryFeedLoaded(feeds: curState.feeds + feeds, hasMore: true, query: query);

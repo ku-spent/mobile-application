@@ -28,4 +28,10 @@ class NewsRemoteDataSource implements NewsDataSource {
       throw e;
     }
   }
+
+  @override
+  Future<News> getNewsById(String id) {
+    // TODO: implement getNewsById
+    throw UnimplementedError();
+  }
 }
