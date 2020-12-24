@@ -17,14 +17,14 @@ import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 
-/** This is an auto generated class representing the History type in your schema. */
+/** This is an auto generated class representing the UserNewsAction type in your schema. */
 @immutable
-class History extends Model {
-  static const classType = const HistoryType();
+class UserNewsAction extends Model {
+  static const classType = const UserNewsActionType();
   final String id;
   final User user;
   final News news;
-  final HistoryStatus status;
+  final UserAction action;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -36,26 +36,26 @@ class History extends Model {
     return id;
   }
 
-  const History._internal(
+  const UserNewsAction._internal(
       {@required this.id,
       @required this.user,
       @required this.news,
-      @required this.status,
+      @required this.action,
       @required this.createdAt,
       @required this.updatedAt});
 
-  factory History(
+  factory UserNewsAction(
       {@required String id,
       @required User user,
       @required News news,
-      @required HistoryStatus status,
+      @required UserAction action,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
-    return History._internal(
+    return UserNewsAction._internal(
         id: id == null ? UUID.getUUID() : id,
         user: user,
         news: news,
-        status: status,
+        action: action,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -67,11 +67,11 @@ class History extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is History &&
+    return other is UserNewsAction &&
         id == other.id &&
         user == other.user &&
         news == other.news &&
-        status == other.status &&
+        action == other.action &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -83,11 +83,11 @@ class History extends Model {
   String toString() {
     var buffer = new StringBuffer();
 
-    buffer.write("History {");
+    buffer.write("UserNewsAction {");
     buffer.write("id=" + id + ", ");
     buffer.write("user=" + (user != null ? user.toString() : "null") + ", ");
     buffer.write("news=" + (news != null ? news.toString() : "null") + ", ");
-    buffer.write("status=" + enumToString(status) + ", ");
+    buffer.write("action=" + enumToString(action) + ", ");
     buffer.write("createdAt=" +
         (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
         ", ");
@@ -98,23 +98,23 @@ class History extends Model {
     return buffer.toString();
   }
 
-  History copyWith(
+  UserNewsAction copyWith(
       {@required String id,
       @required User user,
       @required News news,
-      @required HistoryStatus status,
+      @required UserAction action,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
-    return History(
+    return UserNewsAction(
         id: id ?? this.id,
         user: user ?? this.user,
         news: news ?? this.news,
-        status: status ?? this.status,
+        action: action ?? this.action,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
 
-  History.fromJson(Map<String, dynamic> json)
+  UserNewsAction.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         user = json['user'] != null
             ? User.fromJson(new Map<String, dynamic>.from(json['user']))
@@ -122,8 +122,7 @@ class History extends Model {
         news = json['news'] != null
             ? News.fromJson(new Map<String, dynamic>.from(json['news']))
             : null,
-        status =
-            enumFromString<HistoryStatus>(json['status'], HistoryStatus.values),
+        action = enumFromString<UserAction>(json['action'], UserAction.values),
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -131,12 +130,12 @@ class History extends Model {
         'id': id,
         'user': user?.toJson(),
         'news': news?.toJson(),
-        'status': enumToString(status),
+        'action': enumToString(action),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
 
-  static final QueryField ID = QueryField(fieldName: "history.id");
+  static final QueryField ID = QueryField(fieldName: "userNewsAction.id");
   static final QueryField USER = QueryField(
       fieldName: "user",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
@@ -145,13 +144,13 @@ class History extends Model {
       fieldName: "news",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (News).toString()));
-  static final QueryField STATUS = QueryField(fieldName: "status");
+  static final QueryField ACTION = QueryField(fieldName: "action");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema =
       Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "History";
-    modelSchemaDefinition.pluralName = "Histories";
+    modelSchemaDefinition.name = "UserNewsAction";
+    modelSchemaDefinition.pluralName = "UserNewsActions";
 
     modelSchemaDefinition.authRules = [
       AuthRule(
@@ -169,39 +168,39 @@ class History extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: History.USER,
+        key: UserNewsAction.USER,
         isRequired: true,
         targetName: "userId",
         ofModelName: (User).toString()));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: History.NEWS,
+        key: UserNewsAction.NEWS,
         isRequired: true,
         targetName: "newsId",
         ofModelName: (News).toString()));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.STATUS,
+        key: UserNewsAction.ACTION,
         isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.CREATEDAT,
+        key: UserNewsAction.CREATEDAT,
         isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.UPDATEDAT,
+        key: UserNewsAction.UPDATEDAT,
         isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
   });
 }
 
-class HistoryType extends ModelType<History> {
-  const HistoryType();
+class UserNewsActionType extends ModelType<UserNewsAction> {
+  const UserNewsActionType();
 
   @override
-  History fromJson(Map<String, dynamic> jsonData) {
-    return History.fromJson(jsonData);
+  UserNewsAction fromJson(Map<String, dynamic> jsonData) {
+    return UserNewsAction.fromJson(jsonData);
   }
 }

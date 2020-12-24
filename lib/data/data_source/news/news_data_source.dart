@@ -1,4 +1,4 @@
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 abstract class NewsDataSource {
   Future<List<News>> getFeeds(

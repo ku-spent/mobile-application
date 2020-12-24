@@ -4,7 +4,7 @@ import 'package:spent/data/repository/news_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/User.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 @injectable
 class GetViewNewsHistoryUseCase {
@@ -20,13 +20,12 @@ class GetViewNewsHistoryUseCase {
     histories.forEach((elem) {
       final id = elem.id;
       final u = elem.updatedAt.add(Duration(hours: 7));
-      print('$id $u');
     });
     List<News> news = [];
     histories.forEach((history) async {
-      final newsId = history.newId;
-      print('get news $newsId');
-      News historyNews = await _newsRepository.getNewsById(history.newId);
+      final newsId = history.news.id;
+      // print('get news $newsId');
+      News historyNews = await _newsRepository.getNewsById(history.news.id);
       if (historyNews != null) news.add(historyNews);
     });
     return news;

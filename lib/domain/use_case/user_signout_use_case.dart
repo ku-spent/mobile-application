@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 @injectable

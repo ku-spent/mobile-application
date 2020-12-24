@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/use_case/save_user_view_news_history_use_case.dart';
 import 'package:spent/domain/use_case/send_event_view_news_use_case.dart';
 

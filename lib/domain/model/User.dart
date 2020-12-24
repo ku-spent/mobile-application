@@ -94,8 +94,11 @@ class User extends Model {
     buffer.write("name=" + name + ", ");
     buffer.write("email=" + email + ", ");
     buffer.write("picture=" + picture + ", ");
-    buffer.write("createdAt=" + (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") + ", ");
-    buffer.write("updatedAt=" + (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
+    buffer.write("createdAt=" +
+        (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
+        ", ");
+    buffer.write("updatedAt=" +
+        (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
     buffer.write("}");
 
     return buffer.toString();
@@ -125,7 +128,9 @@ class User extends Model {
         email = json['email'],
         picture = json['picture'],
         histories = json['histories'] is List
-            ? (json['histories'] as List).map((e) => History.fromJson(new Map<String, dynamic>.from(e))).toList()
+            ? (json['histories'] as List)
+                .map((e) => History.fromJson(new Map<String, dynamic>.from(e)))
+                .toList()
             : null,
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
@@ -145,32 +150,48 @@ class User extends Model {
   static final QueryField EMAIL = QueryField(fieldName: "email");
   static final QueryField PICTURE = QueryField(fieldName: "picture");
   static final QueryField HISTORIES = QueryField(
-      fieldName: "histories", fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (History).toString()));
+      fieldName: "histories",
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
+          ofModelName: (History).toString()));
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  static var schema =
+      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "User";
     modelSchemaDefinition.pluralName = "Users";
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: User.NAME, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: User.NAME,
+        isRequired: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: User.EMAIL, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: User.EMAIL,
+        isRequired: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: User.PICTURE, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: User.PICTURE,
+        isRequired: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: User.HISTORIES, isRequired: false, ofModelName: (History).toString(), associatedKey: History.USER));
+        key: User.HISTORIES,
+        isRequired: false,
+        ofModelName: (History).toString(),
+        associatedKey: History.USER));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: User.CREATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: User.CREATEDAT,
+        isRequired: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: User.UPDATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: User.UPDATEDAT,
+        isRequired: true,
+        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
   });
 }
 

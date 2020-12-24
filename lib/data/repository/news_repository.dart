@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_local_data_source.dart';
 import 'package:spent/data/data_source/news/news_remote_data_source.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 @injectable
 class NewsRepository {
@@ -36,7 +36,6 @@ class NewsRepository {
       final news = _newsLocalDataSource.getNewsById(id);
       return news;
     } catch (e) {
-      print('getNewsById: $e');
       return null;
     }
   }

@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 @injectable
 class NewsLocalDataSource implements NewsDataSource {
@@ -11,7 +11,7 @@ class NewsLocalDataSource implements NewsDataSource {
   Future<List<News>> getFeeds(int from, int size, String queryField, String query) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);
-      List<News> news = newsBox.values.where((news) => news.toMap()[queryField] == query).toList().reversed.toList();
+      List<News> news = newsBox.values.where((news) => news.toJson()[queryField] == query).toList().reversed.toList();
       return news;
     } catch (e) {
       print(e);
@@ -28,7 +28,6 @@ class NewsLocalDataSource implements NewsDataSource {
       // TODO
       return news;
     } catch (e) {
-      print('getNewsById: $e');
       return null;
     }
   }
@@ -37,10 +36,10 @@ class NewsLocalDataSource implements NewsDataSource {
     final newsBox = await Hive.openBox<News>(News.boxName);
     newsList.reversed.forEach((news) async {
       final existNews = await getNewsById(news.id);
-      print('existNews: $existNews');
+      // print('existNews: $existNews');
       if (existNews == null) {
         final pubDate = news.pubDate;
-        print('add news: $pubDate');
+        // print('add news: $pubDate');
         newsBox.add(news);
       }
     });

@@ -6,7 +6,7 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';

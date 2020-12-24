@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 @injectable
 class NewsRemoteDataSource implements NewsDataSource {

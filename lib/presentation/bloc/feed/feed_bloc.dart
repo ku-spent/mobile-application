@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/use_case/get_news_feed_use_case.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';

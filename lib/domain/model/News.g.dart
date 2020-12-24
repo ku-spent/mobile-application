@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'news.dart';
+part of 'News.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -23,15 +23,18 @@ class NewsAdapter extends TypeAdapter<News> {
       summary: fields[3] as String,
       image: fields[4] as String,
       source: fields[5] as String,
-      pubDate: fields[6] as DateTime,
-      category: fields[7] as String,
+      category: fields[6] as String,
+      pubDate: fields[7] as DateTime,
+      histories: (fields[8] as List)?.cast<History>(),
+      createdAt: fields[9] as DateTime,
+      updatedAt: fields[10] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, News obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -45,9 +48,15 @@ class NewsAdapter extends TypeAdapter<News> {
       ..writeByte(5)
       ..write(obj.source)
       ..writeByte(6)
-      ..write(obj.pubDate)
+      ..write(obj.category)
       ..writeByte(7)
-      ..write(obj.category);
+      ..write(obj.pubDate)
+      ..writeByte(8)
+      ..write(obj.histories)
+      ..writeByte(9)
+      ..write(obj.createdAt)
+      ..writeByte(10)
+      ..write(obj.updatedAt);
   }
 
   @override

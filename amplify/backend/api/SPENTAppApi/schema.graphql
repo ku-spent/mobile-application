@@ -22,15 +22,40 @@ type News @model {
   source: String!
   category: String!
   pubDate: AWSDateTime!
+  histories: [History] @connection(keyName: "byNews", fields: ["id"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
 
-type History @model @auth(rules: [{ allow: owner }]) @key(name: "byUser", fields: ["userId", "updatedAt"]) {
+enum UserAction {
+  LIKE
+}
+
+type UserNewsAction
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUser", fields: ["userId", "updatedAt"])
+  @key(name: "byNews", fields: ["newsId", "updatedAt"]) {
   id: ID!
   userId: ID!
   user: User! @connection(fields: ["userId"])
-  newId: String!
+  newsId: ID!
+  news: News! @connection(fields: ["newsId"])
+  action: UserAction!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type History
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUser", fields: ["userId", "updatedAt"])
+  @key(name: "byNews", fields: ["newsId", "updatedAt"]) {
+  id: ID!
+  userId: ID!
+  user: User! @connection(fields: ["userId"])
+  newsId: ID!
+  news: News! @connection(fields: ["newsId"])
   status: HistoryStatus!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!

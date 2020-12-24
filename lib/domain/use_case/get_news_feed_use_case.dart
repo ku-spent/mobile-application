@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/news_repository.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 
 @injectable
 class GetNewsFeedUseCase {

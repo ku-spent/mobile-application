@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/user_storage/user_storage.dart';
 import 'package:spent/domain/model/History.dart';
-import 'package:spent/domain/model/news.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/User.dart';
 
 @singleton
