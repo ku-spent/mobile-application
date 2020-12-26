@@ -40,7 +40,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         final feeds = await _getNewsFeedUseCase.call(
           from: 0,
           size: fetchSize,
-          isRemote: _networkBloc.isConnected,
+          isRemote: false,
         );
         yield FeedLoaded(feeds: feeds, hasMore: true);
       } else if (curState is FeedLoaded) {
