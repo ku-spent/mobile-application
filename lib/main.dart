@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
+import 'package:spent/presentation/bloc/history/history_bloc.dart';
 
 import 'package:spent/presentation/theme.dart';
 import 'package:spent/domain/model/News.dart';
@@ -55,9 +56,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserEventBloc>(
           create: (BuildContext context) => getIt<UserEventBloc>(),
         ),
-        // BlocProvider<HistoryBloc>(
-        //   create: (BuildContext context) => getIt<HistoryBloc>(),
-        // ),
+        BlocProvider<HistoryBloc>(
+          create: (BuildContext context) => getIt<HistoryBloc>(),
+        ),
         BlocProvider<BookmarkBloc>(
           create: (BuildContext context) => getIt<BookmarkBloc>(),
         )

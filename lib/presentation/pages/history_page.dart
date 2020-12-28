@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:spent/di/di.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/nav_drawer.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -30,10 +28,11 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
-    // Future.delayed(Duration.zero, () async {
-    //   _historyBloc = BlocProvider.of<HistoryBloc>(context);
-    //   _fetchHistories();
-    // });
+
+    Future.delayed(Duration.zero, () async {
+      _historyBloc = BlocProvider.of<HistoryBloc>(context);
+      _fetchHistories();
+    });
   }
 
   @override
@@ -56,62 +55,55 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void _onRefresh() async {
     _refreshController.refreshCompleted();
-    // _historyBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
+    _historyBloc.add(RefreshHistory(callback: _refreshController.refreshCompleted));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: NavDrawer(),
       appBar: AppBar(
           title: Text(
         PageName[NavItem.page_history],
         style: GoogleFonts.kanit(),
       )),
-      body: BlocProvider<HistoryBloc>(
-        create: (BuildContext context) => getIt<HistoryBloc>()..add(FetchHistory()),
-        child: BlocConsumer<HistoryBloc, HistoryState>(
-          listener: (context, state) {
-            print(state);
-          },
-          builder: (context, state) {
-            if (state is HistoryInitial || state is HistoryLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is HistoryLoaded) {
-              if (state.news.isEmpty) {
-                return Center(
-                  child: Text('no histories'),
-                );
-              } else {
-                return SmartRefresher(
-                  enablePullDown: true,
-                  // enablePullUp: state.hasMore,
-                  header: WaterDropMaterialHeader(),
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    addAutomaticKeepAlives: true,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    itemCount: state.news.length,
-                    itemBuilder: (BuildContext context, int index) => CardBase(
-                      key: UniqueKey(),
-                      news: state.news[index],
-                      showPicture: false,
-                    ),
-                    separatorBuilder: (BuildContext context, int index) => SizedBox(
-                      height: 8,
-                    ),
-                    controller: _scrollController,
+      body: BlocBuilder<HistoryBloc, HistoryState>(
+        builder: (context, state) {
+          if (state is HistoryInitial || state is HistoryLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is HistoryLoaded) {
+            if (state.news.isEmpty) {
+              return Center(
+                child: Text('no histories'),
+              );
+            } else {
+              return SmartRefresher(
+                enablePullDown: true,
+                // enablePullUp: state.hasMore,
+                header: WaterDropMaterialHeader(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                child: ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  addAutomaticKeepAlives: true,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  itemCount: state.news.length,
+                  itemBuilder: (BuildContext context, int index) => CardBase(
+                    news: state.news[index],
+                    showPicture: false,
                   ),
-                );
-              }
-            } else if (state is HistoryLoadError) {
-              return RetryError();
+                  separatorBuilder: (BuildContext context, int index) => SizedBox(
+                    height: 8,
+                  ),
+                  controller: _scrollController,
+                ),
+              );
             }
-          },
-        ),
+          } else if (state is HistoryLoadError) {
+            return RetryError();
+          }
+        },
       ),
+      // ),
     );
   }
 }

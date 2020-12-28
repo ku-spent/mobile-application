@@ -36,10 +36,7 @@ class NewsLocalDataSource implements NewsDataSource {
     final newsBox = await Hive.openBox<News>(News.boxName);
     newsList.reversed.forEach((news) async {
       final existNews = await getNewsById(news.id);
-      // print('existNews: $existNews');
       if (existNews == null) {
-        final pubDate = news.pubDate;
-        // print('add news: $pubDate');
         newsBox.add(news);
       }
     });

@@ -18,7 +18,7 @@ class RefreshFeed extends FeedEvent {
   const RefreshFeed({this.callback});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [callback];
 }
 
 typedef RefreshFeedCallback = void Function();

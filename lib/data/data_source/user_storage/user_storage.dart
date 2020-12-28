@@ -3,8 +3,6 @@ import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_inte
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
-// import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/User.dart';
 
 @singleton
 class UserStorage {
@@ -12,6 +10,7 @@ class UserStorage {
 
   Future<void> saveNewsHistory(User user, News news) async {
     final history = History(
+      id: UUID.getUUID(),
       news: news,
       user: user,
       status: HistoryStatus.ACTIVE,
