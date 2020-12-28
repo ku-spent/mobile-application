@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       builder: (context, state) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationAuthenticated) {
-            return AppRetainWidget(child: AppScreen());
+            return AppScreen();
           } else if (state is AuthenticationInitial || state is AuthenticationLoading) {
             return Scaffold(
               body: Center(

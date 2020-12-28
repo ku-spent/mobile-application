@@ -15,7 +15,7 @@ class NetworkBloc extends Bloc<NetworkEvent, NetworkState> {
   NetworkBloc(this._iPv6) : super(NetworkInitial());
 
   StreamSubscription _subscription;
-  bool isConnected;
+  bool isConnected = false;
 
   @override
   Stream<NetworkState> mapEventToState(

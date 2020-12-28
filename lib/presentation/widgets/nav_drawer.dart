@@ -1,7 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
-import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -18,14 +19,9 @@ class NavDrawer extends StatelessWidget {
       Navigator.of(context).pop();
     }
 
-    void _handleItemClick(BuildContext context, NavItem item) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          maintainState: false,
-          builder: (context) => item == NavItem.page_history ? HistoryPage() : null,
-        ),
-      );
+    void _handleItemClick(BuildContext context, String route) {
+      ExtendedNavigator.of(context).push(route);
+      Navigator.of(context).pop();
     }
 
     void _handleSignout(BuildContext context) {
@@ -82,14 +78,14 @@ class NavDrawer extends StatelessWidget {
                 title: Text(PageName[NavItem.page_bookmark]),
                 leading: Icon(Icons.bookmark),
                 selected: state.selectedPage == NavItem.page_bookmark,
-                onTap: () => {_handleHomeItemClick(context, NavItem.page_bookmark)},
+                onTap: () => _handleHomeItemClick(context, NavItem.page_bookmark),
                 contentPadding: _listPadding,
               ),
               ListTile(
                 title: Text(PageName[NavItem.page_history]),
                 leading: Icon(Icons.history),
                 selected: state.selectedPage == NavItem.page_history,
-                onTap: () => {_handleItemClick(context, NavItem.page_history)},
+                onTap: () => _handleItemClick(context, Routes.historyPage),
                 contentPadding: _listPadding,
               ),
               Padding(
@@ -99,13 +95,13 @@ class NavDrawer extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.settings),
                 title: Text('การตั้งค่า'),
-                onTap: () => {Navigator.of(context).pop()},
+                onTap: () => {_handleItemClick(context, Routes.settingPage)},
                 contentPadding: _listPadding,
               ),
               ListTile(
                 leading: Icon(Icons.info_outline),
                 title: Text('เกี่ยวกับ'),
-                onTap: () => {Navigator.of(context).pop()},
+                onTap: () => {_handleItemClick(context, Routes.aboutPage)},
                 contentPadding: _listPadding,
               ),
               ListTile(

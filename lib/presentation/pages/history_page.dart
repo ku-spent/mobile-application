@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:spent/di/di.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
@@ -12,9 +13,7 @@ import 'package:spent/presentation/widgets/retry_error.dart';
 class HistoryPage extends StatefulWidget {
   final ScrollController scrollController = ScrollController();
 
-  HistoryPage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  HistoryPage({Key key}) : super(key: key);
 
   @override
   _HistoryPageState createState() => _HistoryPageState();
@@ -31,10 +30,10 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
-    Future.delayed(Duration.zero, () async {
-      _historyBloc = BlocProvider.of<HistoryBloc>(context);
-      _fetchHistories();
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   _historyBloc = BlocProvider.of<HistoryBloc>(context);
+    //   _fetchHistories();
+    // });
   }
 
   @override
@@ -62,15 +61,19 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationBloc, NavigationState>(
-      builder: (BuildContext context, NavigationState state) => Scaffold(
-        drawer: NavDrawer(),
-        appBar: AppBar(
-            title: Text(
-          PageName[state.selectedPage],
-          style: GoogleFonts.kanit(),
-        )),
-        body: BlocBuilder<HistoryBloc, HistoryState>(
+    return Scaffold(
+      // drawer: NavDrawer(),
+      appBar: AppBar(
+          title: Text(
+        PageName[NavItem.page_history],
+        style: GoogleFonts.kanit(),
+      )),
+      body: BlocProvider<HistoryBloc>(
+        create: (BuildContext context) => getIt<HistoryBloc>()..add(FetchHistory()),
+        child: BlocConsumer<HistoryBloc, HistoryState>(
+          listener: (context, state) {
+            print(state);
+          },
           builder: (context, state) {
             if (state is HistoryInitial || state is HistoryLoading) {
               return Center(child: CircularProgressIndicator());
