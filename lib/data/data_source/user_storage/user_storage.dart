@@ -42,7 +42,7 @@ class UserStorage {
     }
   }
 
-  Future<List<History>> getNewsHistory(User user) async {
+  Future<List<History>> getNewsHistoryByUser(User user) async {
     final histories = await Amplify.DataStore.query(
       History.classType,
       where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id)).and(History.STATUS.eq('ACTIVE')),
@@ -52,5 +52,39 @@ class UserStorage {
     histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
     return histories;
+  }
+
+  Future<void> saveBookmark(User user, News news) async {
+    final bookmark = Bookmark(
+      news: news,
+      user: user,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    await Amplify.DataStore.save(bookmark);
+  }
+
+  Future<void> deleteBookmark(Bookmark bookmark) async {
+    await Amplify.DataStore.delete(bookmark);
+  }
+
+  Future<Bookmark> getBookmarkByNewsId(User user, News news) async {
+    Bookmark bookmark = (await Amplify.DataStore.query(
+      Bookmark.classType,
+      where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id))
+          .and(QueryPredicateOperation('news.id', EqualQueryOperator(news.id))),
+    ))[0];
+    return bookmark;
+  }
+
+  Future<List<Bookmark>> getBookmarksByUser(User user) async {
+    final bookmarks = await Amplify.DataStore.query(
+      Bookmark.classType,
+      where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id)),
+      sortBy: [Bookmark.UPDATEDAT.descending()],
+    );
+    // sort desc
+    bookmarks.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return bookmarks;
   }
 }

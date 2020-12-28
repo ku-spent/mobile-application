@@ -27,6 +27,8 @@ class User extends Model {
   final String email;
   final String picture;
   final List<History> histories;
+  final List<Bookmark> bookmarks;
+  final List<UserNewsAction> newsActions;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -44,6 +46,8 @@ class User extends Model {
       @required this.email,
       @required this.picture,
       this.histories,
+      this.bookmarks,
+      this.newsActions,
       @required this.createdAt,
       @required this.updatedAt});
 
@@ -53,6 +57,8 @@ class User extends Model {
       @required String email,
       @required String picture,
       List<History> histories,
+      List<Bookmark> bookmarks,
+      List<UserNewsAction> newsActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return User._internal(
@@ -61,6 +67,9 @@ class User extends Model {
         email: email,
         picture: picture,
         histories: histories != null ? List.unmodifiable(histories) : histories,
+        bookmarks: bookmarks != null ? List.unmodifiable(bookmarks) : bookmarks,
+        newsActions:
+            newsActions != null ? List.unmodifiable(newsActions) : newsActions,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -78,6 +87,8 @@ class User extends Model {
         email == other.email &&
         picture == other.picture &&
         DeepCollectionEquality().equals(histories, other.histories) &&
+        DeepCollectionEquality().equals(bookmarks, other.bookmarks) &&
+        DeepCollectionEquality().equals(newsActions, other.newsActions) &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -110,6 +121,8 @@ class User extends Model {
       @required String email,
       @required String picture,
       List<History> histories,
+      List<Bookmark> bookmarks,
+      List<UserNewsAction> newsActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return User(
@@ -118,6 +131,8 @@ class User extends Model {
         email: email ?? this.email,
         picture: picture ?? this.picture,
         histories: histories ?? this.histories,
+        bookmarks: bookmarks ?? this.bookmarks,
+        newsActions: newsActions ?? this.newsActions,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -132,6 +147,17 @@ class User extends Model {
                 .map((e) => History.fromJson(new Map<String, dynamic>.from(e)))
                 .toList()
             : null,
+        bookmarks = json['bookmarks'] is List
+            ? (json['bookmarks'] as List)
+                .map((e) => Bookmark.fromJson(new Map<String, dynamic>.from(e)))
+                .toList()
+            : null,
+        newsActions = json['newsActions'] is List
+            ? (json['newsActions'] as List)
+                .map((e) =>
+                    UserNewsAction.fromJson(new Map<String, dynamic>.from(e)))
+                .toList()
+            : null,
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -141,6 +167,8 @@ class User extends Model {
         'email': email,
         'picture': picture,
         'histories': histories?.map((e) => e?.toJson()),
+        'bookmarks': bookmarks?.map((e) => e?.toJson()),
+        'newsActions': newsActions?.map((e) => e?.toJson()),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
@@ -153,6 +181,14 @@ class User extends Model {
       fieldName: "histories",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (History).toString()));
+  static final QueryField BOOKMARKS = QueryField(
+      fieldName: "bookmarks",
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
+          ofModelName: (Bookmark).toString()));
+  static final QueryField NEWSACTIONS = QueryField(
+      fieldName: "newsActions",
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
+          ofModelName: (UserNewsAction).toString()));
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema =
@@ -182,6 +218,18 @@ class User extends Model {
         isRequired: false,
         ofModelName: (History).toString(),
         associatedKey: History.USER));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+        key: User.BOOKMARKS,
+        isRequired: false,
+        ofModelName: (Bookmark).toString(),
+        associatedKey: Bookmark.USER));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+        key: User.NEWSACTIONS,
+        isRequired: false,
+        ofModelName: (UserNewsAction).toString(),
+        associatedKey: UserNewsAction.USER));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: User.CREATEDAT,

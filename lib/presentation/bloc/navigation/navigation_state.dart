@@ -16,10 +16,12 @@ enum NavItem {
   page_home,
   page_following,
   page_bookmark,
+  page_history,
 }
 
 const Map<NavItem, String> PageName = {
   NavItem.page_home: 'หน้าแรก',
   NavItem.page_following: 'การติดตาม',
   NavItem.page_bookmark: 'ที่บันทึกไว้',
+  NavItem.page_history: 'ประวัติการอ่าน'
 };

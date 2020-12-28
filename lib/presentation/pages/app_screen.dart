@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/di/di.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:spent/presentation/pages/bookmark_page.dart';
 
 // Page
 import 'package:spent/presentation/pages/following_page.dart';
@@ -56,7 +57,7 @@ class AppScreen extends StatelessWidget {
             children: [
               HomePage(scrollController: _scrollController),
               FollowingPage(),
-              HistoryPage(scrollController: _scrollController),
+              BookmarkPage(scrollController: _scrollController),
             ],
           ),
           bottomNavigationBar: BottomNavbar(scrollController: _scrollController),

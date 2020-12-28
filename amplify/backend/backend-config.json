@@ -14,7 +14,7 @@
     }
   },
   "api": {
-    "SPENTAppApi": {
+    "SPENTApi": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -30,7 +30,7 @@
               "authenticationType": "API_KEY",
               "apiKeyConfig": {
                 "apiKeyExpirationDays": 365,
-                "description": "SPENTApiKey"
+                "description": "SPENTKey"
               }
             }
           ]

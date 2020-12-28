@@ -3,16 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:spent/presentation/theme.dart';
+import 'package:spent/presentation/pages/splash_page.dart';
 import 'package:spent/domain/model/News.dart';
 
+import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
+import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
-import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
-import 'package:spent/presentation/pages/splash_page.dart';
-import 'package:spent/presentation/theme.dart';
-
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HistoryBloc>(
           create: (BuildContext context) => getIt<HistoryBloc>(),
+        ),
+        BlocProvider<BookmarkBloc>(
+          create: (BuildContext context) => getIt<BookmarkBloc>(),
         )
       ],
       child: MaterialApp(

@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/user_storage/user_storage.dart';
 import 'package:spent/domain/model/History.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/User.dart';
 
@@ -23,8 +24,26 @@ class UserRepository {
     return history;
   }
 
-  Future<List<History>> getNewsHistory(User user) async {
-    final histories = await _userStorage.getNewsHistory(user);
+  Future<List<History>> getNewsHistoryByUser(User user) async {
+    final histories = await _userStorage.getNewsHistoryByUser(user);
     return histories;
+  }
+
+  Future<void> saveBookmark(User user, News news) async {
+    await _userStorage.saveBookmark(user, news);
+  }
+
+  Future<void> deleteBookmark(Bookmark bookmark) async {
+    await _userStorage.deleteBookmark(bookmark);
+  }
+
+  Future<Bookmark> getBookmarkNewsId(User user, News news) async {
+    final bookmark = await _userStorage.getBookmarkByNewsId(user, news);
+    return bookmark;
+  }
+
+  Future<List<Bookmark>> getBookmarksByUser(User user) async {
+    final bookmarks = await _userStorage.getBookmarksByUser(user);
+    return bookmarks;
   }
 }

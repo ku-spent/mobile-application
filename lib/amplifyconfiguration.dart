@@ -46,17 +46,17 @@ const amplifyconfig = ''' {
                 },
                 "AppSync": {
                     "Default": {
-                        "ApiUrl": "https://ucv6vml3ofggho336s5z2kvuvy.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                        "ApiUrl": "https://quxwa5rc3vgglbri3rujvmgmry.appsync-api.ap-southeast-1.amazonaws.com/graphql",
                         "Region": "ap-southeast-1",
                         "AuthMode": "AMAZON_COGNITO_USER_POOLS",
-                        "ClientDatabasePrefix": "SPENTAppApi_AMAZON_COGNITO_USER_POOLS"
+                        "ClientDatabasePrefix": "SPENTApi_AMAZON_COGNITO_USER_POOLS"
                     },
-                    "SPENTAppApi_API_KEY": {
-                        "ApiUrl": "https://ucv6vml3ofggho336s5z2kvuvy.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                    "SPENTApi_API_KEY": {
+                        "ApiUrl": "https://quxwa5rc3vgglbri3rujvmgmry.appsync-api.ap-southeast-1.amazonaws.com/graphql",
                         "Region": "ap-southeast-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-uo3cvm2dxjf3raeanyxorefx5u",
-                        "ClientDatabasePrefix": "SPENTAppApi_API_KEY"
+                        "ApiKey": "da2-anlzulk3rzaihlawdcmf7pzuge",
+                        "ClientDatabasePrefix": "SPENTApi_API_KEY"
                     }
                 },
                 "PinpointAnalytics": {
@@ -89,12 +89,12 @@ const amplifyconfig = ''' {
     "api": {
         "plugins": {
             "awsAPIPlugin": {
-                "SPENTAppApi": {
+                "SPENTApi": {
                     "endpointType": "GraphQL",
-                    "endpoint": "https://ucv6vml3ofggho336s5z2kvuvy.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+                    "endpoint": "https://quxwa5rc3vgglbri3rujvmgmry.appsync-api.ap-southeast-1.amazonaws.com/graphql",
                     "region": "ap-southeast-1",
                     "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-                    "apiKey": "da2-uo3cvm2dxjf3raeanyxorefx5u"
+                    "apiKey": "da2-anlzulk3rzaihlawdcmf7pzuge"
                 }
             }
         }

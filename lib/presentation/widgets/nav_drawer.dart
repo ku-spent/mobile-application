@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -12,9 +13,19 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _handleItemClick(BuildContext context, NavItem item) {
+    void _handleHomeItemClick(BuildContext context, NavItem item) {
       BlocProvider.of<NavigationBloc>(context).add(NavigateTo(item));
       Navigator.of(context).pop();
+    }
+
+    void _handleItemClick(BuildContext context, NavItem item) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          maintainState: false,
+          builder: (context) => item == NavItem.page_history ? HistoryPage() : null,
+        ),
+      );
     }
 
     void _handleSignout(BuildContext context) {
@@ -54,30 +65,31 @@ class NavDrawer extends StatelessWidget {
               //   height: 32,
               // ),
               ListTile(
-                title: Text('หน้าแรก'),
+                title: Text(PageName[NavItem.page_home]),
                 leading: Icon(Icons.home),
                 selected: state.selectedPage == NavItem.page_home,
-                onTap: () => _handleItemClick(context, NavItem.page_home),
+                onTap: () => _handleHomeItemClick(context, NavItem.page_home),
                 contentPadding: _listPadding,
               ),
               ListTile(
-                title: Text('การติดตาม'),
+                title: Text(PageName[NavItem.page_following]),
                 leading: Icon(Icons.rss_feed_rounded),
                 selected: state.selectedPage == NavItem.page_following,
-                onTap: () => _handleItemClick(context, NavItem.page_following),
+                onTap: () => _handleHomeItemClick(context, NavItem.page_following),
                 contentPadding: _listPadding,
               ),
               ListTile(
-                title: Text('ที่บันทึกไว้'),
+                title: Text(PageName[NavItem.page_bookmark]),
                 leading: Icon(Icons.bookmark),
                 selected: state.selectedPage == NavItem.page_bookmark,
-                onTap: () => {_handleItemClick(context, NavItem.page_bookmark)},
+                onTap: () => {_handleHomeItemClick(context, NavItem.page_bookmark)},
                 contentPadding: _listPadding,
               ),
               ListTile(
+                title: Text(PageName[NavItem.page_history]),
                 leading: Icon(Icons.history),
-                title: Text('ประวัติการอ่านข่าว'),
-                onTap: () => {Navigator.of(context).pop()},
+                selected: state.selectedPage == NavItem.page_history,
+                onTap: () => {_handleItemClick(context, NavItem.page_history)},
                 contentPadding: _listPadding,
               ),
               Padding(

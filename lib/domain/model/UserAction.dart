@@ -13,4 +13,4 @@
 * permissions and limitations under the License.
 */
 
-enum UserAction { LIKE }
+enum UserAction { LIKE, UNLIKE, NONE }

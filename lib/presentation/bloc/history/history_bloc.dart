@@ -9,7 +9,7 @@ import 'package:spent/domain/use_case/get_view_news_history_use_case.dart';
 part 'history_event.dart';
 part 'history_state.dart';
 
-@injectable
+@singleton
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   final GetViewNewsHistoryUseCase _getViewNewsHistoryUseCase;
 
@@ -27,7 +27,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   Stream<HistoryState> _mapHistoryLoadedState(FetchHistory event) async* {
     yield HistoryLoading();
     try {
-      final newsHistories = await _getViewNewsHistoryUseCase.call();
+      List<News> newsHistories = await _getViewNewsHistoryUseCase.call();
       yield HistoryLoaded(newsHistories);
     } catch (e) {
       print(e);

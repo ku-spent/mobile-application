@@ -3,12 +3,20 @@ enum HistoryStatus {
   DELETED
 }
 
+enum UserAction {
+  LIKE
+  UNLIKE
+  NONE
+}
+
 type User @model {
   id: ID!
   name: String!
   email: String!
   picture: String!
   histories: [History] @connection(keyName: "byUser", fields: ["id"])
+  bookmarks: [Bookmark] @connection(keyName: "byUser", fields: ["id"])
+  newsActions: [UserNewsAction] @connection(keyName: "byUser", fields: ["id"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -23,12 +31,10 @@ type News @model {
   category: String!
   pubDate: AWSDateTime!
   histories: [History] @connection(keyName: "byNews", fields: ["id"])
+  bookmarks: [Bookmark] @connection(keyName: "byNews", fields: ["id"])
+  userActions: [UserNewsAction] @connection(keyName: "byNews", fields: ["id"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-}
-
-enum UserAction {
-  LIKE
 }
 
 type UserNewsAction
@@ -42,6 +48,20 @@ type UserNewsAction
   newsId: ID!
   news: News! @connection(fields: ["newsId"])
   action: UserAction!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Bookmark
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUser", fields: ["userId", "updatedAt"])
+  @key(name: "byNews", fields: ["newsId", "updatedAt"]) {
+  id: ID!
+  userId: ID!
+  user: User! @connection(fields: ["userId"])
+  newsId: ID!
+  news: News! @connection(fields: ["newsId"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
