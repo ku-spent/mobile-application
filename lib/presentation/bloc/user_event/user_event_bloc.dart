@@ -25,6 +25,9 @@ class UserEventBloc extends Bloc<UserEventEvent, UserEventState> {
     if (event is ReadNewsEvent) {
       yield* _mapUserEventSendingState(event);
     }
+    // else if (event is SaveBookmarkEvent) {
+    //   yield* _mapUserEventSendingState(event);
+    // }
   }
 
   Stream<UserEventState> _mapUserEventSendingState(ReadNewsEvent event) async* {

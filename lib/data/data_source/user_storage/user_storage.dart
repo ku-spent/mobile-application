@@ -69,12 +69,16 @@ class UserStorage {
   }
 
   Future<Bookmark> getBookmarkByNewsId(User user, News news) async {
-    Bookmark bookmark = (await Amplify.DataStore.query(
-      Bookmark.classType,
-      where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id))
-          .and(QueryPredicateOperation('news.id', EqualQueryOperator(news.id))),
-    ))[0];
-    return bookmark;
+    try {
+      Bookmark bookmark = (await Amplify.DataStore.query(
+        Bookmark.classType,
+        where: QueryPredicateOperation('user.id', EqualQueryOperator(user.id))
+            .and(QueryPredicateOperation('news.id', EqualQueryOperator(news.id))),
+      ))[0];
+      return bookmark;
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<List<Bookmark>> getBookmarksByUser(User user) async {

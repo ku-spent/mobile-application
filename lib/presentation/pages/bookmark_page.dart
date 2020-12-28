@@ -60,9 +60,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<BookmarkBloc, BookmarkState>(
       builder: (context, state) {
-        if (state is BookmarkInitial || state is BookmarkLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is BookmarkLoaded) {
+        print(state);
+        if (state is BookmarkLoaded) {
           if (state.news.isEmpty) {
             return Center(
               child: Text('no bookmarks'),
@@ -93,6 +92,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
           }
         } else if (state is BookmarkLoadError) {
           return RetryError();
+        } else {
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

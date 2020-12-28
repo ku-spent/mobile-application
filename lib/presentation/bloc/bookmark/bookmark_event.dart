@@ -8,3 +8,12 @@ abstract class BookmarkEvent extends Equatable {
 }
 
 class FetchBookmark extends BookmarkEvent {}
+
+class SaveBookmark extends BookmarkEvent {
+  final News news;
+
+  const SaveBookmark({@required this.news});
+
+  @override
+  List<Object> get props => [news];
+}

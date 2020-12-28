@@ -15,3 +15,12 @@ class ReadNewsEvent extends UserEventEvent {
   @override
   List<Object> get props => [news];
 }
+
+class SaveBookmarkEvent extends UserEventEvent {
+  final News news;
+
+  const SaveBookmarkEvent({@required this.news});
+
+  @override
+  List<Object> get props => [news];
+}

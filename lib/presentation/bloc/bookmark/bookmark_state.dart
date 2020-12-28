@@ -21,3 +21,9 @@ class BookmarkLoaded extends BookmarkState {
 }
 
 class BookmarkLoadError extends BookmarkState {}
+
+class SaveBookmarkLoading extends BookmarkState {}
+
+class SaveBookmarkSuccess extends BookmarkState {}
+
+class SaveBookmarkLoadError extends BookmarkState {}
