@@ -10,8 +10,9 @@ class BottomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _scrollToTop(int index, int currentIndex) {
+      print(scrollController);
       bool isHomePage = currentIndex == 0;
-      if (isHomePage && scrollController != null && currentIndex == index)
+      if (isHomePage && scrollController.hasClients && currentIndex == index)
         scrollController.animateTo(scrollController.position.minScrollExtent,
             duration: Duration(milliseconds: 270), curve: Curves.easeInExpo);
     }

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
 import 'pages/history_page.dart';
+import 'pages/search_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
 
@@ -22,12 +23,14 @@ class Routes {
   static const String historyPage = '/bookmark';
   static const String settingPage = '/setting';
   static const String aboutPage = '/about';
+  static const String searchPage = '/search';
   static const all = <String>{
     splashPage,
     appScreen,
     historyPage,
     settingPage,
     aboutPage,
+    searchPage,
   };
 }
 
@@ -40,6 +43,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.historyPage, page: HistoryPage),
     RouteDef(Routes.settingPage, page: SettingPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
+    RouteDef(Routes.searchPage, page: SearchPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -86,6 +90,12 @@ class AppRouter extends RouterBase {
       );
       return CupertinoPageRoute<dynamic>(
         builder: (context) => AboutPage(key: args.key),
+        settings: data,
+      );
+    },
+    SearchPage: (data) {
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => const SearchPage(),
         settings: data,
       );
     },
