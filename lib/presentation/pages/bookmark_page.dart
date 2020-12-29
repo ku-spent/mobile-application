@@ -29,7 +29,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () async {
       _bookmarkBloc = BlocProvider.of<BookmarkBloc>(context);
-      _fetchHistories();
+      _fetchBookmarks();
     });
   }
 
@@ -47,7 +47,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
     }
   }
 
-  void _fetchHistories() {
+  void _fetchBookmarks() {
+    print('fetch bookmarks');
     _bookmarkBloc.add(FetchBookmark());
   }
 

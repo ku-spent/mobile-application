@@ -55,6 +55,7 @@ class UserStorage {
 
   Future<void> saveBookmark(User user, News news) async {
     final bookmark = Bookmark(
+      id: UUID.getUUID(),
       news: news,
       user: user,
       createdAt: DateTime.now(),
