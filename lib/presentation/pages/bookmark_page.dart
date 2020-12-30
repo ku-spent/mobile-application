@@ -87,56 +87,40 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 child: Text('no bookmarks'),
               );
             } else {
-              print(state.news.map((e) => e.id));
               return SmartRefresher(
-                  enablePullDown: true,
-                  // enablePullUp: state.hasMore,
-                  header: WaterDropMaterialHeader(),
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  child: ImplicitlyAnimatedList<News>(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    items: state.news,
-                    removeDuration: const Duration(milliseconds: 200),
-                    insertDuration: const Duration(milliseconds: 200),
-                    updateDuration: const Duration(milliseconds: 200),
-                    areItemsTheSame: (a, b) => a.id == b.id,
-                    itemBuilder: (context, animation, result, i) {
-                      return SizeFadeTransition(
-                        animation: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    updateItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    removeItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                  )
-                  // ListView.separated(
-                  //   physics: BouncingScrollPhysics(),
-                  //   addAutomaticKeepAlives: true,
-                  //   padding: const EdgeInsets.symmetric(vertical: 16),
-                  //   itemCount: state.news.length,
-                  //   itemBuilder: (BuildContext context, int index) => CardBase(
-                  //     key: UniqueKey(),
-                  //     news: state.news[index],
-                  //     showPicture: false,
-                  //   ),
-                  //   separatorBuilder: (BuildContext context, int index) => SizedBox(
-                  //     height: 8,
-                  //   ),
-                  //   controller: _scrollController,
-                  // ),
-                  );
+                enablePullDown: true,
+                // enablePullUp: state.hasMore,
+                header: WaterDropMaterialHeader(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                child: ImplicitlyAnimatedList<News>(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  items: state.news,
+                  removeDuration: const Duration(milliseconds: 200),
+                  insertDuration: const Duration(milliseconds: 200),
+                  updateDuration: const Duration(milliseconds: 200),
+                  areItemsTheSame: (a, b) => a.id == b.id,
+                  itemBuilder: (context, animation, result, i) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      child: _buildItem(context, result),
+                    );
+                  },
+                  updateItemBuilder: (context, animation, result) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: _buildItem(context, result),
+                    );
+                  },
+                  removeItemBuilder: (context, animation, result) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: _buildItem(context, result),
+                    );
+                  },
+                ),
+              );
             }
           } else if (state is BookmarkLoadError) {
             return RetryError();

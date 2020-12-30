@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
@@ -53,8 +54,11 @@ class _HistoryPageState extends State<HistoryPage> {
     _historyBloc.add(FetchHistory());
   }
 
+  void _refreshHistories() {
+    _historyBloc.add(RefreshHistory());
+  }
+
   void _onRefresh() async {
-    _refreshController.refreshCompleted();
     _historyBloc.add(RefreshHistory(callback: _refreshController.refreshCompleted));
   }
 
@@ -66,42 +70,49 @@ class _HistoryPageState extends State<HistoryPage> {
         PageName[NavItem.page_history],
         style: GoogleFonts.kanit(),
       )),
-      body: BlocBuilder<HistoryBloc, HistoryState>(
-        builder: (context, state) {
-          if (state is HistoryInitial || state is HistoryLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is HistoryLoaded) {
-            if (state.news.isEmpty) {
-              return Center(
-                child: Text('no histories'),
-              );
-            } else {
-              return SmartRefresher(
-                enablePullDown: true,
-                // enablePullUp: state.hasMore,
-                header: WaterDropMaterialHeader(),
-                controller: _refreshController,
-                onRefresh: _onRefresh,
-                child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  addAutomaticKeepAlives: true,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  itemCount: state.news.length,
-                  itemBuilder: (BuildContext context, int index) => CardBase(
-                    news: state.news[index],
-                    showPicture: false,
-                  ),
-                  separatorBuilder: (BuildContext context, int index) => SizedBox(
-                    height: 8,
-                  ),
-                  controller: _scrollController,
-                ),
-              );
-            }
-          } else if (state is HistoryLoadError) {
-            return RetryError();
+      body: BlocListener<SaveHistoryBloc, SaveHistoryState>(
+        listener: (context, state) {
+          if (state is SaveHistorySuccess) {
+            _refreshHistories();
           }
         },
+        child: BlocBuilder<HistoryBloc, HistoryState>(
+          builder: (context, state) {
+            if (state is HistoryInitial || state is HistoryLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is HistoryLoaded) {
+              if (state.news.isEmpty) {
+                return Center(
+                  child: Text('no histories'),
+                );
+              } else {
+                return SmartRefresher(
+                  enablePullDown: true,
+                  // enablePullUp: state.hasMore,
+                  header: WaterDropMaterialHeader(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  child: ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    addAutomaticKeepAlives: true,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    itemCount: state.news.length,
+                    itemBuilder: (BuildContext context, int index) => CardBase(
+                      news: state.news[index],
+                      showPicture: false,
+                    ),
+                    separatorBuilder: (BuildContext context, int index) => SizedBox(
+                      height: 8,
+                    ),
+                    controller: _scrollController,
+                  ),
+                );
+              }
+            } else if (state is HistoryLoadError) {
+              return RetryError();
+            }
+          },
+        ),
       ),
       // ),
     );

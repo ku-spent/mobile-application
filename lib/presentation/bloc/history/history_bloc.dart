@@ -19,7 +19,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   Stream<HistoryState> mapEventToState(
     HistoryEvent event,
   ) async* {
-    print(123);
     if (event is FetchHistory) {
       yield* _mapHistoryLoadedState(event);
     } else if (event is RefreshHistory) {
@@ -48,6 +47,10 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     } catch (e) {
       print(e);
       yield HistoryLoadError();
+    } finally {
+      if (event.callback != null) {
+        event.callback();
+      }
     }
   }
 }
