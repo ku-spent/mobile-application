@@ -9,11 +9,11 @@ abstract class BookmarkEvent extends Equatable {
 
 class FetchBookmark extends BookmarkEvent {}
 
-class SaveBookmark extends BookmarkEvent {
-  final News news;
+class RefreshBookmark extends BookmarkEvent {
+  final Function callback;
 
-  const SaveBookmark({@required this.news});
+  const RefreshBookmark({this.callback});
 
   @override
-  List<Object> get props => [news];
+  List<Object> get props => [callback];
 }

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
+import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
@@ -37,13 +37,13 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   String _likeStatus = NewsAction.noneLike;
   NewsAction _newsAction = NewsAction(likeStatus: 'like');
   UserEventBloc _userEventBloc;
-  BookmarkBloc _bookmarkBloc;
+  SaveBookmarkBloc _saveBookmarkBloc;
 
   @override
   void initState() {
     super.initState();
     _userEventBloc = BlocProvider.of<UserEventBloc>(context);
-    _bookmarkBloc = BlocProvider.of<BookmarkBloc>(context);
+    _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
     _news = widget.news;
   }
 
@@ -107,7 +107,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   }
 
   void _onClickBookmark() {
-    _bookmarkBloc.add(SaveBookmark(news: widget.news));
+    _saveBookmarkBloc.add(SaveBookmark(news: widget.news));
     setState(() {
       _isBookmarked = !_isBookmarked;
     });
@@ -123,7 +123,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BookmarkBloc, BookmarkState>(
+    return BlocBuilder<SaveBookmarkBloc, SaveBookmarkState>(
       builder: (context, state) => BlocBuilder<UserEventBloc, UserEventState>(
         builder: (context, state) => Container(
           child: Card(

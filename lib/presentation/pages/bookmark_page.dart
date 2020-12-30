@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
+import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
@@ -52,51 +56,95 @@ class _BookmarkPageState extends State<BookmarkPage> {
     _bookmarkBloc.add(FetchBookmark());
   }
 
+  void _refreshBookmarks() {
+    print('refresh bookmarks');
+    _bookmarkBloc.add(RefreshBookmark());
+  }
+
   void _onRefresh() async {
-    _refreshController.refreshCompleted();
-    // _bookmarkBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
+    _bookmarkBloc.add(RefreshBookmark(callback: () => {_refreshController.refreshCompleted()}));
+  }
+
+  Widget _buildItem(BuildContext context, News news) {
+    return CardBase(
+      key: UniqueKey(),
+      news: news,
+      showPicture: false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BookmarkBloc, BookmarkState>(
-      builder: (context, state) {
-        print(state);
-        if (state is BookmarkLoaded) {
-          if (state.news.isEmpty) {
-            return Center(
-              child: Text('no bookmarks'),
-            );
-          } else {
-            return SmartRefresher(
-              enablePullDown: true,
-              // enablePullUp: state.hasMore,
-              header: WaterDropMaterialHeader(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              child: ListView.separated(
-                physics: BouncingScrollPhysics(),
-                addAutomaticKeepAlives: true,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                itemCount: state.news.length,
-                itemBuilder: (BuildContext context, int index) => CardBase(
-                  key: UniqueKey(),
-                  news: state.news[index],
-                  showPicture: false,
-                ),
-                separatorBuilder: (BuildContext context, int index) => SizedBox(
-                  height: 8,
-                ),
-                controller: _scrollController,
-              ),
-            );
-          }
-        } else if (state is BookmarkLoadError) {
-          return RetryError();
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
+    return BlocListener<SaveBookmarkBloc, SaveBookmarkState>(
+      listener: (context, state) => {
+        if (state is SaveBookmarkSuccess) {_refreshBookmarks()}
       },
+      child: BlocBuilder<BookmarkBloc, BookmarkState>(
+        builder: (context, state) {
+          if (state is BookmarkLoaded) {
+            if (state.news.isEmpty) {
+              return Center(
+                child: Text('no bookmarks'),
+              );
+            } else {
+              print(state.news.map((e) => e.id));
+              return SmartRefresher(
+                  enablePullDown: true,
+                  // enablePullUp: state.hasMore,
+                  header: WaterDropMaterialHeader(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  child: ImplicitlyAnimatedList<News>(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    items: state.news,
+                    removeDuration: const Duration(milliseconds: 200),
+                    insertDuration: const Duration(milliseconds: 200),
+                    updateDuration: const Duration(milliseconds: 200),
+                    areItemsTheSame: (a, b) => a.id == b.id,
+                    itemBuilder: (context, animation, result, i) {
+                      return SizeFadeTransition(
+                        animation: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
+                    updateItemBuilder: (context, animation, result) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
+                    removeItemBuilder: (context, animation, result) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
+                  )
+                  // ListView.separated(
+                  //   physics: BouncingScrollPhysics(),
+                  //   addAutomaticKeepAlives: true,
+                  //   padding: const EdgeInsets.symmetric(vertical: 16),
+                  //   itemCount: state.news.length,
+                  //   itemBuilder: (BuildContext context, int index) => CardBase(
+                  //     key: UniqueKey(),
+                  //     news: state.news[index],
+                  //     showPicture: false,
+                  //   ),
+                  //   separatorBuilder: (BuildContext context, int index) => SizedBox(
+                  //     height: 8,
+                  //   ),
+                  //   controller: _scrollController,
+                  // ),
+                  );
+            }
+          } else if (state is BookmarkLoadError) {
+            return RetryError();
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

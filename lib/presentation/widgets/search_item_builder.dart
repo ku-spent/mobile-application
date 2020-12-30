@@ -63,6 +63,12 @@ class SearchItemBuilder extends StatelessWidget {
             child: buildItem(context, result),
           );
         },
+        removeItemBuilder: (context, animation, result) {
+          return FadeTransition(
+            opacity: animation,
+            child: buildItem(context, result),
+          );
+        },
       ),
     ]);
   }

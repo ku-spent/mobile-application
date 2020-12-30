@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
+import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 
 import 'package:spent/presentation/theme.dart';
 import 'package:spent/domain/model/News.dart';
@@ -61,6 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BookmarkBloc>(
           create: (BuildContext context) => getIt<BookmarkBloc>(),
+        ),
+        BlocProvider<SaveBookmarkBloc>(
+          create: (BuildContext context) => getIt<SaveBookmarkBloc>(),
         )
       ],
       child: MaterialApp(

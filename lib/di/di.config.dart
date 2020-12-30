@@ -31,6 +31,7 @@ import '../data/data_source/news/news_local_data_source.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
 import '../presentation/bloc/query/query_bloc.dart';
+import '../presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import '../domain/use_case/save_bookmark_use_case.dart';
 import '../domain/use_case/save_user_view_news_history_use_case.dart';
 import '../presentation/bloc/search/search_bloc.dart';
@@ -137,7 +138,7 @@ GetIt $initGetIt(
   gh.singleton<HistoryBloc>(HistoryBloc(get<GetViewNewsHistoryUseCase>()));
   gh.singleton<UserEventBloc>(UserEventBloc(
       get<SendEventViewNewsUseCase>(), get<SaveUserViewNewsHistoryUseCase>()));
-  gh.singleton<BookmarkBloc>(
-      BookmarkBloc(get<GetBookmarkUseCase>(), get<SaveBookmarkUseCase>()));
+  gh.singleton<BookmarkBloc>(BookmarkBloc(get<GetBookmarkUseCase>()));
+  gh.singleton<SaveBookmarkBloc>(SaveBookmarkBloc(get<SaveBookmarkUseCase>()));
   return get;
 }
