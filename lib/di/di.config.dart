@@ -24,9 +24,12 @@ import '../presentation/bloc/history/history_bloc.dart';
 import '../core/IPv6.dart';
 import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
+import '../presentation/bloc/like_news/like_news_bloc.dart';
+import '../domain/use_case/like_news_use_case.dart';
 import '../data/data_source/local_storage/local_storage.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
 import '../presentation/bloc/network/network_bloc.dart';
+import '../presentation/bloc/news/news_bloc.dart';
 import '../data/data_source/news/news_local_data_source.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
@@ -115,6 +118,8 @@ GetIt $initGetIt(
         get<UserRepository>(),
         get<NewsRepository>(),
       ));
+  gh.factory<LikeNewsUseCase>(() =>
+      LikeNewsUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveBookmarkUseCase>(() => SaveBookmarkUseCase(
       get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
@@ -138,10 +143,16 @@ GetIt $initGetIt(
   gh.singleton<UserRepository>(UserRepository(get<UserStorage>()));
   gh.singleton<HistoryBloc>(HistoryBloc(get<GetViewNewsHistoryUseCase>()));
   gh.singleton<BookmarkBloc>(BookmarkBloc(get<GetBookmarkUseCase>()));
+  gh.singleton<LikeNewsBloc>(LikeNewsBloc(get<LikeNewsUseCase>()));
   gh.singleton<SaveBookmarkBloc>(SaveBookmarkBloc(get<SaveBookmarkUseCase>()));
   gh.singleton<SaveHistoryBloc>(
       SaveHistoryBloc(get<SaveUserViewNewsHistoryUseCase>()));
   gh.singleton<UserEventBloc>(
       UserEventBloc(get<SendEventViewNewsUseCase>(), get<SaveHistoryBloc>()));
+  gh.singleton<NewsBloc>(NewsBloc(
+    get<SaveBookmarkBloc>(),
+    get<SaveHistoryBloc>(),
+    get<LikeNewsBloc>(),
+  ));
   return get;
 }

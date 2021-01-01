@@ -25,18 +25,15 @@ class NewsAdapter extends TypeAdapter<News> {
       source: fields[5] as String,
       category: fields[6] as String,
       pubDate: fields[7] as DateTime,
-      histories: (fields[8] as List)?.cast<History>(),
-      bookmarks: (fields[9] as List)?.cast<Bookmark>(),
-      userActions: (fields[10] as List)?.cast<UserNewsAction>(),
-      createdAt: fields[11] as DateTime,
-      updatedAt: fields[12] as DateTime,
+      createdAt: fields[8] as DateTime,
+      updatedAt: fields[9] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, News obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -54,14 +51,8 @@ class NewsAdapter extends TypeAdapter<News> {
       ..writeByte(7)
       ..write(obj.pubDate)
       ..writeByte(8)
-      ..write(obj.histories)
-      ..writeByte(9)
-      ..write(obj.bookmarks)
-      ..writeByte(10)
-      ..write(obj.userActions)
-      ..writeByte(11)
       ..write(obj.createdAt)
-      ..writeByte(12)
+      ..writeByte(9)
       ..write(obj.updatedAt);
   }
 

@@ -18,7 +18,7 @@ class GetBookmarkUseCase {
     List<Bookmark> bookmarks = await _userRepository.getBookmarksByUser(user);
     List<News> news = [];
     bookmarks.forEach((bookmark) async {
-      News bookmarkNews = await _newsRepository.getNewsById(bookmark.news.id);
+      News bookmarkNews = await _newsRepository.getNewsById(bookmark.newsId);
       if (bookmarkNews != null) news.add(bookmarkNews);
     });
     return news;

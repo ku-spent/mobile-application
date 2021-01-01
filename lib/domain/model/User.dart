@@ -13,9 +13,7 @@
 * permissions and limitations under the License.
 */
 
-import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 /** This is an auto generated class representing the User type in your schema. */
@@ -26,9 +24,6 @@ class User extends Model {
   final String name;
   final String email;
   final String picture;
-  final List<History> histories;
-  final List<Bookmark> bookmarks;
-  final List<UserNewsAction> newsActions;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -45,9 +40,6 @@ class User extends Model {
       @required this.name,
       @required this.email,
       @required this.picture,
-      this.histories,
-      this.bookmarks,
-      this.newsActions,
       @required this.createdAt,
       @required this.updatedAt});
 
@@ -56,9 +48,6 @@ class User extends Model {
       @required String name,
       @required String email,
       @required String picture,
-      List<History> histories,
-      List<Bookmark> bookmarks,
-      List<UserNewsAction> newsActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return User._internal(
@@ -66,10 +55,6 @@ class User extends Model {
         name: name,
         email: email,
         picture: picture,
-        histories: histories != null ? List.unmodifiable(histories) : histories,
-        bookmarks: bookmarks != null ? List.unmodifiable(bookmarks) : bookmarks,
-        newsActions:
-            newsActions != null ? List.unmodifiable(newsActions) : newsActions,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -86,9 +71,6 @@ class User extends Model {
         name == other.name &&
         email == other.email &&
         picture == other.picture &&
-        DeepCollectionEquality().equals(histories, other.histories) &&
-        DeepCollectionEquality().equals(bookmarks, other.bookmarks) &&
-        DeepCollectionEquality().equals(newsActions, other.newsActions) &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -120,9 +102,6 @@ class User extends Model {
       @required String name,
       @required String email,
       @required String picture,
-      List<History> histories,
-      List<Bookmark> bookmarks,
-      List<UserNewsAction> newsActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return User(
@@ -130,9 +109,6 @@ class User extends Model {
         name: name ?? this.name,
         email: email ?? this.email,
         picture: picture ?? this.picture,
-        histories: histories ?? this.histories,
-        bookmarks: bookmarks ?? this.bookmarks,
-        newsActions: newsActions ?? this.newsActions,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -142,22 +118,6 @@ class User extends Model {
         name = json['name'],
         email = json['email'],
         picture = json['picture'],
-        histories = json['histories'] is List
-            ? (json['histories'] as List)
-                .map((e) => History.fromJson(new Map<String, dynamic>.from(e)))
-                .toList()
-            : null,
-        bookmarks = json['bookmarks'] is List
-            ? (json['bookmarks'] as List)
-                .map((e) => Bookmark.fromJson(new Map<String, dynamic>.from(e)))
-                .toList()
-            : null,
-        newsActions = json['newsActions'] is List
-            ? (json['newsActions'] as List)
-                .map((e) =>
-                    UserNewsAction.fromJson(new Map<String, dynamic>.from(e)))
-                .toList()
-            : null,
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -166,9 +126,6 @@ class User extends Model {
         'name': name,
         'email': email,
         'picture': picture,
-        'histories': histories?.map((e) => e?.toJson()),
-        'bookmarks': bookmarks?.map((e) => e?.toJson()),
-        'newsActions': newsActions?.map((e) => e?.toJson()),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
@@ -177,18 +134,6 @@ class User extends Model {
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField EMAIL = QueryField(fieldName: "email");
   static final QueryField PICTURE = QueryField(fieldName: "picture");
-  static final QueryField HISTORIES = QueryField(
-      fieldName: "histories",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (History).toString()));
-  static final QueryField BOOKMARKS = QueryField(
-      fieldName: "bookmarks",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (Bookmark).toString()));
-  static final QueryField NEWSACTIONS = QueryField(
-      fieldName: "newsActions",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (UserNewsAction).toString()));
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema =
@@ -212,24 +157,6 @@ class User extends Model {
         key: User.PICTURE,
         isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.string)));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: User.HISTORIES,
-        isRequired: false,
-        ofModelName: (History).toString(),
-        associatedKey: History.USER));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: User.BOOKMARKS,
-        isRequired: false,
-        ofModelName: (Bookmark).toString(),
-        associatedKey: Bookmark.USER));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: User.NEWSACTIONS,
-        isRequired: false,
-        ofModelName: (UserNewsAction).toString(),
-        associatedKey: UserNewsAction.USER));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: User.CREATEDAT,

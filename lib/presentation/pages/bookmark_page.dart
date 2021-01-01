@@ -76,8 +76,10 @@ class _BookmarkPageState extends State<BookmarkPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SaveBookmarkBloc, SaveBookmarkState>(
-      listener: (context, state) => {
-        if (state is SaveBookmarkSuccess) {_refreshBookmarks()}
+      listener: (context, state) {
+        if (state is SaveBookmarkSuccess) {
+          _refreshBookmarks();
+        }
       },
       child: BlocBuilder<BookmarkBloc, BookmarkState>(
         builder: (context, state) {

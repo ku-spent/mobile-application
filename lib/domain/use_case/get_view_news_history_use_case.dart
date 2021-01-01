@@ -19,7 +19,7 @@ class GetViewNewsHistoryUseCase {
     List<History> histories = await _userRepository.getNewsHistoryByUser(user);
     List<News> news = [];
     histories.forEach((history) async {
-      News historyNews = await _newsRepository.getNewsById(history.news.id);
+      News historyNews = await _newsRepository.getNewsById(history.newsId);
       if (historyNews != null) news.add(historyNews);
     });
     return news;

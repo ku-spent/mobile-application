@@ -13,7 +13,6 @@
 * permissions and limitations under the License.
 */
 
-import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 
@@ -22,8 +21,8 @@ import 'package:flutter/foundation.dart';
 class Bookmark extends Model {
   static const classType = const BookmarkType();
   final String id;
-  final User user;
-  final News news;
+  final String userId;
+  final String newsId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -37,21 +36,21 @@ class Bookmark extends Model {
 
   const Bookmark._internal(
       {@required this.id,
-      @required this.user,
-      @required this.news,
+      @required this.userId,
+      @required this.newsId,
       @required this.createdAt,
       @required this.updatedAt});
 
   factory Bookmark(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return Bookmark._internal(
         id: id == null ? UUID.getUUID() : id,
-        user: user,
-        news: news,
+        userId: userId,
+        newsId: newsId,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -65,8 +64,8 @@ class Bookmark extends Model {
     if (identical(other, this)) return true;
     return other is Bookmark &&
         id == other.id &&
-        user == other.user &&
-        news == other.news &&
+        userId == other.userId &&
+        newsId == other.newsId &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -80,8 +79,8 @@ class Bookmark extends Model {
 
     buffer.write("Bookmark {");
     buffer.write("id=" + id + ", ");
-    buffer.write("user=" + (user != null ? user.toString() : "null") + ", ");
-    buffer.write("news=" + (news != null ? news.toString() : "null") + ", ");
+    buffer.write("userId=" + userId + ", ");
+    buffer.write("newsId=" + newsId + ", ");
     buffer.write("createdAt=" +
         (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
         ", ");
@@ -94,46 +93,36 @@ class Bookmark extends Model {
 
   Bookmark copyWith(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return Bookmark(
         id: id ?? this.id,
-        user: user ?? this.user,
-        news: news ?? this.news,
+        userId: userId ?? this.userId,
+        newsId: newsId ?? this.newsId,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
 
   Bookmark.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'] != null
-            ? User.fromJson(new Map<String, dynamic>.from(json['user']))
-            : null,
-        news = json['news'] != null
-            ? News.fromJson(new Map<String, dynamic>.from(json['news']))
-            : null,
+        userId = json['userId'],
+        newsId = json['newsId'],
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'user': user?.toJson(),
-        'news': news?.toJson(),
+        'userId': userId,
+        'newsId': newsId,
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
 
   static final QueryField ID = QueryField(fieldName: "bookmark.id");
-  static final QueryField USER = QueryField(
-      fieldName: "user",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (User).toString()));
-  static final QueryField NEWS = QueryField(
-      fieldName: "news",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (News).toString()));
+  static final QueryField USERID = QueryField(fieldName: "userId");
+  static final QueryField NEWSID = QueryField(fieldName: "newsId");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema =
@@ -156,17 +145,15 @@ class Bookmark extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: Bookmark.USER,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: Bookmark.USERID,
         isRequired: true,
-        targetName: "userId",
-        ofModelName: (User).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: Bookmark.NEWS,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: Bookmark.NEWSID,
         isRequired: true,
-        targetName: "newsId",
-        ofModelName: (News).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: Bookmark.CREATEDAT,

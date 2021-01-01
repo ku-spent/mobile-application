@@ -9,8 +9,9 @@ import 'package:spent/domain/model/User.dart';
 class UserRepository {
   final UserStorage _userStorage;
 
-  UserRepository(this._userStorage);
+  const UserRepository(this._userStorage);
 
+  // History
   Future<void> saveNewsHistory(User user, News news) async {
     await _userStorage.saveNewsHistory(user, news);
   }
@@ -29,6 +30,7 @@ class UserRepository {
     return histories;
   }
 
+  // Bookmark
   Future<void> saveBookmark(User user, News news) async {
     await _userStorage.saveBookmark(user, news);
   }
@@ -37,7 +39,7 @@ class UserRepository {
     await _userStorage.deleteBookmark(bookmark);
   }
 
-  Future<Bookmark> getBookmarkNewsId(User user, News news) async {
+  Future<Bookmark> getBookmarkByNewsId(User user, News news) async {
     final bookmark = await _userStorage.getBookmarkByNewsId(user, news);
     return bookmark;
   }
@@ -45,5 +47,24 @@ class UserRepository {
   Future<List<Bookmark>> getBookmarksByUser(User user) async {
     final bookmarks = await _userStorage.getBookmarksByUser(user);
     return bookmarks;
+  }
+
+  // UserNewsAction
+  Future<void> saveUserNewsAction(User user, News news) async {
+    await _userStorage.saveUserNewsAction(user, news);
+  }
+
+  Future<void> deleteUserNewsAction(UserNewsAction userNewsAction) async {
+    await _userStorage.deleteUserNewsAction(userNewsAction);
+  }
+
+  Future<UserNewsAction> getUserNewsActionByNewsId(User user, News news) async {
+    final userNewsAction = await _userStorage.getUserNewsActionByNewsId(user, news);
+    return userNewsAction;
+  }
+
+  Future<List<UserNewsAction>> getUserNewsActionsByUser(User user) async {
+    final userNewsActions = await _userStorage.getUserNewsActionsByUser(user);
+    return userNewsActions;
   }
 }

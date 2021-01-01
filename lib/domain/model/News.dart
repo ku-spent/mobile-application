@@ -13,13 +13,9 @@
 * permissions and limitations under the License.
 */
 
-import 'package:hive/hive.dart';
-
-import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:hive/hive.dart';
 part 'News.g.dart';
 
 /** This is an auto generated class representing the News type in your schema. */
@@ -44,14 +40,8 @@ class News extends Model {
   @HiveField(7)
   final DateTime pubDate;
   @HiveField(8)
-  final List<History> histories;
-  @HiveField(9)
-  final List<Bookmark> bookmarks;
-  @HiveField(10)
-  final List<UserNewsAction> userActions;
-  @HiveField(11)
   final DateTime createdAt;
-  @HiveField(12)
+  @HiveField(9)
   final DateTime updatedAt;
 
   static String boxName = 'NEWS';
@@ -73,9 +63,6 @@ class News extends Model {
       @required this.source,
       @required this.category,
       @required this.pubDate,
-      this.histories,
-      this.bookmarks,
-      this.userActions,
       @required this.createdAt,
       @required this.updatedAt});
 
@@ -88,9 +75,6 @@ class News extends Model {
       @required String source,
       @required String category,
       @required DateTime pubDate,
-      List<History> histories,
-      List<Bookmark> bookmarks,
-      List<UserNewsAction> userActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return News._internal(
@@ -102,9 +86,6 @@ class News extends Model {
         source: source,
         category: category,
         pubDate: pubDate,
-        histories: histories != null ? List.unmodifiable(histories) : histories,
-        bookmarks: bookmarks != null ? List.unmodifiable(bookmarks) : bookmarks,
-        userActions: userActions != null ? List.unmodifiable(userActions) : userActions,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -125,9 +106,6 @@ class News extends Model {
         source == other.source &&
         category == other.category &&
         pubDate == other.pubDate &&
-        DeepCollectionEquality().equals(histories, other.histories) &&
-        DeepCollectionEquality().equals(bookmarks, other.bookmarks) &&
-        DeepCollectionEquality().equals(userActions, other.userActions) &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -164,9 +142,6 @@ class News extends Model {
       @required String source,
       @required String category,
       @required DateTime pubDate,
-      List<History> histories,
-      List<Bookmark> bookmarks,
-      List<UserNewsAction> userActions,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return News(
@@ -178,9 +153,6 @@ class News extends Model {
         source: source ?? this.source,
         category: category ?? this.category,
         pubDate: pubDate ?? this.pubDate,
-        histories: histories ?? this.histories,
-        bookmarks: bookmarks ?? this.bookmarks,
-        userActions: userActions ?? this.userActions,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -194,17 +166,6 @@ class News extends Model {
         source = json['source'],
         category = json['category'],
         pubDate = DateTimeParse.fromString(json['pubDate']),
-        histories = json['histories'] is List
-            ? (json['histories'] as List).map((e) => History.fromJson(new Map<String, dynamic>.from(e))).toList()
-            : null,
-        bookmarks = json['bookmarks'] is List
-            ? (json['bookmarks'] as List).map((e) => Bookmark.fromJson(new Map<String, dynamic>.from(e))).toList()
-            : null,
-        userActions = json['userActions'] is List
-            ? (json['userActions'] as List)
-                .map((e) => UserNewsAction.fromJson(new Map<String, dynamic>.from(e)))
-                .toList()
-            : null,
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -217,9 +178,6 @@ class News extends Model {
         'source': source,
         'category': category,
         'pubDate': pubDate?.toDateTimeIso8601String(),
-        'histories': histories?.map((e) => e?.toJson()),
-        'bookmarks': bookmarks?.map((e) => e?.toJson()),
-        'userActions': userActions?.map((e) => e?.toJson()),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
@@ -232,13 +190,6 @@ class News extends Model {
   static final QueryField SOURCE = QueryField(fieldName: "source");
   static final QueryField CATEGORY = QueryField(fieldName: "category");
   static final QueryField PUBDATE = QueryField(fieldName: "pubDate");
-  static final QueryField HISTORIES = QueryField(
-      fieldName: "histories", fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (History).toString()));
-  static final QueryField BOOKMARKS = QueryField(
-      fieldName: "bookmarks", fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Bookmark).toString()));
-  static final QueryField USERACTIONS = QueryField(
-      fieldName: "userActions",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (UserNewsAction).toString()));
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -267,18 +218,6 @@ class News extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: News.PUBDATE, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: News.HISTORIES, isRequired: false, ofModelName: (History).toString(), associatedKey: History.NEWS));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: News.BOOKMARKS, isRequired: false, ofModelName: (Bookmark).toString(), associatedKey: Bookmark.NEWS));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: News.USERACTIONS,
-        isRequired: false,
-        ofModelName: (UserNewsAction).toString(),
-        associatedKey: UserNewsAction.NEWS));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: News.CREATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));

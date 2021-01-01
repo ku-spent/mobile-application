@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/News.dart';
@@ -38,12 +39,14 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   NewsAction _newsAction = NewsAction(likeStatus: 'like');
   UserEventBloc _userEventBloc;
   SaveBookmarkBloc _saveBookmarkBloc;
+  LikeNewsBloc _likeNewsBloc;
 
   @override
   void initState() {
     super.initState();
     _userEventBloc = BlocProvider.of<UserEventBloc>(context);
     _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
+    _likeNewsBloc = BlocProvider.of<LikeNewsBloc>(context);
     _news = widget.news;
   }
 
@@ -95,6 +98,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   }
 
   void _onClickLike() {
+    _likeNewsBloc.add(LikeNews(news: widget.news));
     setState(() {
       _likeStatus = _likeStatus == NewsAction.like ? NewsAction.noneLike : NewsAction.like;
     });
@@ -123,34 +127,37 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SaveBookmarkBloc, SaveBookmarkState>(
-      builder: (context, state) => BlocBuilder<UserEventBloc, UserEventState>(
-        builder: (context, state) => Container(
-          child: Card(
-            margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            shadowColor: Theme.of(context).primaryColorLight,
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              child: Container(
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    _buildContent(widget.showPicture),
-                    _buildBottom(),
-                  ],
-                ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<SaveBookmarkBloc, SaveBookmarkState>(listener: (context, state) {}),
+        BlocListener<UserEventBloc, UserEventState>(listener: (context, state) {}),
+        BlocListener<LikeNewsBloc, LikeNewsState>(listener: (context, state) {})
+      ],
+      child: Container(
+        child: Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          shadowColor: Theme.of(context).primaryColorLight,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            child: Container(
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  _buildContent(widget.showPicture),
+                  _buildBottom(),
+                ],
               ),
             ),
           ),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).primaryColorLight.withOpacity(.08),
-                blurRadius: 16.0,
-              ),
-            ],
-          ),
+        ),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColorLight.withOpacity(.08),
+              blurRadius: 16.0,
+            ),
+          ],
         ),
       ),
     );

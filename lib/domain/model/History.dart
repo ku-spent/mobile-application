@@ -22,8 +22,8 @@ import 'package:flutter/foundation.dart';
 class History extends Model {
   static const classType = const HistoryType();
   final String id;
-  final User user;
-  final News news;
+  final String userId;
+  final String newsId;
   final HistoryStatus status;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -38,23 +38,23 @@ class History extends Model {
 
   const History._internal(
       {@required this.id,
-      @required this.user,
-      @required this.news,
+      @required this.userId,
+      @required this.newsId,
       @required this.status,
       @required this.createdAt,
       @required this.updatedAt});
 
   factory History(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required HistoryStatus status,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return History._internal(
         id: id == null ? UUID.getUUID() : id,
-        user: user,
-        news: news,
+        userId: userId,
+        newsId: newsId,
         status: status,
         createdAt: createdAt,
         updatedAt: updatedAt);
@@ -69,8 +69,8 @@ class History extends Model {
     if (identical(other, this)) return true;
     return other is History &&
         id == other.id &&
-        user == other.user &&
-        news == other.news &&
+        userId == other.userId &&
+        newsId == other.newsId &&
         status == other.status &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
@@ -85,8 +85,8 @@ class History extends Model {
 
     buffer.write("History {");
     buffer.write("id=" + id + ", ");
-    buffer.write("user=" + (user != null ? user.toString() : "null") + ", ");
-    buffer.write("news=" + (news != null ? news.toString() : "null") + ", ");
+    buffer.write("userId=" + userId + ", ");
+    buffer.write("newsId=" + newsId + ", ");
     buffer.write("status=" + enumToString(status) + ", ");
     buffer.write("createdAt=" +
         (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
@@ -100,15 +100,15 @@ class History extends Model {
 
   History copyWith(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required HistoryStatus status,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return History(
         id: id ?? this.id,
-        user: user ?? this.user,
-        news: news ?? this.news,
+        userId: userId ?? this.userId,
+        newsId: newsId ?? this.newsId,
         status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
@@ -116,12 +116,8 @@ class History extends Model {
 
   History.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'] != null
-            ? User.fromJson(new Map<String, dynamic>.from(json['user']))
-            : null,
-        news = json['news'] != null
-            ? News.fromJson(new Map<String, dynamic>.from(json['news']))
-            : null,
+        userId = json['userId'],
+        newsId = json['newsId'],
         status =
             enumFromString<HistoryStatus>(json['status'], HistoryStatus.values),
         createdAt = DateTimeParse.fromString(json['createdAt']),
@@ -129,22 +125,16 @@ class History extends Model {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'user': user?.toJson(),
-        'news': news?.toJson(),
+        'userId': userId,
+        'newsId': newsId,
         'status': enumToString(status),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
 
   static final QueryField ID = QueryField(fieldName: "history.id");
-  static final QueryField USER = QueryField(
-      fieldName: "user",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (User).toString()));
-  static final QueryField NEWS = QueryField(
-      fieldName: "news",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (News).toString()));
+  static final QueryField USERID = QueryField(fieldName: "userId");
+  static final QueryField NEWSID = QueryField(fieldName: "newsId");
   static final QueryField STATUS = QueryField(fieldName: "status");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
@@ -168,17 +158,15 @@ class History extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: History.USER,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: History.USERID,
         isRequired: true,
-        targetName: "userId",
-        ofModelName: (User).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: History.NEWS,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: History.NEWSID,
         isRequired: true,
-        targetName: "newsId",
-        ofModelName: (News).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: History.STATUS,

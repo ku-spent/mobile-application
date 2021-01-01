@@ -22,8 +22,8 @@ import 'package:flutter/foundation.dart';
 class UserNewsAction extends Model {
   static const classType = const UserNewsActionType();
   final String id;
-  final User user;
-  final News news;
+  final String userId;
+  final String newsId;
   final UserAction action;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -38,23 +38,23 @@ class UserNewsAction extends Model {
 
   const UserNewsAction._internal(
       {@required this.id,
-      @required this.user,
-      @required this.news,
+      @required this.userId,
+      @required this.newsId,
       @required this.action,
       @required this.createdAt,
       @required this.updatedAt});
 
   factory UserNewsAction(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required UserAction action,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return UserNewsAction._internal(
         id: id == null ? UUID.getUUID() : id,
-        user: user,
-        news: news,
+        userId: userId,
+        newsId: newsId,
         action: action,
         createdAt: createdAt,
         updatedAt: updatedAt);
@@ -69,8 +69,8 @@ class UserNewsAction extends Model {
     if (identical(other, this)) return true;
     return other is UserNewsAction &&
         id == other.id &&
-        user == other.user &&
-        news == other.news &&
+        userId == other.userId &&
+        newsId == other.newsId &&
         action == other.action &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
@@ -85,8 +85,8 @@ class UserNewsAction extends Model {
 
     buffer.write("UserNewsAction {");
     buffer.write("id=" + id + ", ");
-    buffer.write("user=" + (user != null ? user.toString() : "null") + ", ");
-    buffer.write("news=" + (news != null ? news.toString() : "null") + ", ");
+    buffer.write("userId=" + userId + ", ");
+    buffer.write("newsId=" + newsId + ", ");
     buffer.write("action=" + enumToString(action) + ", ");
     buffer.write("createdAt=" +
         (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
@@ -100,15 +100,15 @@ class UserNewsAction extends Model {
 
   UserNewsAction copyWith(
       {@required String id,
-      @required User user,
-      @required News news,
+      @required String userId,
+      @required String newsId,
       @required UserAction action,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return UserNewsAction(
         id: id ?? this.id,
-        user: user ?? this.user,
-        news: news ?? this.news,
+        userId: userId ?? this.userId,
+        newsId: newsId ?? this.newsId,
         action: action ?? this.action,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
@@ -116,34 +116,24 @@ class UserNewsAction extends Model {
 
   UserNewsAction.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        user = json['user'] != null
-            ? User.fromJson(new Map<String, dynamic>.from(json['user']))
-            : null,
-        news = json['news'] != null
-            ? News.fromJson(new Map<String, dynamic>.from(json['news']))
-            : null,
+        userId = json['userId'],
+        newsId = json['newsId'],
         action = enumFromString<UserAction>(json['action'], UserAction.values),
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'user': user?.toJson(),
-        'news': news?.toJson(),
+        'userId': userId,
+        'newsId': newsId,
         'action': enumToString(action),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
 
   static final QueryField ID = QueryField(fieldName: "userNewsAction.id");
-  static final QueryField USER = QueryField(
-      fieldName: "user",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (User).toString()));
-  static final QueryField NEWS = QueryField(
-      fieldName: "news",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (News).toString()));
+  static final QueryField USERID = QueryField(fieldName: "userId");
+  static final QueryField NEWSID = QueryField(fieldName: "newsId");
   static final QueryField ACTION = QueryField(fieldName: "action");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
@@ -167,17 +157,15 @@ class UserNewsAction extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: UserNewsAction.USER,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserNewsAction.USERID,
         isRequired: true,
-        targetName: "userId",
-        ofModelName: (User).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: UserNewsAction.NEWS,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserNewsAction.NEWSID,
         isRequired: true,
-        targetName: "newsId",
-        ofModelName: (News).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: UserNewsAction.ACTION,

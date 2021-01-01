@@ -3,21 +3,22 @@ import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/News.dart';
+import 'package:spent/domain/model/User.dart';
 
 @injectable
-class SaveBookmarkUseCase {
+class LikeNewsUseCase {
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
 
-  const SaveBookmarkUseCase(this._authenticationRepository, this._userRepository);
+  const LikeNewsUseCase(this._authenticationRepository, this._userRepository);
 
   Future<void> call(News news) async {
     User user = await _authenticationRepository.getCurrentUser();
-    Bookmark bookmark = await _userRepository.getBookmarkByNewsId(user, news);
-    if (bookmark != null) {
-      await _userRepository.deleteBookmark(bookmark);
+    UserNewsAction userNewsAction = await _userRepository.getUserNewsActionByNewsId(user, news);
+    if (userNewsAction != null) {
+      await _userRepository.deleteUserNewsAction(userNewsAction);
     } else {
-      await _userRepository.saveBookmark(user, news);
+      await _userRepository.saveUserNewsAction(user, news);
     }
   }
 }

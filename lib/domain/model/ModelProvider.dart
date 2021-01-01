@@ -30,7 +30,7 @@ export 'UserNewsAction.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "a50e7cb0fc6a58f474cb8be0863098d8";
+  String version = "8895a2a1631fee4b81fa047ed1cc5f2a";
   @override
   List<ModelSchema> modelSchemas = [
     Bookmark.schema,
