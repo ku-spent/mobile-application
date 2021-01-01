@@ -57,17 +57,11 @@ extension CardBaseMethod on _CardBaseState {
             children: [
               Row(children: [
                 _buildIcon(
-                  isActive: _likeStatus == NewsAction.like,
+                  isActive: _userAction == UserAction.LIKE,
                   active: Icon(Icons.favorite),
                   inActive: Icon(Icons.favorite_outline),
                   onPressed: _onClickLike,
                 ),
-                // _buildIcon(
-                //   isActive: _likeStatus == NewsAction.dislike,
-                //   active: Icon(Icons.thumb_down),
-                //   inActive: Icon(Icons.thumb_down_outlined),
-                //   onPressed: _onClickDislike,
-                // ),
               ]),
               InkWell(
                 splashColor: Colors.blue.withAlpha(30),

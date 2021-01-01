@@ -20,14 +20,5 @@ class SaveBookmarkSuccess extends SaveBookmarkState {
   @override
   List<Object> get props => [news, result];
 }
-// class SaveBookmarkSuccess extends SaveBookmarkState {
-//   final bool isBookmarked;
-//   final News news;
-
-//   const SaveBookmarkSuccess(this.isBookmarked, this.news);
-
-//   @override
-//   List<Object> get props => [];
-// }
 
 class SaveBookmarkLoadError extends SaveBookmarkState {}

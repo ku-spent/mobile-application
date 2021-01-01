@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
@@ -26,8 +27,11 @@ class SaveBookmarkUseCase {
   }
 }
 
-class SaveBookmarkResult {
+class SaveBookmarkResult extends Equatable {
   final bool isBookmarked;
 
   const SaveBookmarkResult({this.isBookmarked});
+
+  @override
+  List<Object> get props => [isBookmarked];
 }

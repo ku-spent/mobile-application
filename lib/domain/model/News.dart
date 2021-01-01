@@ -16,6 +16,7 @@
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 part 'News.g.dart';
 
 /** This is an auto generated class representing the News type in your schema. */
@@ -45,7 +46,7 @@ class News extends Model {
   final DateTime updatedAt;
 
   bool isBookmarked = false;
-  bool isLiked = false;
+  UserAction userAction = UserAction.NONE;
 
   static String boxName = 'NEWS';
 

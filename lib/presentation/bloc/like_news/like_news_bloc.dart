@@ -28,8 +28,8 @@ class LikeNewsBloc extends Bloc<LikeNewsEvent, LikeNewsState> {
   Stream<LikeNewsState> _mapLikeNewsLoadedState(LikeNews event) async* {
     yield LikeNewsLoading();
     try {
-      await _likeNewsUseCase.call(event.news);
-      yield LikeNewsSuccess();
+      LikeNewsResult result = await _likeNewsUseCase.call(event.news);
+      yield LikeNewsSuccess(event.news, result);
     } catch (e) {
       print(e);
       yield LikeNewsLoadError();

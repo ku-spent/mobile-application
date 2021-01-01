@@ -15,7 +15,8 @@ class UserRepository {
     Bookmark bookmark = await getBookmarkByNewsId(user, news);
     UserNewsAction userNewsAction = await getUserNewsActionByNewsId(user, news);
     news.isBookmarked = bookmark != null;
-    news.isLiked = userNewsAction != null && userNewsAction.action == UserAction.LIKE;
+    news.userAction =
+        userNewsAction != null && userNewsAction.action == UserAction.LIKE ? UserAction.LIKE : UserAction.NONE;
     return news;
   }
 

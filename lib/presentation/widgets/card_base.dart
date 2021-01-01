@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
-import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/news_action.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
@@ -32,11 +31,10 @@ class CardBase extends StatefulWidget {
   _CardBaseState createState() => _CardBaseState();
 }
 
-class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin {
+class _CardBaseState extends State<CardBase> {
   News _news;
-  bool _isBookmarked = false;
-  String _likeStatus = NewsAction.noneLike;
-  NewsAction _newsAction = NewsAction(likeStatus: 'like');
+  bool _isBookmarked;
+  UserAction _userAction;
   UserEventBloc _userEventBloc;
   SaveBookmarkBloc _saveBookmarkBloc;
   LikeNewsBloc _likeNewsBloc;
@@ -49,8 +47,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
     _likeNewsBloc = BlocProvider.of<LikeNewsBloc>(context);
     _news = widget.news;
     _isBookmarked = _news.isBookmarked;
-    // final bookmark = _news.isBookmarked;
-    // print('news bookmark: $bookmark');
+    _userAction = _news.userAction;
   }
 
   void _goToLink(BuildContext context) async {
@@ -102,14 +99,15 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
 
   void _onClickLike() {
     _likeNewsBloc.add(LikeNews(news: _news));
-    setState(() {
-      _likeStatus = _likeStatus == NewsAction.like ? NewsAction.noneLike : NewsAction.like;
-    });
   }
 
-  void _onClickDislike() {
+  void _onClickBookmark() {
+    _saveBookmarkBloc.add(SaveBookmark(news: _news));
+  }
+
+  void _setUserAction(UserAction userAction) {
     setState(() {
-      _likeStatus = _likeStatus == NewsAction.dislike ? NewsAction.noneLike : NewsAction.dislike;
+      _userAction = userAction;
     });
   }
 
@@ -117,10 +115,6 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
     setState(() {
       _isBookmarked = isBookmarked;
     });
-  }
-
-  void _onClickBookmark() {
-    _saveBookmarkBloc.add(SaveBookmark(news: _news));
   }
 
   Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
@@ -140,8 +134,12 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
             _setIsBookmarked(state.result.isBookmarked);
           }
         }),
+        BlocListener<LikeNewsBloc, LikeNewsState>(listener: (context, state) {
+          if (state is LikeNewsSuccess && state.news.id == _news.id) {
+            _setUserAction(state.result.userAction);
+          }
+        }),
         BlocListener<UserEventBloc, UserEventState>(listener: (context, state) {}),
-        BlocListener<LikeNewsBloc, LikeNewsState>(listener: (context, state) {})
       ],
       child: Container(
         child: Card(
