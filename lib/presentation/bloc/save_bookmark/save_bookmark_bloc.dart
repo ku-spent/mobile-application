@@ -28,8 +28,8 @@ class SaveBookmarkBloc extends Bloc<SaveBookmarkEvent, SaveBookmarkState> {
   Stream<SaveBookmarkState> _mapSaveBookmarkLoadedState(SaveBookmark event) async* {
     yield SaveBookmarkLoading();
     try {
-      await _saveBookmarkUseCase.call(event.news);
-      yield SaveBookmarkSuccess();
+      SaveBookmarkResult result = await _saveBookmarkUseCase.call(event.news);
+      yield SaveBookmarkSuccess(event.news, result);
     } catch (e) {
       print(e);
       yield SaveBookmarkLoadError();

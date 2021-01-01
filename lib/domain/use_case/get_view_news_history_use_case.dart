@@ -17,11 +17,10 @@ class GetViewNewsHistoryUseCase {
   Future<List<News>> call() async {
     User user = await _authenticationRepository.getCurrentUser();
     List<History> histories = await _userRepository.getNewsHistoryByUser(user);
-    List<News> news = [];
-    histories.forEach((history) async {
-      News historyNews = await _newsRepository.getNewsById(history.newsId);
-      if (historyNews != null) news.add(historyNews);
-    });
-    return news;
+    List<News> newsList = await Future.wait(histories.map((history) => _newsRepository.getNewsById(history.newsId)));
+    newsList.removeWhere((news) => news == null);
+    List<News> mappedUserNews =
+        await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
+    return mappedUserNews;
   }
 }

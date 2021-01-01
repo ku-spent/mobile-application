@@ -109,7 +109,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 );
               }
             } else if (state is HistoryLoadError) {
-              return RetryError();
+              return RetryError(callback: _onRefresh);
             }
           },
         ),

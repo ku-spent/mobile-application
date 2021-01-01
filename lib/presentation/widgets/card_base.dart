@@ -48,6 +48,9 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
     _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
     _likeNewsBloc = BlocProvider.of<LikeNewsBloc>(context);
     _news = widget.news;
+    _isBookmarked = _news.isBookmarked;
+    // final bookmark = _news.isBookmarked;
+    // print('news bookmark: $bookmark');
   }
 
   void _goToLink(BuildContext context) async {
@@ -98,7 +101,7 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   }
 
   void _onClickLike() {
-    _likeNewsBloc.add(LikeNews(news: widget.news));
+    _likeNewsBloc.add(LikeNews(news: _news));
     setState(() {
       _likeStatus = _likeStatus == NewsAction.like ? NewsAction.noneLike : NewsAction.like;
     });
@@ -110,11 +113,14 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
     });
   }
 
-  void _onClickBookmark() {
-    _saveBookmarkBloc.add(SaveBookmark(news: widget.news));
+  void _setIsBookmarked(bool isBookmarked) {
     setState(() {
-      _isBookmarked = !_isBookmarked;
+      _isBookmarked = isBookmarked;
     });
+  }
+
+  void _onClickBookmark() {
+    _saveBookmarkBloc.add(SaveBookmark(news: _news));
   }
 
   Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
@@ -129,7 +135,11 @@ class _CardBaseState extends State<CardBase> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<SaveBookmarkBloc, SaveBookmarkState>(listener: (context, state) {}),
+        BlocListener<SaveBookmarkBloc, SaveBookmarkState>(listener: (context, state) {
+          if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
+            _setIsBookmarked(state.result.isBookmarked);
+          }
+        }),
         BlocListener<UserEventBloc, UserEventState>(listener: (context, state) {}),
         BlocListener<LikeNewsBloc, LikeNewsState>(listener: (context, state) {})
       ],

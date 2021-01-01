@@ -125,7 +125,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               );
             }
           } else if (state is BookmarkLoadError) {
-            return RetryError();
+            return RetryError(callback: _onRefresh);
           } else {
             return Center(child: CircularProgressIndicator());
           }

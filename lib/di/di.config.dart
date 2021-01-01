@@ -89,13 +89,9 @@ GetIt $initGetIt(
       () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignOutUseCase>(
       () => UserSignOutUseCase(get<AuthenticationRepository>()));
-  gh.factory<GetNewsFeedUseCase>(
-      () => GetNewsFeedUseCase(get<NewsRepository>()));
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
       (pageController, _) =>
           NavigationBloc(pageController, get<AuthenticationBloc>()));
-  gh.factory<QueryFeedBloc>(
-      () => QueryFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<SearchItemDataSource>(
       () => SearchRemoteDataSource(get<SearchItemFuse>()));
   gh.factory<SearchRepository>(
@@ -106,12 +102,15 @@ GetIt $initGetIt(
         get<UserSignInWithAmplifyUseCase>(),
         get<IdentifyUserUseCase>(),
       ));
-  gh.factory<FeedBloc>(
-      () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<GetBookmarkUseCase>(() => GetBookmarkUseCase(
         get<AuthenticationRepository>(),
         get<UserRepository>(),
         get<NewsRepository>(),
+      ));
+  gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(
+        get<NewsRepository>(),
+        get<UserRepository>(),
+        get<AuthenticationRepository>(),
       ));
   gh.factory<GetViewNewsHistoryUseCase>(() => GetViewNewsHistoryUseCase(
         get<AuthenticationRepository>(),
@@ -120,12 +119,16 @@ GetIt $initGetIt(
       ));
   gh.factory<LikeNewsUseCase>(() =>
       LikeNewsUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
+  gh.factory<QueryFeedBloc>(
+      () => QueryFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<SaveBookmarkUseCase>(() => SaveBookmarkUseCase(
       get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
       SaveUserViewNewsHistoryUseCase(
           get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
+  gh.factory<FeedBloc>(
+      () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
 
   // Eager singletons must be registered in the right order
   gh.singleton<AppHttpManager>(AppHttpManager());

@@ -44,6 +44,9 @@ class News extends Model {
   @HiveField(9)
   final DateTime updatedAt;
 
+  bool isBookmarked = false;
+  bool isLiked = false;
+
   static String boxName = 'NEWS';
 
   @override
@@ -54,7 +57,7 @@ class News extends Model {
     return id;
   }
 
-  const News._internal(
+  News._internal(
       {@required this.id,
       @required this.url,
       @required this.title,

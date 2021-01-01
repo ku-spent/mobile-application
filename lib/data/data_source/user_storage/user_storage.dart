@@ -31,10 +31,11 @@ class UserStorage {
 
   Future<History> getHistoryByNewsId(User user, News news) async {
     try {
-      History history = (await Amplify.DataStore.query(
+      List<History> histories = await Amplify.DataStore.query(
         History.classType,
         where: History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE')).and(History.NEWSID.eq(news.id)),
-      ))[0];
+      );
+      History history = histories.isNotEmpty ? histories[0] : null;
       return history;
     } catch (err) {
       print(err);
@@ -71,10 +72,11 @@ class UserStorage {
 
   Future<Bookmark> getBookmarkByNewsId(User user, News news) async {
     try {
-      Bookmark bookmark = (await Amplify.DataStore.query(
+      List<Bookmark> bookmarks = await Amplify.DataStore.query(
         Bookmark.classType,
         where: Bookmark.USERID.eq(user.id).and(Bookmark.NEWSID.eq(news.id)),
-      ))[0];
+      );
+      Bookmark bookmark = bookmarks.isNotEmpty ? bookmarks[0] : null;
       return bookmark;
     } catch (e) {
       print(e);
@@ -111,11 +113,12 @@ class UserStorage {
 
   Future<UserNewsAction> getUserNewsActionByNewsId(User user, News news) async {
     try {
-      UserNewsAction userNewsAction = (await Amplify.DataStore.query(UserNewsAction.classType,
+      List<UserNewsAction> userNewsActions = await Amplify.DataStore.query(UserNewsAction.classType,
           where: UserNewsAction.USERID
               .eq(user.id)
               .and(UserNewsAction.NEWSID.eq(news.id))
-              .and(UserNewsAction.ACTION.eq('LIKE'))))[0];
+              .and(UserNewsAction.ACTION.eq('LIKE')));
+      UserNewsAction userNewsAction = userNewsActions.isNotEmpty ? userNewsActions[0] : null;
       return userNewsAction;
     } catch (e) {
       print(e);

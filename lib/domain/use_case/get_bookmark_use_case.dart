@@ -16,11 +16,10 @@ class GetBookmarkUseCase {
   Future<List<News>> call() async {
     User user = await _authenticationRepository.getCurrentUser();
     List<Bookmark> bookmarks = await _userRepository.getBookmarksByUser(user);
-    List<News> news = [];
-    bookmarks.forEach((bookmark) async {
-      News bookmarkNews = await _newsRepository.getNewsById(bookmark.newsId);
-      if (bookmarkNews != null) news.add(bookmarkNews);
-    });
-    return news;
+    List<News> newsList = await Future.wait(bookmarks.map((bookmark) => _newsRepository.getNewsById(bookmark.newsId)));
+    newsList = newsList.where((news) => news != null).toList();
+    List<News> mappedUserNews =
+        await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
+    return mappedUserNews;
   }
 }
