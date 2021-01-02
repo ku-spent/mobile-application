@@ -1,9 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
@@ -13,7 +12,11 @@ import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 part 'card_base.part.dart';
 
@@ -132,6 +135,10 @@ class _CardBaseState extends State<CardBase> {
         BlocListener<SaveBookmarkBloc, SaveBookmarkState>(listener: (context, state) {
           if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(state.result.isBookmarked);
+            BotToast.showText(
+              text: state.result.isBookmarked ? 'Bookmarked' : 'Removed',
+              textStyle: GoogleFonts.kanit(color: Colors.white),
+            );
           }
         }),
         BlocListener<LikeNewsBloc, LikeNewsState>(listener: (context, state) {

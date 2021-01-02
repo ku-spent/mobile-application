@@ -7,10 +7,7 @@ abstract class FeedEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchFeed extends FeedEvent {
-  @override
-  List<Object> get props => [];
-}
+class FetchFeed extends FeedEvent {}
 
 class RefreshFeed extends FeedEvent {
   final RefreshFeedCallback callback;

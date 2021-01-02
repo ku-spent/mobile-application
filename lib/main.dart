@@ -9,6 +9,7 @@ import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/pages/splash_page.dart';
 
 import 'package:spent/presentation/theme.dart';
 import 'package:spent/domain/model/News.dart';
@@ -22,6 +23,7 @@ import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/di/di.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +34,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  final botToastBuilder = BotToastInit();
+
+  MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +83,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SPENT',
         theme: MyTheme(context: context).mainTheme,
-        builder: ExtendedNavigator.builder(router: AppRouter(), builder: (context, extendedNav) => extendedNav),
-        // home: SplashPage(),
+        builder: ExtendedNavigator.builder(
+          router: AppRouter(),
+          builder: (context, child) {
+            child = botToastBuilder(context, child);
+            return child;
+          },
+        ),
+        navigatorObservers: [BotToastNavigatorObserver()],
+        home: SplashPage(),
       ),
     );
   }

@@ -39,6 +39,7 @@ dependencies:
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
   auto_route: ^0.6.9
+  bot_toast: ^3.0.5
   cached_network_image: ^2.3.3
   connectivity: ^2.0.2
   data_connection_checker: ^0.3.4
@@ -47,7 +48,6 @@ dependencies:
   flutter_custom_tabs: ^0.6.0
   flutter_signin_button: ^1.1.0
   flutter_svg: ^0.19.0
-  fluttertoast: ^7.1.6
   fuzzy: ^0.2.3
   get_it: ^5.0.1
   google_fonts: ^1.1.0
@@ -70,11 +70,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  auto_route_generator: ^0.6.10
   build_runner: ^1.10.4
   flutter_launcher_icons: ^0.8.1
   flutter_native_splash: ^0.1.9
   injectable_generator: ^1.0.6
-  auto_route_generator: ^0.6.10
 
 flutter_native_splash:
   image: assets/images/logo.png

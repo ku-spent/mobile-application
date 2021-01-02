@@ -14,6 +14,7 @@
 */
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
@@ -22,7 +23,7 @@ part 'News.g.dart';
 /** This is an auto generated class representing the News type in your schema. */
 @immutable
 @HiveType(typeId: 1)
-class News extends Model {
+class News extends Model with EquatableMixin {
   static const classType = const NewsType();
   @HiveField(0)
   final String id;
@@ -49,6 +50,10 @@ class News extends Model {
   UserAction userAction = UserAction.NONE;
 
   static String boxName = 'NEWS';
+
+  @override
+  List<Object> get props =>
+      [id, url, title, summary, image, source, category, pubDate, createdAt, updatedAt, isBookmarked, userAction];
 
   @override
   getInstanceType() => classType;
