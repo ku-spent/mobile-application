@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/keep_alive_page.dart';
@@ -56,6 +59,12 @@ class _HomePageState extends State<HomePage> {
     _feedBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
   }
 
+  Widget _buildItem(BuildContext context, News news) {
+    return CardBase(
+      news: news,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
@@ -73,20 +82,41 @@ class _HomePageState extends State<HomePage> {
           header: WaterDropMaterialHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
-          child: ListView.separated(
-            addAutomaticKeepAlives: true,
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            itemCount: state.feeds.length,
-            itemBuilder: (BuildContext context, int index) => KeepAlivePage(
-              child: CardBase(
-                news: state.feeds[index],
-              ),
-            ),
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-              height: 8,
-            ),
+          child: ListView(
+            shrinkWrap: true,
             controller: _scrollController,
+            children: [
+              ImplicitlyAnimatedList<News>(
+                primary: false,
+                shrinkWrap: true,
+                items: state.feeds,
+                physics: const BouncingScrollPhysics(),
+                removeDuration: const Duration(milliseconds: 200),
+                insertDuration: const Duration(milliseconds: 200),
+                updateDuration: const Duration(milliseconds: 200),
+                areItemsTheSame: (a, b) => a.id == b.id,
+                itemBuilder: (context, animation, result, i) {
+                  return SizeFadeTransition(
+                    key: ValueKey(result.id),
+                    animation: animation,
+                    child: _buildItem(context, result),
+                  );
+                },
+                updateItemBuilder: (context, animation, result) {
+                  return FadeTransition(
+                    key: ValueKey(result.id),
+                    opacity: animation,
+                    child: _buildItem(context, result),
+                  );
+                },
+                removeItemBuilder: (context, animation, result) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: _buildItem(context, result),
+                  );
+                },
+              )
+            ],
           ),
         );
       } else if (state is FeedError) {
