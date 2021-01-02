@@ -67,7 +67,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
   Widget _buildItem(BuildContext context, News news) {
     return CardBase(
-      key: UniqueKey(),
       news: news,
       showPicture: false,
     );
@@ -89,6 +88,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 child: Text('no bookmarks'),
               );
             } else {
+              print(state.news.map((e) => e.id));
               return SmartRefresher(
                 enablePullDown: true,
                 // enablePullUp: state.hasMore,
@@ -97,20 +97,22 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 onRefresh: _onRefresh,
                 child: ImplicitlyAnimatedList<News>(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
                   items: state.news,
+                  physics: const NeverScrollableScrollPhysics(),
                   removeDuration: const Duration(milliseconds: 200),
                   insertDuration: const Duration(milliseconds: 200),
                   updateDuration: const Duration(milliseconds: 200),
                   areItemsTheSame: (a, b) => a.id == b.id,
                   itemBuilder: (context, animation, result, i) {
                     return SizeFadeTransition(
+                      key: ValueKey(result.id),
                       animation: animation,
                       child: _buildItem(context, result),
                     );
                   },
                   updateItemBuilder: (context, animation, result) {
                     return FadeTransition(
+                      key: ValueKey(result.id),
                       opacity: animation,
                       child: _buildItem(context, result),
                     );

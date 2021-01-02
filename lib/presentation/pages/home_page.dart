@@ -74,13 +74,14 @@ class _HomePageState extends State<HomePage> {
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: ListView.separated(
-            physics: BouncingScrollPhysics(),
             addAutomaticKeepAlives: true,
+            physics: BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: state.feeds.length,
-            itemBuilder: (BuildContext context, int index) => CardBase(
-              news: state.feeds[index],
-              key: UniqueKey(),
+            itemBuilder: (BuildContext context, int index) => KeepAlivePage(
+              child: CardBase(
+                news: state.feeds[index],
+              ),
             ),
             separatorBuilder: (BuildContext context, int index) => SizedBox(
               height: 8,
