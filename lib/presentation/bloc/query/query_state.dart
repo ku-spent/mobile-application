@@ -12,6 +12,11 @@ class QueryFeedInitial extends QueryFeedState {
   List<Object> get props => [];
 }
 
+class QueryFeedLoading extends QueryFeedState {
+  @override
+  List<Object> get props => [];
+}
+
 class QueryFeedLoaded extends QueryFeedState {
   final List<News> feeds;
   final bool hasMore;

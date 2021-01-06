@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/pages/home_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/retry_error.dart';
 
 class QueryPage extends StatefulWidget {
   final String query;
@@ -73,11 +74,9 @@ class _QueryPageState extends State<QueryPage> {
     _sourceBloc.add(FetchQueryFeed());
   }
 
-  // void _onRefresh() async {
-  //   _sourceBloc.add(RefreshSource(
-  //       source: widget.source,
-  //       callback: () => {_refreshController.refreshCompleted()}));
-  // }
+  void _onRefresh() async {
+    _sourceBloc.add(RefreshQueryFeed(source: widget.query));
+  }
 
   void _scrollToTop() {
     scrollController.animateTo(scrollController.position.minScrollExtent,
@@ -157,28 +156,25 @@ class _QueryPageState extends State<QueryPage> {
                         children: [Text('No Results')],
                       ),
                     )
-                  : SliverPadding(
-                      padding: EdgeInsets.only(top: 16.0),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(
-                          List.generate(
+                  : SliverList(
+                      delegate: SliverChildListDelegate(
+                        List.generate(
                             state.hasMore ? state.feeds.length + 1 : state.feeds.length,
                             (index) => index >= state.feeds.length
                                 ? BottomLoader()
-                                : Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                                    child: CardBase(
-                                      news: state.feeds[index],
-                                    ),
-                                  ),
-                          ),
-                        ),
+                                : CardBase(
+                                    news: state.feeds[index],
+                                  )),
                       ),
                     )
+              // SliverPadding(
+              //     padding: EdgeInsets.only(top: 16.0),
+              //     sliver: ,
+              //   )
             ],
           );
         } else if (state is QueryFeedError) {
-          return Center(child: Text('Something went wrong!'));
+          return RetryError(callback: _onRefresh);
         }
       }),
     );

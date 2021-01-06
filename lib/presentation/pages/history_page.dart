@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
@@ -62,6 +65,13 @@ class _HistoryPageState extends State<HistoryPage> {
     _historyBloc.add(RefreshHistory(callback: _refreshController.refreshCompleted));
   }
 
+  Widget _buildItem(BuildContext context, News news) {
+    return CardBase(
+      news: news,
+      showPicture: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,9 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
         },
         child: BlocBuilder<HistoryBloc, HistoryState>(
           builder: (context, state) {
-            if (state is HistoryInitial || state is HistoryLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is HistoryLoaded) {
+            if (state is HistoryLoaded) {
               if (state.news.isEmpty) {
                 return Center(
                   child: Text('no histories'),
@@ -92,24 +100,41 @@ class _HistoryPageState extends State<HistoryPage> {
                   header: WaterDropMaterialHeader(),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
-                  child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    addAutomaticKeepAlives: true,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    itemCount: state.news.length,
-                    itemBuilder: (BuildContext context, int index) => CardBase(
-                      news: state.news[index],
-                      showPicture: false,
-                    ),
-                    separatorBuilder: (BuildContext context, int index) => SizedBox(
-                      height: 8,
-                    ),
-                    controller: _scrollController,
+                  child: ImplicitlyAnimatedList<News>(
+                    shrinkWrap: true,
+                    items: state.news,
+                    physics: const NeverScrollableScrollPhysics(),
+                    removeDuration: const Duration(milliseconds: 200),
+                    insertDuration: const Duration(milliseconds: 200),
+                    updateDuration: const Duration(milliseconds: 200),
+                    areItemsTheSame: (a, b) => a.id == b.id,
+                    itemBuilder: (context, animation, result, i) {
+                      return SizeFadeTransition(
+                        key: ValueKey(result.id),
+                        animation: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
+                    updateItemBuilder: (context, animation, result) {
+                      return FadeTransition(
+                        key: ValueKey(result.id),
+                        opacity: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
+                    removeItemBuilder: (context, animation, result) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: _buildItem(context, result),
+                      );
+                    },
                   ),
                 );
               }
             } else if (state is HistoryLoadError) {
               return RetryError(callback: _onRefresh);
+            } else {
+              return Center(child: CircularProgressIndicator());
             }
           },
         ),

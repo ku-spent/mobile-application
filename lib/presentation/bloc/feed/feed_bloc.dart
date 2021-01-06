@@ -65,14 +65,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       if (curState is FeedError) {
         yield FeedLoading();
       }
-      if (curState is FeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(
-          from: 0,
-          size: fetchSize,
-          isRemote: _networkBloc.isConnected,
-        );
-        yield FeedLoaded(feeds: feeds, hasMore: true);
-      }
+      final feeds = await _getNewsFeedUseCase.call(
+        from: 0,
+        size: fetchSize,
+        isRemote: _networkBloc.isConnected,
+      );
+      yield FeedLoaded(feeds: feeds, hasMore: true);
       if (callback != null) callback();
     } catch (_) {
       yield FeedError();

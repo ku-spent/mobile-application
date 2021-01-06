@@ -24,8 +24,6 @@ class NewsLocalDataSource implements NewsDataSource {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);
       News news = newsBox.values.singleWhere((news) => news.id == id);
-      // remote
-      // TODO
       return news;
     } catch (e) {
       return null;

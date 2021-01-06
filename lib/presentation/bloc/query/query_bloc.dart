@@ -79,10 +79,11 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
   Stream<QueryFeedState> _mapRefreshLoadedQueryFeedState(RefreshFeedCallback callback) async* {
     try {
       final curState = state;
-      if (curState is QueryFeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
-        yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
+      if (curState is QueryFeedError) {
+        // yield QueryFeedLoading();
       }
+      final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
+      yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
       if (callback != null) callback();
     } catch (_) {
       yield QueryFeedError();

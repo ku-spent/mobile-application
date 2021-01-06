@@ -149,6 +149,7 @@ class _CardBaseState extends State<CardBase> {
         BlocListener<UserEventBloc, UserEventState>(listener: (context, state) {}),
       ],
       child: Container(
+        margin: EdgeInsets.only(bottom: 16.0),
         child: Card(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),

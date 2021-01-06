@@ -1,3 +1,4 @@
+import 'package:amplify_core/amplify_core.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
@@ -22,7 +23,9 @@ class NewsRemoteDataSource implements NewsDataSource {
         }),
       );
       List items = response['data']['hits'];
-      return items.map((e) => News.fromJson(e['_source'])).toList();
+      List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
+      // List<News> formattedNewsList = await Future.wait(newsList.map((e) => getNewsById(e.id)));
+      return newsList;
     } catch (e) {
       print(e);
       throw e;
@@ -30,8 +33,12 @@ class NewsRemoteDataSource implements NewsDataSource {
   }
 
   @override
-  Future<News> getNewsById(String id) {
-    // TODO: implement getNewsById
-    throw UnimplementedError();
+  Future<News> getNewsById(String id) async {
+    List<News> newsList = await Amplify.DataStore.query(
+      News.classType,
+      where: News.ID.eq(id),
+    );
+    News news = newsList.isNotEmpty ? newsList[0] : null;
+    return news;
   }
 }

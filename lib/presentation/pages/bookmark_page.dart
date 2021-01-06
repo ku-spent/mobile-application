@@ -88,7 +88,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 child: Text('no bookmarks'),
               );
             } else {
-              print(state.news.map((e) => e.id));
               return SmartRefresher(
                 enablePullDown: true,
                 // enablePullUp: state.hasMore,
