@@ -39,8 +39,10 @@ dependencies:
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
   auto_route: ^0.6.9
+  badges: ^1.1.6
   bot_toast: ^3.0.5
   cached_network_image: ^2.3.3
+  carousel_slider: ^2.3.1
   connectivity: ^2.0.2
   data_connection_checker: ^0.3.4
   equatable: ^1.2.5

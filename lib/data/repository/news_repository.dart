@@ -35,7 +35,7 @@ class NewsRepository {
     try {
       News cachedNews = await _newsLocalDataSource.getNewsById(id);
       if (cachedNews == null) {
-        return _newsRemoteDataSource.getNewsById(id);
+        return await _newsRemoteDataSource.getNewsById(id);
       } else {
         return cachedNews;
       }

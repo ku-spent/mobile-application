@@ -34,10 +34,20 @@ class NewsRemoteDataSource implements NewsDataSource {
 
   @override
   Future<News> getNewsById(String id) async {
-    List<News> newsList = await Amplify.DataStore.query(
-      News.classType,
-      where: News.ID.eq(id),
+    // List<News> newsList = await Amplify.DataStore.query(
+    //   News.classType,
+    //   where: News.ID.eq(id),
+    // );
+    final response = await _httpManager.get(
+      path: '/feed',
+      query: Map.from({
+        'size': '1',
+        'queryField': 'id',
+        'query': id,
+      }),
     );
+    List items = response['data']['hits'];
+    List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
     News news = newsList.isNotEmpty ? newsList[0] : null;
     return news;
   }

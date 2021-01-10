@@ -109,19 +109,24 @@ extension CardBaseMethod on _CardBaseState {
               children: [
                 Text(
                   _news.title,
-                  style: Theme.of(context).textTheme.headline6,
+                  style:
+                      widget.isSubCard ? Theme.of(context).textTheme.bodyText2 : Theme.of(context).textTheme.headline6,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                 ),
-                SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  _news.summary,
-                  style: Theme.of(context).textTheme.bodyText2,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
+                widget.showSummary
+                    ? SizedBox(
+                        height: 4,
+                      )
+                    : Container(),
+                widget.showSummary
+                    ? Text(
+                        _news.summary,
+                        style: Theme.of(context).textTheme.bodyText2,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      )
+                    : Container(),
               ],
             ),
           )

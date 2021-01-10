@@ -18,7 +18,7 @@ class GetViewNewsHistoryUseCase {
     User user = await _authenticationRepository.getCurrentUser();
     List<History> histories = await _userRepository.getNewsHistoryByUser(user);
     List<News> newsList = await Future.wait(histories.map((history) => _newsRepository.getNewsById(history.newsId)));
-    newsList.removeWhere((news) => news == null);
+    newsList = newsList.where((news) => news != null).toList();
     List<News> mappedUserNews =
         await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
     return mappedUserNews;

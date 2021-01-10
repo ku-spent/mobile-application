@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -25,11 +24,15 @@ part 'card_base.part.dart';
 class CardBase extends StatefulWidget {
   final News news;
   final bool showPicture;
+  final bool showSummary;
+  final bool isSubCard;
 
   CardBase({
     Key key,
     @required this.news,
     this.showPicture = true,
+    this.showSummary = true,
+    this.isSubCard = false,
   }) : super(key: key);
 
   @override
@@ -71,7 +74,7 @@ class _CardBaseState extends State<CardBase> {
     //     ],
     //   ),
     // );
-    // _userEventBloc.add(ReadNewsEvent(news: _news));
+    _userEventBloc.add(ReadNewsEvent(news: _news));
   }
 
   void _goToQuerySourcePage(BuildContext context) {
