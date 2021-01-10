@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
@@ -54,21 +56,22 @@ class _CardBaseState extends State<CardBase> {
   }
 
   void _goToLink(BuildContext context) async {
-    await launch(
-      _news.url,
-      option: CustomTabsOption(
-        toolbarColor: Theme.of(context).primaryColor,
-        enableDefaultShare: true,
-        enableUrlBarHiding: false,
-        showPageTitle: true,
-        animation: CustomTabsAnimation.slideIn(),
-        extraCustomTabs: const <String>[
-          'org.mozilla.firefox',
-          'com.microsoft.emmx',
-        ],
-      ),
-    );
-    _userEventBloc.add(ReadNewsEvent(news: _news));
+    ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
+    // await launch(
+    //   _news.url,
+    //   option: CustomTabsOption(
+    //     toolbarColor: Theme.of(context).primaryColor,
+    //     enableDefaultShare: true,
+    //     enableUrlBarHiding: false,
+    //     showPageTitle: true,
+    //     animation: CustomTabsAnimation.slideIn(),
+    //     extraCustomTabs: const <String>[
+    //       'org.mozilla.firefox',
+    //       'com.microsoft.emmx',
+    //     ],
+    //   ),
+    // );
+    // _userEventBloc.add(ReadNewsEvent(news: _news));
   }
 
   void _goToQuerySourcePage(BuildContext context) {

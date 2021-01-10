@@ -10,12 +10,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/model/ModelProvider.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
 import 'pages/history_page.dart';
 import 'pages/search_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
+import 'pages/view_url.dart';
 
 class Routes {
   static const String splashPage = '/';
@@ -24,6 +26,7 @@ class Routes {
   static const String settingPage = '/setting';
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
+  static const String viewUrl = '/news';
   static const all = <String>{
     splashPage,
     appScreen,
@@ -31,6 +34,7 @@ class Routes {
     settingPage,
     aboutPage,
     searchPage,
+    viewUrl,
   };
 }
 
@@ -44,6 +48,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.settingPage, page: SettingPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
+    RouteDef(Routes.viewUrl, page: ViewUrl),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -99,6 +104,16 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
+    ViewUrl: (data) {
+      final args = data.getArgs<ViewUrlArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => ViewUrl(
+          key: args.key,
+          news: args.news,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -134,4 +149,11 @@ class SettingPageArguments {
 class AboutPageArguments {
   final Key key;
   AboutPageArguments({this.key});
+}
+
+/// ViewUrl arguments holder class
+class ViewUrlArguments {
+  final Key key;
+  final News news;
+  ViewUrlArguments({this.key, @required this.news});
 }

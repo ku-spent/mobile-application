@@ -91,14 +91,16 @@ extension CardBaseMethod on _CardBaseState {
                   padding: EdgeInsets.only(top: 8, bottom: 16),
                   child: ClipRRect(
                     // borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      imageUrl: _news.image,
-                      placeholder: (context, url) => Container(color: Colors.black26),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+                    child: Hero(
+                        tag: 'news-image-${_news.id}',
+                        child: CachedNetworkImage(
+                          imageUrl: _news.image,
+                          placeholder: (context, url) => Container(color: Colors.black26),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          width: double.infinity,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        )),
                   ))
               : Container(),
           Padding(

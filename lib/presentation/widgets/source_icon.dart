@@ -4,10 +4,10 @@ import 'package:spent/domain/model/news_source.dart';
 
 class SourceIcon extends StatelessWidget {
   final String source;
-  final double width = 32;
-  final double height = 32;
+  final double width;
+  final double height;
 
-  const SourceIcon({Key key, @required this.source}) : super(key: key);
+  const SourceIcon({Key key, @required this.source, this.width = 32.0, this.height = 32.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

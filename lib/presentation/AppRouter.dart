@@ -5,6 +5,7 @@ import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/pages/search_page.dart';
 import 'package:spent/presentation/pages/setting_page.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
+import 'package:spent/presentation/pages/view_url.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
@@ -14,6 +15,7 @@ import 'package:spent/presentation/pages/splash_page.dart';
     CupertinoRoute(path: '/setting', page: SettingPage),
     CupertinoRoute(path: '/about', page: AboutPage),
     CupertinoRoute(path: '/search', page: SearchPage),
+    MaterialRoute(path: '/news', page: ViewUrl),
   ],
 )
 class $AppRouter {}

@@ -62,11 +62,19 @@ class _AppScreenState extends State<AppScreen> {
     ExtendedNavigator.of(context).push(Routes.searchPage);
   }
 
+  void _scrollToTop() {
+    _currentScrollController.animateTo(_currentScrollController.position.minScrollExtent,
+        duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);
+  }
+
   Future<bool> onWillPop(BuildContext context) async {
     try {
       final _pageController = BlocProvider.of<NavigationBloc>(context).pageController;
       if (_pageController.page.round() == _pageController.initialPage) {
-        if (Platform.isAndroid) {
+        if (_currentScrollController.position.pixels > 0) {
+          _scrollToTop();
+          return false;
+        } else if (Platform.isAndroid) {
           print('pop');
           if (Navigator.of(context).canPop()) {
             return true;

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
@@ -30,6 +32,7 @@ void main() async {
   configureInjection(Environment.dev);
   await Hive.initFlutter();
   Hive.registerAdapter(NewsAdapter());
+  initializeDateFormatting('th_TH');
   runApp(MyApp());
 }
 
