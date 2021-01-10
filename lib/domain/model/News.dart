@@ -45,6 +45,10 @@ class News extends Model with EquatableMixin {
   final DateTime createdAt;
   @HiveField(9)
   final DateTime updatedAt;
+  @HiveField(10)
+  final List<String> tags;
+  @HiveField(11)
+  final String rawHTMLContent;
 
   bool isBookmarked = false;
   UserAction userAction = UserAction.NONE;
@@ -73,7 +77,9 @@ class News extends Model with EquatableMixin {
       @required this.category,
       @required this.pubDate,
       @required this.createdAt,
-      @required this.updatedAt});
+      @required this.updatedAt,
+      @required this.tags,
+      @required this.rawHTMLContent});
 
   factory News(
       {@required String id,
@@ -85,18 +91,23 @@ class News extends Model with EquatableMixin {
       @required String category,
       @required DateTime pubDate,
       @required DateTime createdAt,
-      @required DateTime updatedAt}) {
+      @required DateTime updatedAt,
+      List<String> tags = const [],
+      String rawHTMLContent = ''}) {
     return News._internal(
-        id: id == null ? UUID.getUUID() : id,
-        url: url,
-        title: title,
-        summary: summary,
-        image: image,
-        source: source,
-        category: category,
-        pubDate: pubDate,
-        createdAt: createdAt,
-        updatedAt: updatedAt);
+      id: id == null ? UUID.getUUID() : id,
+      url: url,
+      title: title,
+      summary: summary,
+      image: image,
+      source: source,
+      category: category,
+      pubDate: pubDate,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      tags: tags,
+      rawHTMLContent: rawHTMLContent,
+    );
   }
 
   bool equals(Object other) {
@@ -176,7 +187,9 @@ class News extends Model with EquatableMixin {
         category = json['category'],
         pubDate = DateTimeParse.fromString(json['pubDate']),
         createdAt = DateTimeParse.fromString(json['createdAt']),
-        updatedAt = DateTimeParse.fromString(json['updatedAt']);
+        updatedAt = DateTimeParse.fromString(json['updatedAt']),
+        tags = json['tags'].cast<String>() ?? [],
+        rawHTMLContent = json['raw_html_content'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -188,7 +201,9 @@ class News extends Model with EquatableMixin {
         'category': category,
         'pubDate': pubDate?.toDateTimeIso8601String(),
         'createdAt': createdAt?.toDateTimeIso8601String(),
-        'updatedAt': updatedAt?.toDateTimeIso8601String()
+        'updatedAt': updatedAt?.toDateTimeIso8601String(),
+        'tags': tags.toString(),
+        'rawHTMLContent': rawHTMLContent
       };
 
   static final QueryField ID = QueryField(fieldName: "news.id");

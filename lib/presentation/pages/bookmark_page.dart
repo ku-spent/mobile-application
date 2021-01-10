@@ -68,7 +68,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget _buildItem(BuildContext context, News news) {
     return CardBase(
       news: news,
-      showPicture: false,
     );
   }
 

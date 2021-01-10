@@ -1,10 +1,10 @@
 class Category {
-  static const String localNews = 'ในประเทศ';
   static const String politics = 'การเมือง';
-  static const String sport = 'กีฬา';
-  static const String crime = 'อาชญากรรม';
-  static const String international = 'ต่างประเทศ';
   static const String economic = 'เศรษฐกิจ';
+  static const String international = 'ต่างประเทศ';
+  static const String crime = 'อาชญากรรม';
+  static const String sport = 'กีฬา';
+  static const String localNews = 'ในประเทศ';
   static const String entertainment = 'บันเทิง';
   static const String lifeStyle = 'ไลฟ์สไตล์';
   static const String environment = 'สิ่งแวดล้อม';
