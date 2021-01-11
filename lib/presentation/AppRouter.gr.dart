@@ -14,6 +14,7 @@ import '../domain/model/ModelProvider.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
 import 'pages/history_page.dart';
+import 'pages/query_page.dart';
 import 'pages/search_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
   static const String viewUrl = '/news';
+  static const String queryPage = '/query';
   static const all = <String>{
     splashPage,
     appScreen,
@@ -35,6 +37,7 @@ class Routes {
     aboutPage,
     searchPage,
     viewUrl,
+    queryPage,
   };
 }
 
@@ -49,6 +52,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
     RouteDef(Routes.viewUrl, page: ViewUrl),
+    RouteDef(Routes.queryPage, page: QueryPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -114,6 +118,19 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
+    QueryPage: (data) {
+      final args = data.getArgs<QueryPageArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => QueryPage(
+          key: args.key,
+          query: args.query,
+          queryField: args.queryField,
+          coverUrl: args.coverUrl,
+          isShowTitle: args.isShowTitle,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -156,4 +173,19 @@ class ViewUrlArguments {
   final Key key;
   final News news;
   ViewUrlArguments({this.key, @required this.news});
+}
+
+/// QueryPage arguments holder class
+class QueryPageArguments {
+  final Key key;
+  final String query;
+  final String queryField;
+  final String coverUrl;
+  final bool isShowTitle;
+  QueryPageArguments(
+      {this.key,
+      @required this.query,
+      @required this.queryField,
+      @required this.coverUrl,
+      this.isShowTitle = false});
 }

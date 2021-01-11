@@ -11,7 +11,6 @@ import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
-import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -60,48 +59,44 @@ class _CardBaseState extends State<CardBase> {
 
   void _goToLink(BuildContext context) async {
     ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
-    // await launch(
-    //   _news.url,
-    //   option: CustomTabsOption(
-    //     toolbarColor: Theme.of(context).primaryColor,
-    //     enableDefaultShare: true,
-    //     enableUrlBarHiding: false,
-    //     showPageTitle: true,
-    //     animation: CustomTabsAnimation.slideIn(),
-    //     extraCustomTabs: const <String>[
-    //       'org.mozilla.firefox',
-    //       'com.microsoft.emmx',
-    //     ],
-    //   ),
-    // );
     _userEventBloc.add(ReadNewsEvent(news: _news));
   }
 
-  void _goToQuerySourcePage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        maintainState: false,
-        builder: (context) => QueryPage(
-          query: _news.source,
-          queryField: QueryField.source,
-          coverUrl: NewsSource.newsSourceCover[_news.source],
-        ),
+  void _goToQuerySourcePage() {
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        query: _news.source,
+        queryField: QueryField.source,
+        coverUrl: NewsSource.newsSourceCover[_news.source],
+        isShowTitle: true,
       ),
     );
   }
 
-  void _goToQueryCategoryPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        maintainState: false,
-        builder: (context) => QueryPage(
-          isShowTitle: true,
-          query: _news.category,
-          queryField: QueryField.category,
-          coverUrl: Category.newsCategoryCover[_news.category],
-        ),
+  void _goToQueryCategoryPage() {
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        isShowTitle: true,
+        query: _news.category,
+        queryField: QueryField.category,
+        coverUrl: Category.newsCategoryCover[_news.category],
+      ),
+    );
+  }
+
+  void goToQueryTagPage(String tag) {
+    final coverUrl = Category.newsCategoryCover.keys.contains(_news.category)
+        ? Category.newsCategoryCover[_news.category]
+        : Category.newsCategoryCover[Category.localNews];
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        query: tag,
+        queryField: 'tags',
+        isShowTitle: true,
+        coverUrl: coverUrl,
       ),
     );
   }
@@ -126,9 +121,10 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
-  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
+  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive, Color activeColor}) {
+    final _activeColor = activeColor != null ? activeColor : Theme.of(context).primaryColor;
     return IconButton(
-      color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+      color: isActive ? _activeColor : Colors.grey,
       onPressed: onPressed,
       icon: isActive ? active : inActive,
     );

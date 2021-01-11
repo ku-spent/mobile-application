@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/domain/model/category.dart';
@@ -52,31 +54,22 @@ class _SearchBarState extends State<SearchBar> {
   ];
 
   void _onClickCategoryItem(BuildContext context, String category) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        maintainState: false,
-        builder: (context) => QueryPage(
-          query: category,
-          queryField: QueryField.category,
-          coverUrl: Category.newsCategoryCover[category],
-          isShowTitle: true,
-        ),
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        query: category,
+        queryField: QueryField.category,
+        coverUrl: Category.newsCategoryCover[category],
+        isShowTitle: true,
       ),
     );
   }
 
   void _onClickSourceItem(BuildContext context, String source) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        maintainState: false,
-        builder: (context) => QueryPage(
-          query: source,
-          queryField: QueryField.source,
-          coverUrl: NewsSource.newsSourceCover[source],
-        ),
-      ),
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+          query: source, queryField: QueryField.source, coverUrl: NewsSource.newsSourceCover[source]),
     );
   }
 

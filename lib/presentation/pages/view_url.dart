@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/domain/model/category.dart';
+import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
@@ -46,7 +49,7 @@ class _ViewUrlState extends State<ViewUrl> {
     if (option == QueryPageOptions.open) {
       final String url = _news.url;
       if (await canLaunch(url)) {
-        await launch(url);
+        await launch(url, enableJavaScript: false);
       } else {
         throw 'Could not launch $url';
       }
@@ -84,20 +87,18 @@ class _ViewUrlState extends State<ViewUrl> {
         backgroundColor: Colors.transparent,
         pinned: true,
         flexibleSpace: FlexibleSpaceBar(
-            stretchModes: [
-              StretchMode.zoomBackground,
-            ],
-            background: Hero(
-              tag: 'news-image-${_news.id}',
-              child: CachedNetworkImage(
-                imageUrl: _news.image,
-                placeholder: (context, url) => Container(
-                  color: Colors.black26,
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                fit: BoxFit.cover,
-              ),
-            )));
+          stretchModes: [
+            StretchMode.zoomBackground,
+          ],
+          background: CachedNetworkImage(
+            imageUrl: _news.image,
+            placeholder: (context, url) => Container(
+              color: Colors.black26,
+            ),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            fit: BoxFit.cover,
+          ),
+        ));
   }
 
   Widget _buildSourceTitle(News news) {
@@ -127,14 +128,28 @@ class _ViewUrlState extends State<ViewUrl> {
               spacing: 5.0,
               runSpacing: 5.0,
               children: _news.tags
-                  .map((tag) => Badge(
-                        elevation: 0,
-                        toAnimate: false,
-                        shape: BadgeShape.square,
-                        badgeColor: Theme.of(context).primaryColorLight,
-                        borderRadius: BorderRadius.circular(16),
-                        badgeContent: Text(tag, style: GoogleFonts.kanit(color: Colors.black87)),
-                      ))
+                  .map(
+                    (tag) => InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        child: Badge(
+                          elevation: 0,
+                          toAnimate: false,
+                          shape: BadgeShape.square,
+                          badgeColor: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(16),
+                          badgeContent: Text(tag, style: GoogleFonts.kanit(color: Colors.black87)),
+                        ),
+                        onTap: () {
+                          ExtendedNavigator.of(context).push(
+                            Routes.queryPage,
+                            arguments: QueryPageArguments(
+                                query: tag,
+                                queryField: 'tags',
+                                isShowTitle: true,
+                                coverUrl: Category.newsCategoryCover[Category.localNews]),
+                          );
+                        }),
+                  )
                   .toList())
         ],
       ),

@@ -7,7 +7,7 @@ extension CardBaseMethod on _CardBaseState {
       children: [
         InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () => _goToQuerySourcePage(context),
+          onTap: () => _goToQuerySourcePage(),
           child: Container(
             padding: EdgeInsets.only(left: 12, top: 8, bottom: 8, right: 8),
             child: Row(
@@ -37,42 +37,65 @@ extension CardBaseMethod on _CardBaseState {
             ),
           ),
         ),
-        _buildIcon(
-          isActive: _isBookmarked,
-          active: Icon(Icons.bookmark),
-          inActive: Icon(Icons.bookmark_outline),
-          onPressed: _onClickBookmark,
-        ),
+        // _buildIcon(
+        //   isActive: _isBookmarked,
+        //   active: Icon(Icons.bookmark),
+        //   inActive: Icon(Icons.bookmark_outline),
+        //   onPressed: _onClickBookmark,
+        // ),
       ],
+    );
+  }
+
+  Widget _buildTag(String tag, {bool isCategory = false}) {
+    return InkWell(
+      splashColor: Colors.blue.withAlpha(30),
+      onTap: () => isCategory ? _goToQueryCategoryPage() : goToQueryTagPage(tag),
+      child: Text(
+        tag,
+        style: GoogleFonts.kanit(
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
     );
   }
 
   Widget _buildBottom() {
     return Padding(
-      padding: EdgeInsets.only(left: 4, right: 16),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Wrap(
+                spacing: 5.0,
+                runSpacing: 5.0,
+                children: [
+                      _news.tags.length > 0 && _news.tags[0] == _news.category
+                          ? Container()
+                          : _buildTag(_news.category, isCategory: true)
+                    ] +
+                    _news.tags
+                        .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
+                        .map((tag) => _buildTag(tag))
+                        .toList(),
+              ),
               Row(children: [
                 _buildIcon(
                   isActive: _userAction == UserAction.LIKE,
                   active: Icon(Icons.favorite),
                   inActive: Icon(Icons.favorite_outline),
                   onPressed: _onClickLike,
+                  activeColor: Colors.red[400],
+                ),
+                _buildIcon(
+                  isActive: _isBookmarked,
+                  active: Icon(Icons.bookmark),
+                  inActive: Icon(Icons.bookmark_outline),
+                  onPressed: _onClickBookmark,
                 ),
               ]),
-              InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () => _goToQueryCategoryPage(context),
-                child: Text(
-                  '#' + _news.category,
-                  style: GoogleFonts.kanit(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
             ],
           )
         ],
@@ -88,23 +111,20 @@ extension CardBaseMethod on _CardBaseState {
         children: [
           showPicture
               ? Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 16),
+                  padding: EdgeInsets.only(top: 0.0, bottom: 8.0),
                   child: ClipRRect(
-                    // borderRadius: BorderRadius.circular(8),
-                    child: Hero(
-                        tag: 'news-image-${_news.id}',
-                        child: CachedNetworkImage(
-                          imageUrl: _news.image,
-                          placeholder: (context, url) => Container(color: Colors.black26),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                          width: double.infinity,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        )),
+                    child: CachedNetworkImage(
+                      imageUrl: _news.image,
+                      placeholder: (context, url) => Container(color: Colors.black26),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
                   ))
               : Container(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
                 Text(
