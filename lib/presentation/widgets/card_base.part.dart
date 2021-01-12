@@ -68,18 +68,21 @@ extension CardBaseMethod on _CardBaseState {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Wrap(
-                spacing: 5.0,
-                runSpacing: 5.0,
-                children: [
-                      _news.tags.length > 0 && _news.tags[0] == _news.category
-                          ? Container()
-                          : _buildTag(_news.category, isCategory: true)
-                    ] +
-                    _news.tags
-                        .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
-                        .map((tag) => _buildTag(tag))
-                        .toList(),
+              SizedBox(
+                width: 200,
+                child: Wrap(
+                  spacing: 5.0,
+                  runSpacing: 5.0,
+                  children: [
+                        _news.tags.length > 0 && _news.tags[0] == _news.category
+                            ? Container()
+                            : _buildTag(_news.category, isCategory: true)
+                      ] +
+                      _news.tags
+                          .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
+                          .map((tag) => _buildTag(tag))
+                          .toList(),
+                ),
               ),
               Row(children: [
                 _buildIcon(

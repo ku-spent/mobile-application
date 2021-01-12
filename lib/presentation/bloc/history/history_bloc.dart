@@ -27,7 +27,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   }
 
   Stream<HistoryState> _mapHistoryLoadedState(FetchHistory event) async* {
-    yield HistoryLoading();
+    if (state is! HistoryLoaded) yield HistoryLoading();
     try {
       List<News> newsHistories = await _getViewNewsHistoryUseCase.call();
       yield HistoryLoaded(newsHistories);

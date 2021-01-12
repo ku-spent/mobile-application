@@ -46,6 +46,7 @@ import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
 import '../domain/use_case/send_event_view_news_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
+import '../presentation/bloc/suggest/suggest_bloc.dart';
 import '../presentation/bloc/user_event/user_event_bloc.dart';
 import '../data/repository/user_event_repository.dart';
 import '../data/repository/user_repository.dart';
@@ -127,6 +128,8 @@ GetIt $initGetIt(
       SaveUserViewNewsHistoryUseCase(
           get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
+  gh.factory<SuggestFeedBloc>(
+      () => SuggestFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<FeedBloc>(
       () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
 
