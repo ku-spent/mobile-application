@@ -18,65 +18,83 @@ packages:
   amplify_analytics_pinpoint:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_analytics_pinpoint"
-      relative: true
-    source: path
+      path: "packages/amplify_analytics_pinpoint"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_analytics_plugin_interface:
     dependency: transitive
     description:
-      path: "../amplify-flutter/packages/amplify_analytics_plugin_interface"
-      relative: true
-    source: path
+      path: "packages/amplify_analytics_plugin_interface"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_auth_cognito:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_auth_cognito"
-      relative: true
-    source: path
+      path: "packages/amplify_auth_cognito"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_auth_plugin_interface:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_auth_plugin_interface"
-      relative: true
-    source: path
+      path: "packages/amplify_auth_plugin_interface"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_core:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_core"
-      relative: true
-    source: path
+      path: "packages/amplify_core"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_core_plugin_interface:
     dependency: transitive
     description:
-      path: "../amplify-flutter/packages/amplify_core_plugin_interface"
-      relative: true
-    source: path
+      path: "packages/amplify_core_plugin_interface"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_datastore:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_datastore"
-      relative: true
-    source: path
+      path: "packages/amplify_datastore"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_datastore_plugin_interface:
     dependency: "direct main"
     description:
-      path: "../amplify-flutter/packages/amplify_datastore_plugin_interface"
-      relative: true
-    source: path
+      path: "packages/amplify_datastore_plugin_interface"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   amplify_storage_plugin_interface:
     dependency: transitive
     description:
-      path: "../amplify-flutter/packages/amplify_storage_plugin_interface"
-      relative: true
-    source: path
+      path: "packages/amplify_storage_plugin_interface"
+      ref: HEAD
+      resolved-ref: "5c14c2be1291a5baa89c54eed85a3c471710e820"
+      url: "https://github.com/ku-spent/amplify-flutter.git"
+    source: git
     version: "0.0.1-dev.4"
   analyzer:
     dependency: transitive
