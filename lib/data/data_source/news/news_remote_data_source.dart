@@ -14,7 +14,7 @@ class NewsRemoteDataSource implements NewsDataSource {
   Future<List<News>> getFeeds(int from, int size, String queryField, String query) async {
     try {
       final response = await _httpManager.get(
-        path: '/feed',
+        path: '/news',
         query: Map.from({
           'from': from.toString(),
           'size': size.toString(),
@@ -34,12 +34,8 @@ class NewsRemoteDataSource implements NewsDataSource {
 
   @override
   Future<News> getNewsById(String id) async {
-    // List<News> newsList = await Amplify.DataStore.query(
-    //   News.classType,
-    //   where: News.ID.eq(id),
-    // );
     final response = await _httpManager.get(
-      path: '/feed',
+      path: '/news',
       query: Map.from({
         'size': '1',
         'queryField': 'id',

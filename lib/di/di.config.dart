@@ -39,9 +39,9 @@ import '../domain/use_case/save_bookmark_use_case.dart';
 import '../presentation/bloc/save_history/save_history_bloc.dart';
 import '../domain/use_case/save_user_view_news_history_use_case.dart';
 import '../presentation/bloc/search/search_bloc.dart';
-import '../data/data_source/search_item/search_item_data_source.dart';
 import '../data/data_source/search_item/search_item_fuse.dart';
-import '../data/data_source/search_item/search_item_remote_data_source.dart';
+import '../data/data_source/search_item/search_local_data_source.dart';
+import '../data/data_source/search_item/search_remote_data_source.dart';
 import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
 import '../domain/use_case/send_event_view_news_use_case.dart';
@@ -82,6 +82,13 @@ GetIt $initGetIt(
   gh.factory<NewsRepository>(() =>
       NewsRepository(get<NewsRemoteDataSource>(), get<NewsLocalDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
+  gh.factory<SearchLocalDataSource>(
+      () => SearchLocalDataSource(get<SearchItemFuse>()));
+  gh.factory<SearchRemoteDataSource>(
+      () => SearchRemoteDataSource(get<AppHttpManager>()));
+  gh.factory<SearchRepository>(() => SearchRepository(
+      get<SearchRemoteDataSource>(), get<SearchLocalDataSource>()));
+  gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
   gh.factory<SendEventViewNewsUseCase>(() => SendEventViewNewsUseCase());
   gh.factory<UserEventRepository>(() => UserEventRepository());
   gh.factory<UserSignInWithAmplifyUseCase>(
@@ -93,11 +100,7 @@ GetIt $initGetIt(
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
       (pageController, _) =>
           NavigationBloc(pageController, get<AuthenticationBloc>()));
-  gh.factory<SearchItemDataSource>(
-      () => SearchRemoteDataSource(get<SearchItemFuse>()));
-  gh.factory<SearchRepository>(
-      () => SearchRepository(get<SearchItemDataSource>()));
-  gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
+  gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
   gh.factory<SigninBloc>(() => SigninBloc(
         get<AuthenticationBloc>(),
         get<UserSignInWithAmplifyUseCase>(),
@@ -127,7 +130,6 @@ GetIt $initGetIt(
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
       SaveUserViewNewsHistoryUseCase(
           get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
   gh.factory<SuggestFeedBloc>(
       () => SuggestFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<FeedBloc>(

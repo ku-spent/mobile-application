@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/search_item.dart';
+import 'package:spent/domain/model/search_result.dart';
 import 'package:spent/domain/use_case/search_use_case.dart';
 
 part 'search_event.dart';
@@ -32,7 +32,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapLoadResultsState(String query) async* {
-    yield SearchLoading(results: state.results);
+    yield SearchLoading(result: state.result);
     try {
       final results = await _searchUseCase.call(query);
       yield SearchLoaded(results, query);

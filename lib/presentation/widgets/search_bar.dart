@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/domain/model/search_item.dart';
-import 'package:spent/presentation/pages/query_page.dart';
-import 'package:spent/presentation/widgets/search_item_builder.dart';
+import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/search_item_Builder.dart';
+import 'package:spent/presentation/widgets/search_item_List.dart';
 
 typedef OnClickItem = void Function(BuildContext context, String source);
 
@@ -53,7 +55,7 @@ class _SearchBarState extends State<SearchBar> {
     ),
   ];
 
-  void _onClickCategoryItem(BuildContext context, String category) {
+  void _onClickCategoryItem(String category) {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
@@ -65,7 +67,7 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  void _onClickSourceItem(BuildContext context, String source) {
+  void _onClickSourceItem(String source) {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
@@ -75,21 +77,6 @@ class _SearchBarState extends State<SearchBar> {
 
   void _onQueryChanged(String query) {
     _searchBloc.add(SearchChange(query));
-  }
-
-  Widget _buildResults({List<SearchItem> results, String type}) {
-    final List<SearchItem> typeResults = results.where((item) => item.type == type).toList();
-    OnClickItem _onClick;
-
-    if (type == SearchItem.category)
-      _onClick = _onClickCategoryItem;
-    else if (type == SearchItem.source) _onClick = _onClickSourceItem;
-
-    return SearchItemBuilder(
-      results: typeResults,
-      title: type,
-      onClick: (String query) => _onClick(context, query),
-    );
   }
 
   @override
@@ -103,7 +90,7 @@ class _SearchBarState extends State<SearchBar> {
           controller: _controller,
           clearQueryOnClose: false,
           hintStyle: GoogleFonts.kanit(),
-          hint: 'ค้นหา แหล่งข่าว, ประเภทข่าว',
+          hint: 'ค้นหา ข่าว, แหล่งข่าว, ประเภทข่าว',
           iconColor: Colors.grey,
           color: Colors.white,
           colorOnScroll: Colors.white,
@@ -117,11 +104,36 @@ class _SearchBarState extends State<SearchBar> {
           onSubmitted: _onSumitted,
           body: ListView(
             children: [
-              _buildResults(results: state.results, type: SearchItem.source),
-              Container(
-                height: 16,
+              Padding(
+                padding: EdgeInsets.only(bottom: state.result.sources.length > 0 ? 16.0 : 0.0),
+                child: SearchItemList<SearchItem>(
+                  results: state.result.sources,
+                  title: SearchItem.source,
+                  itemBuilder: (result) => SearchItemBuilder(
+                    result: result,
+                    onClick: _onClickSourceItem,
+                  ),
+                ),
               ),
-              _buildResults(results: state.results, type: SearchItem.category),
+              Padding(
+                padding: EdgeInsets.only(bottom: state.result.categories.length > 0 ? 16.0 : 0.0),
+                child: SearchItemList<SearchItem>(
+                  results: state.result.categories,
+                  title: SearchItem.category,
+                  itemBuilder: (result) => SearchItemBuilder(
+                    result: result,
+                    onClick: _onClickCategoryItem,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 0.0),
+                child: SearchItemList<News>(
+                  results: state.result.news,
+                  title: SearchItem.news,
+                  itemBuilder: (result) => CardBase(news: result),
+                ),
+              ),
             ],
           ),
         );
