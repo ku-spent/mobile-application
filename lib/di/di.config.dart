@@ -7,11 +7,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/http_manager/app_http_manager.dart';
 import '../presentation/bloc/authentication/authentication_bloc.dart';
-import '../data/data_source/authentication/authentication_local_data_souce.dart';
 import '../data/data_source/authentication/authentication_remote_data_source.dart';
 import '../data/repository/authentication_repository.dart';
 import '../presentation/bloc/bookmark/bookmark_bloc.dart';
@@ -26,7 +24,6 @@ import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
 import '../presentation/bloc/like_news/like_news_bloc.dart';
 import '../domain/use_case/like_news_use_case.dart';
-import '../data/data_source/local_storage/local_storage.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
 import '../presentation/bloc/network/network_bloc.dart';
 import '../presentation/bloc/news/news_bloc.dart';
@@ -64,8 +61,6 @@ GetIt $initGetIt(
   EnvironmentFilter environmentFilter,
 }) {
   final gh = GetItHelper(get, environment, environmentFilter);
-  gh.factory<AuthenticationLocalDataSource>(
-      () => AuthenticationLocalDataSource());
   gh.factory<AuthenticationRemoteDataSource>(
       () => AuthenticationRemoteDataSource(get<AppHttpManager>()));
   gh.factory<GetCurrentUserUseCase>(
@@ -74,8 +69,6 @@ GetIt $initGetIt(
       () => IdentifyUserUseCase(get<AuthenticationRepository>()));
   gh.factory<InitialAuthenticationUseCase>(
       () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
-  gh.factoryParam<LocalStorage, SharedPreferences, dynamic>(
-      (_prefs, _) => LocalStorage(_prefs));
   gh.factory<NewsLocalDataSource>(() => NewsLocalDataSource());
   gh.factory<NewsRemoteDataSource>(
       () => NewsRemoteDataSource(get<AppHttpManager>()));

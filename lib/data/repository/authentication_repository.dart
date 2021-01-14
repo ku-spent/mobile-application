@@ -5,12 +5,9 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';
-import 'package:spent/data/data_source/local_storage/local_storage.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
-import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/token.dart';
 import 'package:spent/domain/model/User.dart';
 import 'package:spent/core/constants.dart';
@@ -86,9 +83,6 @@ class AuthenticationRepository {
 
   Future<void> _configureCognitoUser() async {
     _userPool = userPool;
-    final prefs = await SharedPreferences.getInstance();
-    final storage = getIt<LocalStorage>(param1: prefs);
-    _userPool.storage = storage;
 
     final CognitoAuthSession cognitoAuthSession = await Amplify.Auth.fetchAuthSession(
       options: CognitoSessionOptions(getAWSCredentials: true),
