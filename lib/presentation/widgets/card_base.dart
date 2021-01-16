@@ -124,6 +124,7 @@ class _CardBaseState extends State<CardBase> {
   Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive, Color activeColor}) {
     final _activeColor = activeColor != null ? activeColor : Theme.of(context).primaryColor;
     return IconButton(
+      splashColor: _activeColor.withOpacity(0.2),
       color: isActive ? _activeColor : Colors.grey,
       onPressed: onPressed,
       icon: isActive ? active : inActive,

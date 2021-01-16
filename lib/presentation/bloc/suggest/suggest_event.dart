@@ -8,33 +8,19 @@ abstract class SuggestFeedEvent extends Equatable {
 }
 
 class InitialSuggestFeed extends SuggestFeedEvent {
-  final String query;
-  final String queryField;
+  final News curNews;
 
-  const InitialSuggestFeed({@required this.query, @required this.queryField});
+  const InitialSuggestFeed({@required this.curNews});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [curNews];
 }
 
 class FetchSuggestFeed extends SuggestFeedEvent {
-  @override
-  List<Object> get props => [];
-}
+  final News curNews;
 
-class ClearSuggestFeed extends SuggestFeedEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class RefreshSuggestFeed extends SuggestFeedEvent {
-  final RefreshFeedCallback callback;
-  final String source;
-
-  const RefreshSuggestFeed({@required this.source, this.callback});
+  const FetchSuggestFeed({@required this.curNews});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [curNews];
 }
-
-typedef RefreshFeedCallback = void Function();

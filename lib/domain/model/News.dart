@@ -49,6 +49,8 @@ class News extends Model with EquatableMixin {
   final List<String> tags;
   @HiveField(11)
   final String rawHTMLContent;
+  @HiveField(12)
+  final String esId;
 
   bool isBookmarked = false;
   UserAction userAction = UserAction.NONE;
@@ -67,19 +69,21 @@ class News extends Model with EquatableMixin {
     return id;
   }
 
-  News._internal(
-      {@required this.id,
-      @required this.url,
-      @required this.title,
-      @required this.summary,
-      @required this.image,
-      @required this.source,
-      @required this.category,
-      @required this.pubDate,
-      @required this.createdAt,
-      @required this.updatedAt,
-      @required this.tags,
-      @required this.rawHTMLContent});
+  News._internal({
+    @required this.id,
+    @required this.url,
+    @required this.title,
+    @required this.summary,
+    @required this.image,
+    @required this.source,
+    @required this.category,
+    @required this.pubDate,
+    @required this.createdAt,
+    @required this.updatedAt,
+    @required this.tags,
+    @required this.rawHTMLContent,
+    @required this.esId,
+  });
 
   factory News(
       {@required String id,
@@ -93,7 +97,8 @@ class News extends Model with EquatableMixin {
       @required DateTime createdAt,
       @required DateTime updatedAt,
       List<String> tags = const [],
-      String rawHTMLContent = ''}) {
+      String rawHTMLContent = '',
+      @required String esId}) {
     return News._internal(
       id: id == null ? UUID.getUUID() : id,
       url: url,
@@ -107,6 +112,7 @@ class News extends Model with EquatableMixin {
       updatedAt: updatedAt,
       tags: tags,
       rawHTMLContent: rawHTMLContent,
+      esId: esId,
     );
   }
 
@@ -163,7 +169,10 @@ class News extends Model with EquatableMixin {
       @required String category,
       @required DateTime pubDate,
       @required DateTime createdAt,
-      @required DateTime updatedAt}) {
+      @required DateTime updatedAt,
+      List<String> tags = const [],
+      String rawHTMLContent = '',
+      @required String esId}) {
     return News(
         id: id ?? this.id,
         url: url ?? this.url,
@@ -174,10 +183,13 @@ class News extends Model with EquatableMixin {
         category: category ?? this.category,
         pubDate: pubDate ?? this.pubDate,
         createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
+        updatedAt: updatedAt ?? this.updatedAt,
+        tags: tags ?? this.tags,
+        rawHTMLContent: rawHTMLContent ?? this.rawHTMLContent,
+        esId: esId ?? this.esId);
   }
 
-  News.fromJson(Map<String, dynamic> json)
+  News.fromJson(Map<String, dynamic> json, {String esId})
       : id = json['id'],
         url = json['url'],
         title = json['title'],
@@ -189,7 +201,8 @@ class News extends Model with EquatableMixin {
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']),
         tags = json['tags'].cast<String>() ?? [],
-        rawHTMLContent = json['raw_html_content'] ?? '';
+        rawHTMLContent = json['raw_html_content'] ?? '',
+        esId = esId ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,

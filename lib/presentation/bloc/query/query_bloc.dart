@@ -31,12 +31,11 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
       query = event.query;
       queryField = event.queryField;
       yield* _mapInitialLoadedQueryFeedState();
+    } else if ((event is FetchQueryFeed && __hasMore(state))) {
+      yield* _mapLoadedQueryFeedState();
+    } else if (event is RefreshQueryFeed) {
+      yield* _mapRefreshLoadedQueryFeedState(event.callback);
     }
-    // else if ((event is FetchQueryFeed && __hasMore(state))) {
-    //   yield* _mapLoadedQueryFeedState();
-    // } else if (event is RefreshQueryFeed) {
-    //   yield* _mapRefreshLoadedQueryFeedState(event.callback);
-    // }
   }
 
   bool __hasMore(QueryFeedState state) => state is QueryFeedLoaded && state.hasMore;
@@ -57,39 +56,39 @@ class QueryFeedBloc extends Bloc<QueryFeedEvent, QueryFeedState> {
     }
   }
 
-  // Stream<QueryFeedState> _mapLoadedQueryFeedState() async* {
-  //   try {
-  //     final curState = state;
-  //     if (curState is QueryFeedLoaded) {
-  //       final feeds = await _getNewsFeedUseCase.call(
-  //         from: curState.feeds.length,
-  //         size: fetchSize,
-  //         query: query,
-  //         queryField: queryField,
-  //         isRemote: _networkBloc.isConnected,
-  //       );
-  //       yield feeds.isEmpty
-  //           ? curState.copyWith(hasMore: false)
-  //           : QueryFeedLoaded(feeds: curState.feeds + feeds, hasMore: true, query: query);
-  //     }
-  //   } catch (_) {
-  //     yield QueryFeedError();
-  //   }
-  // }
+  Stream<QueryFeedState> _mapLoadedQueryFeedState() async* {
+    try {
+      final curState = state;
+      if (curState is QueryFeedLoaded) {
+        final feeds = await _getNewsFeedUseCase.call(
+          from: curState.feeds.length,
+          size: fetchSize,
+          query: query,
+          queryField: queryField,
+          isRemote: _networkBloc.isConnected,
+        );
+        yield feeds.isEmpty
+            ? curState.copyWith(hasMore: false)
+            : QueryFeedLoaded(feeds: curState.feeds + feeds, hasMore: true, query: query);
+      }
+    } catch (_) {
+      yield QueryFeedError();
+    }
+  }
 
-  // Stream<QueryFeedState> _mapRefreshLoadedQueryFeedState(RefreshFeedCallback callback) async* {
-  //   try {
-  //     final curState = state;
-  //     if (curState is QueryFeedError) {
-  //       // yield QueryFeedLoading();
-  //     }
-  //     final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
-  //     yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
-  //     if (callback != null) callback();
-  //   } catch (_) {
-  //     yield QueryFeedError();
-  //   }
-  // }
+  Stream<QueryFeedState> _mapRefreshLoadedQueryFeedState(RefreshFeedCallback callback) async* {
+    try {
+      final curState = state;
+      if (curState is QueryFeedError) {
+        // yield QueryFeedLoading();
+      }
+      final feeds = await _getNewsFeedUseCase.call(from: 0, size: fetchSize, query: query, queryField: queryField);
+      yield QueryFeedLoaded(feeds: feeds, hasMore: true, query: query);
+      if (callback != null) callback();
+    } catch (_) {
+      yield QueryFeedError();
+    }
+  }
 
   @override
   Stream<Transition<QueryFeedEvent, QueryFeedState>> transformEvents(Stream<QueryFeedEvent> events, transitionFn) {

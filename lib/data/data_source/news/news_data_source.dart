@@ -8,6 +8,12 @@ abstract class NewsDataSource {
     String query,
   );
 
+  Future<List<News>> getSuggestionNews(
+    int from,
+    int size,
+    News curNews,
+  );
+
   Future<News> getNewsById(
     String id,
   );

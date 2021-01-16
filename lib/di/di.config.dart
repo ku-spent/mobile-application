@@ -17,6 +17,7 @@ import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_bookmark_use_case.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
+import '../domain/use_case/get_suggestion_use_case.dart';
 import '../domain/use_case/get_view_news_history_use_case.dart';
 import '../presentation/bloc/history/history_bloc.dart';
 import '../core/IPv6.dart';
@@ -109,6 +110,11 @@ GetIt $initGetIt(
         get<UserRepository>(),
         get<AuthenticationRepository>(),
       ));
+  gh.factory<GetSuggestionNewsUseCase>(() => GetSuggestionNewsUseCase(
+        get<NewsRepository>(),
+        get<UserRepository>(),
+        get<AuthenticationRepository>(),
+      ));
   gh.factory<GetViewNewsHistoryUseCase>(() => GetViewNewsHistoryUseCase(
         get<AuthenticationRepository>(),
         get<UserRepository>(),
@@ -123,8 +129,8 @@ GetIt $initGetIt(
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
       SaveUserViewNewsHistoryUseCase(
           get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<SuggestFeedBloc>(
-      () => SuggestFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
+  gh.factory<SuggestFeedBloc>(() =>
+      SuggestFeedBloc(get<GetSuggestionNewsUseCase>(), get<NetworkBloc>()));
   gh.factory<FeedBloc>(
       () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
 

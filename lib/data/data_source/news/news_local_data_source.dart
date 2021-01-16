@@ -8,6 +8,19 @@ class NewsLocalDataSource implements NewsDataSource {
   const NewsLocalDataSource();
 
   @override
+  Future<List<News>> getSuggestionNews(int from, int size, News curNews) async {
+    try {
+      final newsBox = await Hive.openBox<News>(News.boxName);
+      List<News> news =
+          newsBox.values.where((news) => news.toJson()['category'] == curNews.category).toList().reversed.toList();
+      return news;
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  @override
   Future<List<News>> getFeeds(int from, int size, String queryField, String query) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);

@@ -29,13 +29,14 @@ class NewsAdapter extends TypeAdapter<News> {
       updatedAt: fields[9] as DateTime,
       tags: (fields[10] as List)?.cast<String>(),
       rawHTMLContent: fields[11] as String,
+      esId: fields[12] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, News obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class NewsAdapter extends TypeAdapter<News> {
       ..writeByte(10)
       ..write(obj.tags)
       ..writeByte(11)
-      ..write(obj.rawHTMLContent);
+      ..write(obj.rawHTMLContent)
+      ..writeByte(12)
+      ..write(obj.esId);
   }
 
   @override

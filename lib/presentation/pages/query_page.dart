@@ -56,7 +56,6 @@ class _QueryPageState extends State<QueryPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final minScroll = _scrollController.position.minScrollExtent + _minScrollThreshold;
     final currentScroll = _scrollController.position.pixels;
-
     if (currentScroll > minScroll && _isShowFloatingAction == false) {
       setState(() {
         _isShowFloatingAction = true;

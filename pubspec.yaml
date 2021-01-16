@@ -63,6 +63,7 @@ dependencies:
   flutter_html: ^1.1.1
   flutter_signin_button: ^1.1.0
   flutter_svg: ^0.19.0
+  full_screen_image: ^1.0.2
   fuzzy: ^0.2.3
   get_it: ^5.0.1
   google_fonts: ^1.1.0
@@ -76,9 +77,9 @@ dependencies:
   json_serializable: ^3.5.0
   material_floating_search_bar: ^0.2.2
   path_provider: ^1.6.24
+  photo_view: ^0.10.3
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
-  # shared_preferences: ^0.5.4+3
   timeago: ^2.0.27
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7

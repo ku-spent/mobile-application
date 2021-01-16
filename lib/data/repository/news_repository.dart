@@ -10,6 +10,25 @@ class NewsRepository {
 
   const NewsRepository(this._newsRemoteDataSource, this._newsLocalDataSource);
 
+  Future<List<News>> getSuggestionNewsFromRemote(
+    int from,
+    int size,
+    News curNews,
+  ) async {
+    List<News> newsList = await _newsRemoteDataSource.getSuggestionNews(from, size, curNews);
+    await _newsLocalDataSource.cacheNews(newsList);
+    return newsList;
+  }
+
+  Future<List<News>> getSuggestionNewsFromLocal(
+    int from,
+    int size,
+    News curNews,
+  ) async {
+    final newsList = await _newsLocalDataSource.getSuggestionNews(from, size, curNews);
+    return newsList;
+  }
+
   Future<List<News>> getNewsFromRemote(
     int from,
     int size,

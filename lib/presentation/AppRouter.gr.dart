@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../domain/model/ModelProvider.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
+import 'pages/hero_photo_view_page.dart';
 import 'pages/history_page.dart';
 import 'pages/query_page.dart';
 import 'pages/search_page.dart';
@@ -29,6 +30,7 @@ class Routes {
   static const String searchPage = '/search';
   static const String viewUrl = '/news';
   static const String queryPage = '/query';
+  static const String heroPhotoViewPage = '/hero-photo';
   static const all = <String>{
     splashPage,
     appScreen,
@@ -38,6 +40,7 @@ class Routes {
     searchPage,
     viewUrl,
     queryPage,
+    heroPhotoViewPage,
   };
 }
 
@@ -53,6 +56,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.searchPage, page: SearchPage),
     RouteDef(Routes.viewUrl, page: ViewUrl),
     RouteDef(Routes.queryPage, page: QueryPage),
+    RouteDef(Routes.heroPhotoViewPage, page: HeroPhotoViewPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -131,6 +135,20 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
+    HeroPhotoViewPage: (data) {
+      final args = data.getArgs<HeroPhotoViewPageArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => HeroPhotoViewPage(
+          tag: args.tag,
+          imageProvider: args.imageProvider,
+          backgroundDecoration: args.backgroundDecoration,
+          minScale: args.minScale,
+          maxScale: args.maxScale,
+        ),
+        settings: data,
+        fullscreenDialog: true,
+      );
+    },
   };
 }
 
@@ -188,4 +206,19 @@ class QueryPageArguments {
       @required this.queryField,
       @required this.coverUrl,
       this.isShowTitle = false});
+}
+
+/// HeroPhotoViewPage arguments holder class
+class HeroPhotoViewPageArguments {
+  final String tag;
+  final ImageProvider<Object> imageProvider;
+  final Decoration backgroundDecoration;
+  final dynamic minScale;
+  final dynamic maxScale;
+  HeroPhotoViewPageArguments(
+      {@required this.tag,
+      @required this.imageProvider,
+      this.backgroundDecoration,
+      this.minScale,
+      this.maxScale});
 }

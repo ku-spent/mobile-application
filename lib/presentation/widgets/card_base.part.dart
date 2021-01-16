@@ -37,12 +37,6 @@ extension CardBaseMethod on _CardBaseState {
             ),
           ),
         ),
-        // _buildIcon(
-        //   isActive: _isBookmarked,
-        //   active: Icon(Icons.bookmark),
-        //   inActive: Icon(Icons.bookmark_outline),
-        //   onPressed: _onClickBookmark,
-        // ),
       ],
     );
   }
@@ -53,6 +47,7 @@ extension CardBaseMethod on _CardBaseState {
       onTap: () => isCategory ? _goToQueryCategoryPage() : goToQueryTagPage(tag),
       child: Text(
         tag,
+        overflow: TextOverflow.ellipsis,
         style: GoogleFonts.kanit(
           color: Theme.of(context).primaryColor,
         ),
@@ -62,45 +57,40 @@ extension CardBaseMethod on _CardBaseState {
 
   Widget _buildBottom() {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: Column(
+      padding: EdgeInsets.only(left: 8.0, right: 4.0, top: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 200,
-                child: Wrap(
-                  spacing: 5.0,
-                  runSpacing: 5.0,
-                  children: [
-                        _news.tags.length > 0 && _news.tags[0] == _news.category
-                            ? Container()
-                            : _buildTag(_news.category, isCategory: true)
-                      ] +
-                      _news.tags
-                          .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
-                          .map((tag) => _buildTag(tag))
-                          .toList(),
-                ),
-              ),
-              Row(children: [
-                _buildIcon(
-                  isActive: _userAction == UserAction.LIKE,
-                  active: Icon(Icons.favorite),
-                  inActive: Icon(Icons.favorite_outline),
-                  onPressed: _onClickLike,
-                  activeColor: Colors.red[400],
-                ),
-                _buildIcon(
-                  isActive: _isBookmarked,
-                  active: Icon(Icons.bookmark),
-                  inActive: Icon(Icons.bookmark_outline),
-                  onPressed: _onClickBookmark,
-                ),
-              ]),
-            ],
-          )
+          Flexible(
+            child: Wrap(
+              spacing: 5.0,
+              runSpacing: 5.0,
+              children: [
+                    _news.tags.length > 0 && _news.tags[0] == _news.category
+                        ? Container()
+                        : _buildTag(_news.category, isCategory: true)
+                  ] +
+                  _news.tags
+                      .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
+                      .map((tag) => _buildTag(tag))
+                      .toList(),
+            ),
+          ),
+          Row(children: [
+            _buildIcon(
+              isActive: _userAction == UserAction.LIKE,
+              active: Icon(Icons.favorite),
+              inActive: Icon(Icons.favorite_outline),
+              onPressed: _onClickLike,
+              activeColor: Colors.red[400],
+            ),
+            _buildIcon(
+              isActive: _isBookmarked,
+              active: Icon(Icons.bookmark),
+              inActive: Icon(Icons.bookmark_outline),
+              onPressed: _onClickBookmark,
+            ),
+          ]),
         ],
       ),
     );
@@ -137,17 +127,15 @@ extension CardBaseMethod on _CardBaseState {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                 ),
-                widget.showSummary
-                    ? SizedBox(
-                        height: 4,
-                      )
-                    : Container(),
-                widget.showSummary
-                    ? Text(
-                        _news.summary,
-                        style: Theme.of(context).textTheme.bodyText2,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                widget.showSummary && _news.summary.length > 0
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          _news.summary,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       )
                     : Container(),
               ],

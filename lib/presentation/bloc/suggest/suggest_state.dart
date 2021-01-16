@@ -20,22 +20,22 @@ class SuggestFeedLoading extends SuggestFeedState {
 class SuggestFeedLoaded extends SuggestFeedState {
   final List<News> feeds;
   final bool hasMore;
-  final String query;
+  final News curNews;
 
   const SuggestFeedLoaded({
     @required this.feeds,
     @required this.hasMore,
-    @required this.query,
+    @required this.curNews,
   });
 
   @override
-  List<Object> get props => [feeds, hasMore, query];
+  List<Object> get props => [feeds, hasMore, curNews];
 
   SuggestFeedLoaded copyWith({List<News> feeds, bool hasMore, String query}) {
     return SuggestFeedLoaded(
       feeds: feeds ?? this.feeds,
       hasMore: hasMore ?? this.hasMore,
-      query: query,
+      curNews: curNews,
     );
   }
 }

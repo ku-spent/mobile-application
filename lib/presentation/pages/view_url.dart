@@ -6,16 +6,18 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
-import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/bloc/suggest/suggest_bloc.dart';
+import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:badges/badges.dart';
 import 'package:spent/presentation/widgets/suggest_carousel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 
 class ViewUrl extends StatefulWidget {
   final News news;
@@ -36,12 +38,26 @@ class _ViewUrlState extends State<ViewUrl> {
     _news = widget.news;
   }
 
+  Widget _customImg(
+    BuildContext context,
+    Map<String, String> attributes,
+  ) {
+    final String url = attributes['src'];
+    final String tag = _news.id + url;
+    return HeroImageViewWidget(tag: tag, url: url);
+  }
+
   Widget _buildHTML(News news) {
+    final _imageRender = (ctx, parsedChild, attributes, _) => _customImg(context, attributes);
     return Html(
       data: news.rawHTMLContent,
+      customRender: Map.from({'img': _imageRender}),
       style: {
-        "html": Style(backgroundColor: _backgroundColor),
-        "a": Style(textDecoration: TextDecoration.none),
+        "html": Style(
+            backgroundColor: _backgroundColor,
+            fontFamily: GoogleFonts.sarabun().fontFamily,
+            margin: EdgeInsets.symmetric(horizontal: 8.0)),
+        "a": Style(textDecoration: TextDecoration.none, color: Colors.black87),
       },
     );
   }
@@ -91,14 +107,7 @@ class _ViewUrlState extends State<ViewUrl> {
           stretchModes: [
             StretchMode.zoomBackground,
           ],
-          background: CachedNetworkImage(
-            imageUrl: _news.image,
-            placeholder: (context, url) => Container(
-              color: Colors.black26,
-            ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            fit: BoxFit.cover,
-          ),
+          background: HeroImageViewWidget(tag: _news.id + 'cover', url: _news.image),
         ));
   }
 
@@ -159,42 +168,45 @@ class _ViewUrlState extends State<ViewUrl> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-      if (state is FeedLoaded)
-        return Scaffold(
-          backgroundColor: _backgroundColor,
-          extendBodyBehindAppBar: true,
-          body: CustomScrollView(
-            physics: BouncingScrollPhysics(),
-            slivers: [
-              _buildAppbar(),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Container(
-                  margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 16.0)),
-                      Container(height: 8.0),
-                      _buildSourceTitle(_news),
-                    ],
+    return BlocProvider<SuggestFeedBloc>(
+      lazy: false,
+      create: (BuildContext context) => getIt<SuggestFeedBloc>()..add(InitialSuggestFeed(curNews: _news)),
+      child: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
+        if (state is FeedLoaded)
+          return Scaffold(
+            backgroundColor: _backgroundColor,
+            extendBodyBehindAppBar: true,
+            body: CustomScrollView(
+              physics: BouncingScrollPhysics(),
+              slivers: [
+                _buildAppbar(),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  Container(
+                    margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                        Container(height: 8.0),
+                        _buildSourceTitle(_news),
+                      ],
+                    ),
                   ),
-                ),
-                Divider(),
-                Container(child: _buildHTML(_news)),
-                _buildBadge(),
-                Container(height: 8.0),
-                Divider(),
-                SuggestCarousel(
-                  category: _news.category,
-                  filterOutId: _news.id,
-                ),
-              ])),
-            ],
-          ),
-        );
-    });
+                  Divider(),
+                  Container(child: _buildHTML(_news)),
+                  _buildBadge(),
+                  Container(height: 8.0),
+                  Divider(),
+                  SuggestCarousel(
+                    curNews: _news,
+                  ),
+                ])),
+              ],
+            ),
+          );
+      }),
+    );
   }
 }
 
