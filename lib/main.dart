@@ -5,13 +5,11 @@ import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
-import 'package:spent/presentation/bloc/suggest/suggest_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 
 import 'package:spent/presentation/theme.dart';

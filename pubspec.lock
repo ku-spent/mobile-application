@@ -842,10 +842,12 @@ packages:
   photo_view:
     dependency: "direct main"
     description:
-      name: photo_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.3"
+      path: "."
+      ref: HEAD
+      resolved-ref: "29f9e1302b309bf13edbba30eb09a476089b769c"
+      url: "https://github.com/ku-spent/photo_view"
+    source: git
+    version: "0.9.2"
   platform:
     dependency: transitive
     description:

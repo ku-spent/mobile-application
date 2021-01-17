@@ -7,7 +7,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/keep_alive_page.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_swipe.dart';
 
 class HeroPhotoViewPage extends StatelessWidget {
   final ImageProvider imageProvider;
@@ -17,29 +18,32 @@ class HeroPhotoViewPage extends StatelessWidget {
     this.maxScale,
   });
 
+  static PhotoViewScaleState scaleStateCycle(PhotoViewScaleState actual) {
+    switch (actual) {
+      case PhotoViewScaleState.initial:
+        return PhotoViewScaleState.covering;
+      case PhotoViewScaleState.covering:
+        return PhotoViewScaleState.initial;
+      case PhotoViewScaleState.zoomedIn:
+      case PhotoViewScaleState.zoomedOut:
+        return PhotoViewScaleState.initial;
+      default:
+        return PhotoViewScaleState.initial;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return
-        // Dismissible(
-        //   direction: DismissDirection.vertical,
-        //   key: Key(tag),
-        //   onDismissed: (_) => ExtendedNavigator.of(context).pop(),
-        //   child:
-        Container(
-      constraints: BoxConstraints.expand(
-        height: MediaQuery.of(context).size.height,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: PhotoViewSwipe(
+        scaleStateCycle: scaleStateCycle,
+        imageProvider: imageProvider,
+        backgroundDecoration: backgroundDecoration,
+        minScale: PhotoViewComputedScale.contained,
+        maxScale: PhotoViewComputedScale.covered,
+        heroAttributes: PhotoViewHeroAttributes(tag: tag),
       ),
-      child: PhotoViewGestureDetectorScope(
-        axis: Axis.vertical,
-        child: PhotoView(
-          imageProvider: imageProvider,
-          backgroundDecoration: backgroundDecoration,
-          minScale: PhotoViewComputedScale.contained,
-          maxScale: 1.3,
-          heroAttributes: PhotoViewHeroAttributes(tag: tag),
-        ),
-      ),
-      // ),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:full_screen_image/full_screen_image.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:spent/presentation/pages/hero_photo_view_page.dart';
 
 class HeroImageViewWidget extends StatelessWidget {
   final String tag;
@@ -11,29 +10,30 @@ class HeroImageViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FullScreenWidget(
-      child: Center(
-        child: Hero(
-          tag: tag,
-          child:
-              // Container(
-              //   constraints: BoxConstraints(minHeight: 200.0, maxWidth: MediaQuery.of(context).size.width),
-              //   // color: Colors.grey.withOpacity(0.5),
-              //   // height: 350.0,
-              //   // width: MediaQuery.of(context).size.width,
-              //   child: PhotoView(
-              //     minScale: PhotoViewComputedScale.contained,
-              //     maxScale: 1.8,
-              //     imageProvider: CachedNetworkImageProvider(url),
-              //   ),
-              // )
-              CachedNetworkImage(
-            imageUrl: url,
-            placeholder: (context, url) => Container(
-              color: Colors.black26,
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (_, __, ___) => HeroPhotoViewPage(
+                tag: tag,
+                imageProvider: CachedNetworkImageProvider(url),
+              ),
             ),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            fit: BoxFit.cover,
+          );
+        },
+        child: Container(
+          child: Hero(
+            tag: tag,
+            child: CachedNetworkImage(
+              imageUrl: url,
+              placeholder: (context, url) => Container(
+                color: Colors.black26,
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),

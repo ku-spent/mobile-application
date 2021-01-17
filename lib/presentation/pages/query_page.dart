@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
+import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/pages/home_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class QueryPage extends StatefulWidget {
@@ -27,7 +28,9 @@ class QueryPage extends StatefulWidget {
 
 class _QueryPageState extends State<QueryPage> {
   final ScrollController scrollController = ScrollController();
-  final _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
+  final String _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
+  String _heroTag;
+
   QueryFeedBloc _sourceBloc;
   ScrollController _scrollController;
   bool _isShowFloatingAction = false;
@@ -46,6 +49,7 @@ class _QueryPageState extends State<QueryPage> {
     super.initState();
     _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
+    _heroTag = widget.coverUrl + 'cover' + getRandomString(10);
     Future.delayed(Duration.zero, () {
       _sourceBloc = BlocProvider.of<QueryFeedBloc>(context);
       _sourceBloc.add(InitialQueryFeed(query: widget.query, queryField: widget.queryField));
@@ -139,14 +143,7 @@ class _QueryPageState extends State<QueryPage> {
                     stretchModes: [
                       StretchMode.zoomBackground,
                     ],
-                    background: CachedNetworkImage(
-                      imageUrl: widget.coverUrl,
-                      placeholder: (context, url) => Container(
-                        color: Colors.black26,
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fit: BoxFit.cover,
-                    ),
+                    background: HeroImageViewWidget(tag: _heroTag, url: widget.coverUrl),
                   )),
               state.feeds.isEmpty
                   ? SliverFillRemaining(
