@@ -25,20 +25,18 @@ class HeroPhotoViewPage extends StatelessWidget {
         //   key: Key(tag),
         //   onDismissed: (_) => ExtendedNavigator.of(context).pop(),
         //   child:
-        Scaffold(
-      body: Container(
-        constraints: BoxConstraints.expand(
-          height: MediaQuery.of(context).size.height,
-        ),
-        child: PhotoViewGestureDetectorScope(
-          axis: Axis.vertical,
-          child: PhotoView(
-            imageProvider: imageProvider,
-            backgroundDecoration: backgroundDecoration,
-            minScale: PhotoViewComputedScale.contained,
-            maxScale: 1.3,
-            heroAttributes: PhotoViewHeroAttributes(tag: tag),
-          ),
+        Container(
+      constraints: BoxConstraints.expand(
+        height: MediaQuery.of(context).size.height,
+      ),
+      child: PhotoViewGestureDetectorScope(
+        axis: Axis.vertical,
+        child: PhotoView(
+          imageProvider: imageProvider,
+          backgroundDecoration: backgroundDecoration,
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: 1.3,
+          heroAttributes: PhotoViewHeroAttributes(tag: tag),
         ),
       ),
       // ),

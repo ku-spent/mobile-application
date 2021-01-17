@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:full_screen_image/full_screen_image.dart';
+import 'package:photo_view/photo_view.dart';
 
 class HeroImageViewWidget extends StatelessWidget {
   final String tag;
@@ -14,7 +15,19 @@ class HeroImageViewWidget extends StatelessWidget {
       child: Center(
         child: Hero(
           tag: tag,
-          child: CachedNetworkImage(
+          child:
+              // Container(
+              //   constraints: BoxConstraints(minHeight: 200.0, maxWidth: MediaQuery.of(context).size.width),
+              //   // color: Colors.grey.withOpacity(0.5),
+              //   // height: 350.0,
+              //   // width: MediaQuery.of(context).size.width,
+              //   child: PhotoView(
+              //     minScale: PhotoViewComputedScale.contained,
+              //     maxScale: 1.8,
+              //     imageProvider: CachedNetworkImageProvider(url),
+              //   ),
+              // )
+              CachedNetworkImage(
             imageUrl: url,
             placeholder: (context, url) => Container(
               color: Colors.black26,
