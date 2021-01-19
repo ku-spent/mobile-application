@@ -42,7 +42,7 @@ class _ViewUrlState extends State<ViewUrl> {
   ) {
     final String url = attributes['src'];
     final String tag = _news.id + url;
-    return HeroImageViewWidget(tag: tag, url: url);
+    return Center(child: HeroImageViewWidget(tag: tag, url: url));
   }
 
   Widget _buildHTML(News news) {

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share/share.dart';
 
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -107,6 +108,11 @@ class _CardBaseState extends State<CardBase> {
 
   void _onClickBookmark() {
     _saveBookmarkBloc.add(SaveBookmark(news: _news));
+  }
+
+  void _onClickShare() async {
+    final RenderBox box = context.findRenderObject();
+    await Share.share(_news.url, subject: _news.title, sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 
   void _setUserAction(UserAction userAction) {

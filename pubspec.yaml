@@ -47,6 +47,8 @@ dependencies:
     git:
       url: https://github.com/ku-spent/amplify-flutter.git
       path: packages/amplify_datastore_plugin_interface
+  photo_view:
+    git: https://github.com/ku-spent/photo_view
   amazon_cognito_identity_dart_2: ^0.1.18
   animated_icon_button: ^0.3.0
   animated_splash: ^1.0.0
@@ -77,10 +79,9 @@ dependencies:
   json_serializable: ^3.5.0
   material_floating_search_bar: ^0.2.2
   path_provider: ^1.6.24
-  photo_view:
-    git: https://github.com/ku-spent/photo_view
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
+  share: ^0.6.5+4
   timeago: ^2.0.27
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7

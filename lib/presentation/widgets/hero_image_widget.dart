@@ -10,31 +10,27 @@ class HeroImageViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-            PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (_, __, ___) => HeroPhotoViewPage(
-                tag: tag,
-                imageProvider: CachedNetworkImageProvider(url),
-              ),
-            ),
-          );
-        },
-        child: Container(
-          child: Hero(
-            tag: tag,
-            child: CachedNetworkImage(
-              imageUrl: url,
-              placeholder: (context, url) => Container(
-                color: Colors.black26,
-              ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (_, __, ___) => HeroPhotoViewPage(
+              tag: tag,
+              imageProvider: CachedNetworkImageProvider(url),
             ),
           ),
+        );
+      },
+      child: Hero(
+        tag: tag,
+        child: CachedNetworkImage(
+          imageUrl: url,
+          placeholder: (context, url) => Container(
+            color: Colors.black26,
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          fit: BoxFit.cover,
         ),
       ),
     );

@@ -90,6 +90,12 @@ extension CardBaseMethod on _CardBaseState {
               inActive: Icon(Icons.bookmark_outline),
               onPressed: _onClickBookmark,
             ),
+            _buildIcon(
+              isActive: false,
+              active: Icon(Icons.share),
+              inActive: Icon(Icons.share),
+              onPressed: _onClickShare,
+            ),
           ]),
         ],
       ),
