@@ -1,3 +1,5 @@
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
@@ -32,6 +34,24 @@ class NewsRemoteDataSource implements NewsDataSource {
 
   @override
   Future<List<News>> getFeeds(int from, int size, String queryField, String query) async {
+    try {
+      RestOptions options = RestOptions(
+        path: "/news",
+        queryParameters: Map.from({
+          'from': from.toString(),
+          'size': size.toString(),
+          'queryField': queryField,
+          'query': query,
+        }),
+      );
+      RestOperation restOperation = Amplify.API.get(restOptions: options);
+      RestResponse response = await restOperation.response;
+      print(response);
+      print("GET call succeeded");
+    } catch (error) {
+      print("GET call failed: $error");
+    }
+
     try {
       final response = await _httpManager.get(
         path: '/news',

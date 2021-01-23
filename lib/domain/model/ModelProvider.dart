@@ -32,14 +32,42 @@ class ModelProvider implements ModelProviderInterface {
   @override
   String version = "8895a2a1631fee4b81fa047ed1cc5f2a";
   @override
-  List<ModelSchema> modelSchemas = [
-    Bookmark.schema,
-    History.schema,
-    News.schema,
-    User.schema,
-    UserNewsAction.schema
-  ];
+  List<ModelSchema> modelSchemas = [Bookmark.schema, History.schema, News.schema, User.schema, UserNewsAction.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
+
+  ModelType getModelTypeByModelName(String modelName) {
+    switch (modelName) {
+      case "Bookmark":
+        {
+          return Bookmark.classType;
+        }
+        break;
+      case "History":
+        {
+          return History.classType;
+        }
+        break;
+      case "News":
+        {
+          return News.classType;
+        }
+        break;
+      case "User":
+        {
+          return User.classType;
+        }
+        break;
+      case "UserNewsAction":
+        {
+          return UserNewsAction.classType;
+        }
+        break;
+      default:
+        {
+          throw Exception("Failed to find model in model provider.");
+        }
+    }
+  }
 }

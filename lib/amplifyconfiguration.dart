@@ -95,15 +95,14 @@ const amplifyconfig = ''' {
                     "region": "ap-southeast-1",
                     "authorizationType": "AMAZON_COGNITO_USER_POOLS",
                     "apiKey": "da2-anlzulk3rzaihlawdcmf7pzuge"
-                }
-            },
-            "awsRestAPI": {
+                },
+                "awsRestAPI": {
                     "endpointType": "REST",
                     "endpoint": "https://q1efoi7143.execute-api.ap-southeast-1.amazonaws.com/dev",
                     "region": "ap-southeast-1",
-                    "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-                    ...
+                    "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
+            }
         }
     }
 }''';

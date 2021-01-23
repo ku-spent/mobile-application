@@ -12,8 +12,9 @@ class UserSignInWithAmplifyUseCase {
 
   Future<User> call() async {
     try {
-      final isSuccess = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
-      if (!isSuccess.isSignedIn)
+      SignInResult result = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
+      print(result);
+      if (!result.isSignedIn)
         return null;
       else {
         await _authenticationRepository.initCognito();

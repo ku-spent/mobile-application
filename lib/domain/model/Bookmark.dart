@@ -81,11 +81,8 @@ class Bookmark extends Model {
     buffer.write("id=" + id + ", ");
     buffer.write("userId=" + userId + ", ");
     buffer.write("newsId=" + newsId + ", ");
-    buffer.write("createdAt=" +
-        (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
-        ", ");
-    buffer.write("updatedAt=" +
-        (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
+    buffer.write("createdAt=" + (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") + ", ");
+    buffer.write("updatedAt=" + (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
     buffer.write("}");
 
     return buffer.toString();
@@ -125,8 +122,7 @@ class Bookmark extends Model {
   static final QueryField NEWSID = QueryField(fieldName: "newsId");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
-  static var schema =
-      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Bookmark";
     modelSchemaDefinition.pluralName = "Bookmarks";
 
@@ -135,35 +131,22 @@ class Bookmark extends Model {
           authStrategy: AuthStrategy.OWNER,
           ownerField: "owner",
           identityClaim: "cognito:username",
-          operations: [
-            ModelOperation.CREATE,
-            ModelOperation.UPDATE,
-            ModelOperation.DELETE,
-            ModelOperation.READ
-          ])
+          operations: [ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ])
     ];
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: Bookmark.USERID,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: Bookmark.USERID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: Bookmark.NEWSID,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: Bookmark.NEWSID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: Bookmark.CREATEDAT,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: Bookmark.CREATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: Bookmark.UPDATEDAT,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: Bookmark.UPDATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
   });
 }
 

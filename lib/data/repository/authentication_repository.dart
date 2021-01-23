@@ -47,35 +47,15 @@ class AuthenticationRepository {
 
   Future<void> _configureAmplify() async {
     // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
+    AmplifyAPI api = AmplifyAPI();
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
     AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
-    AmplifyAPI api = AmplifyAPI();
-    Amplify.addPlugins([authPlugin, analyticsPlugin, datastorePlugin, api]);
 
-    Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
-      switch (hubEvent["eventName"]) {
-        case "SIGNED_IN":
-          {
-            print("USER IS SIGNED IN");
-          }
-          break;
-        case "SIGNED_OUT":
-          {
-            Amplify.DataStore.clear();
-            print("USER IS SIGNED OUT");
-          }
-          break;
-        case "SESSION_EXPIRED":
-          {
-            print("USER IS SIGNED IN");
-          }
-          break;
-      }
-    });
+    await Amplify.addPlugins([authPlugin, analyticsPlugin, datastorePlugin, api]);
 
     await Amplify.configure(amplifyconfig);
-    // Amplify.DataStore.clear();
+
     _amplifyConfigured = true;
     print('configured amplify');
   }
@@ -204,6 +184,7 @@ class AuthenticationRepository {
     final userBox = await Hive.openBox(userBoxName);
     await userBox.put(isLoginKey, false);
     _session.invalidateToken();
+    await Amplify.DataStore.clear();
     await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
   }
 
