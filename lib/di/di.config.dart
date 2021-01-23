@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter/widgets.dart';
 
+import '../data/http_manager/amplify_http_manager.dart';
 import '../data/http_manager/app_http_manager.dart';
 import '../presentation/bloc/authentication/authentication_bloc.dart';
 import '../data/data_source/authentication/authentication_remote_data_source.dart';
@@ -62,6 +63,7 @@ GetIt $initGetIt(
   EnvironmentFilter environmentFilter,
 }) {
   final gh = GetItHelper(get, environment, environmentFilter);
+  gh.factory<AmplifyHttpManager>(() => AmplifyHttpManager());
   gh.factory<AuthenticationRemoteDataSource>(
       () => AuthenticationRemoteDataSource(get<AppHttpManager>()));
   gh.factory<GetCurrentUserUseCase>(
@@ -72,14 +74,14 @@ GetIt $initGetIt(
       () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
   gh.factory<NewsLocalDataSource>(() => NewsLocalDataSource());
   gh.factory<NewsRemoteDataSource>(
-      () => NewsRemoteDataSource(get<AppHttpManager>()));
+      () => NewsRemoteDataSource(get<AmplifyHttpManager>()));
   gh.factory<NewsRepository>(() =>
       NewsRepository(get<NewsRemoteDataSource>(), get<NewsLocalDataSource>()));
   gh.factory<SearchItemFuse>(() => SearchItemFuse());
   gh.factory<SearchLocalDataSource>(
       () => SearchLocalDataSource(get<SearchItemFuse>()));
   gh.factory<SearchRemoteDataSource>(
-      () => SearchRemoteDataSource(get<AppHttpManager>()));
+      () => SearchRemoteDataSource(get<AmplifyHttpManager>()));
   gh.factory<SearchRepository>(() => SearchRepository(
       get<SearchRemoteDataSource>(), get<SearchLocalDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
