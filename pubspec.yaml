@@ -23,10 +23,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  amplify_flutter:
+    git:
+      url: https://github.com/ku-spent/amplify-flutter.git
+      path: packages/amplify_flutter
+  amplify_core:
+    git:
+      url: https://github.com/ku-spent/amplify-flutter.git
+      path: packages/amplify_core
   amplify_analytics_pinpoint:
     git:
       url: https://github.com/ku-spent/amplify-flutter.git
       path: packages/amplify_analytics_pinpoint
+  amplify_analytics_plugin_interface:
+    git:
+      url: https://github.com/ku-spent/amplify-flutter.git
+      path: packages/amplify_analytics_plugin_interface
+  amplify_api:
+    git:
+      url: https://github.com/ku-spent/amplify-flutter.git
+      path: packages/amplify_api
+  amplify_api_plugin_interface:
+    git:
+      url: https://github.com/ku-spent/amplify-flutter.git
+      path: packages/amplify_api_plugin_interface
   amplify_auth_cognito:
     git:
       url: https://github.com/ku-spent/amplify-flutter.git
@@ -35,10 +55,6 @@ dependencies:
     git:
       url: https://github.com/ku-spent/amplify-flutter.git
       path: packages/amplify_auth_plugin_interface
-  amplify_core:
-    git:
-      url: https://github.com/ku-spent/amplify-flutter.git
-      path: packages/amplify_core
   amplify_datastore:
     git:
       url: https://github.com/ku-spent/amplify-flutter.git

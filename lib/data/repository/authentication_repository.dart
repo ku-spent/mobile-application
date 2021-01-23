@@ -1,10 +1,12 @@
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
 import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+
 import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';
 import 'package:spent/data/http_manager/app_http_manager.dart';
@@ -25,7 +27,7 @@ class AuthenticationRepository {
   final AppHttpManager _httpManager;
 
   bool _amplifyConfigured = false;
-  Amplify amplifyInstance = Amplify();
+  // AmplifyClass amplifyInstance = Amplify;
 
   CognitoUserPool _userPool;
   CognitoUser _cognitoUser;
@@ -48,13 +50,10 @@ class AuthenticationRepository {
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
     AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
     AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
-    amplifyInstance.addPlugin(
-      authPlugins: [authPlugin],
-      analyticsPlugins: [analyticsPlugin],
-      dataStorePlugins: [datastorePlugin],
-    );
+    AmplifyAPI api = AmplifyAPI();
+    Amplify.addPlugins([authPlugin, analyticsPlugin, datastorePlugin, api]);
 
-    authPlugin.events.listenToAuth((hubEvent) {
+    Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
       switch (hubEvent["eventName"]) {
         case "SIGNED_IN":
           {
@@ -75,7 +74,7 @@ class AuthenticationRepository {
       }
     });
 
-    amplifyInstance.configure(amplifyconfig);
+    await Amplify.configure(amplifyconfig);
     // Amplify.DataStore.clear();
     _amplifyConfigured = true;
     print('configured amplify');

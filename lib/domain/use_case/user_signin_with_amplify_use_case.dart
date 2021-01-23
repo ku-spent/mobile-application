@@ -1,5 +1,5 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
 import 'package:spent/domain/model/User.dart';
@@ -13,7 +13,7 @@ class UserSignInWithAmplifyUseCase {
   Future<User> call() async {
     try {
       final isSuccess = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
-      if (!isSuccess)
+      if (!isSuccess.isSignedIn)
         return null;
       else {
         await _authenticationRepository.initCognito();

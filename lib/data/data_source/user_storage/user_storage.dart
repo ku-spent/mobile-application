@@ -1,5 +1,5 @@
-import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
