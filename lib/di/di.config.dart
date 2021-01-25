@@ -43,7 +43,12 @@ import '../data/data_source/search_item/search_local_data_source.dart';
 import '../data/data_source/search_item/search_remote_data_source.dart';
 import '../data/repository/search_repository.dart';
 import '../domain/use_case/search_use_case.dart';
-import '../domain/use_case/send_event_view_news_use_case.dart';
+import '../domain/use_case/event/send_event_bookmark_news_use_case.dart';
+import '../domain/use_case/event/send_event_like_news_use_case.dart';
+import '../domain/use_case/event/send_event_share_news_use_case.dart';
+import '../domain/use_case/event/send_event_view_news_use_case.dart';
+import '../presentation/bloc/share_news/share_news_bloc.dart';
+import '../domain/use_case/share_news_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
 import '../presentation/bloc/suggest/suggest_bloc.dart';
 import '../presentation/bloc/user_event/user_event_bloc.dart';
@@ -85,7 +90,18 @@ GetIt $initGetIt(
   gh.factory<SearchRepository>(() => SearchRepository(
       get<SearchRemoteDataSource>(), get<SearchLocalDataSource>()));
   gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
+  gh.factory<SendEventBookmarkNewsUseCase>(
+      () => SendEventBookmarkNewsUseCase());
+  gh.factory<SendEventLikeNewsUseCase>(() => SendEventLikeNewsUseCase());
+  gh.factory<SendEventShareNewsUseCase>(() => SendEventShareNewsUseCase());
   gh.factory<SendEventViewNewsUseCase>(() => SendEventViewNewsUseCase());
+  gh.factory<ShareNewsUseCase>(() => ShareNewsUseCase());
+  gh.factory<UserEventBloc>(() => UserEventBloc(
+        get<SendEventViewNewsUseCase>(),
+        get<SendEventBookmarkNewsUseCase>(),
+        get<SendEventLikeNewsUseCase>(),
+        get<SendEventShareNewsUseCase>(),
+      ));
   gh.factory<UserEventRepository>(() => UserEventRepository());
   gh.factory<UserSignInWithAmplifyUseCase>(
       () => UserSignInWithAmplifyUseCase(get<AuthenticationRepository>()));
@@ -149,15 +165,17 @@ GetIt $initGetIt(
     get<InitialAuthenticationUseCase>(),
     get<IdentifyUserUseCase>(),
   ));
+  gh.singleton<ShareNewsBloc>(
+      ShareNewsBloc(get<ShareNewsUseCase>(), get<UserEventBloc>()));
   gh.singleton<UserRepository>(UserRepository(get<UserStorage>()));
   gh.singleton<HistoryBloc>(HistoryBloc(get<GetViewNewsHistoryUseCase>()));
   gh.singleton<BookmarkBloc>(BookmarkBloc(get<GetBookmarkUseCase>()));
-  gh.singleton<LikeNewsBloc>(LikeNewsBloc(get<LikeNewsUseCase>()));
-  gh.singleton<SaveBookmarkBloc>(SaveBookmarkBloc(get<SaveBookmarkUseCase>()));
-  gh.singleton<SaveHistoryBloc>(
-      SaveHistoryBloc(get<SaveUserViewNewsHistoryUseCase>()));
-  gh.singleton<UserEventBloc>(
-      UserEventBloc(get<SendEventViewNewsUseCase>(), get<SaveHistoryBloc>()));
+  gh.singleton<LikeNewsBloc>(
+      LikeNewsBloc(get<LikeNewsUseCase>(), get<UserEventBloc>()));
+  gh.singleton<SaveBookmarkBloc>(
+      SaveBookmarkBloc(get<SaveBookmarkUseCase>(), get<UserEventBloc>()));
+  gh.singleton<SaveHistoryBloc>(SaveHistoryBloc(
+      get<SaveUserViewNewsHistoryUseCase>(), get<UserEventBloc>()));
   gh.singleton<NewsBloc>(NewsBloc(
     get<SaveBookmarkBloc>(),
     get<SaveHistoryBloc>(),

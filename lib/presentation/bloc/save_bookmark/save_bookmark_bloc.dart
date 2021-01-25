@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/use_case/save_bookmark_use_case.dart';
+import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 
 part 'save_bookmark_event.dart';
 part 'save_bookmark_state.dart';
@@ -13,8 +14,9 @@ part 'save_bookmark_state.dart';
 @singleton
 class SaveBookmarkBloc extends Bloc<SaveBookmarkEvent, SaveBookmarkState> {
   final SaveBookmarkUseCase _saveBookmarkUseCase;
+  final UserEventBloc _userEventBloc;
 
-  SaveBookmarkBloc(this._saveBookmarkUseCase) : super(SaveBookmarkInitial());
+  SaveBookmarkBloc(this._saveBookmarkUseCase, this._userEventBloc) : super(SaveBookmarkInitial());
 
   @override
   Stream<SaveBookmarkState> mapEventToState(
@@ -29,6 +31,7 @@ class SaveBookmarkBloc extends Bloc<SaveBookmarkEvent, SaveBookmarkState> {
     yield SaveBookmarkLoading();
     try {
       SaveBookmarkResult result = await _saveBookmarkUseCase.call(event.news);
+      _userEventBloc.add(SendBookmarkNewsEvent(news: event.news));
       yield SaveBookmarkSuccess(event.news, result);
     } catch (e) {
       print(e);

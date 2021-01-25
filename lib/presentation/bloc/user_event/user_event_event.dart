@@ -7,19 +7,37 @@ abstract class UserEventEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ReadNewsEvent extends UserEventEvent {
+class SendViewNewsEvent extends UserEventEvent {
   final News news;
 
-  const ReadNewsEvent({@required this.news});
+  const SendViewNewsEvent({@required this.news});
 
   @override
   List<Object> get props => [news];
 }
 
-class SaveBookmarkEvent extends UserEventEvent {
+class SendLikeNewsEvent extends UserEventEvent {
   final News news;
 
-  const SaveBookmarkEvent({@required this.news});
+  const SendLikeNewsEvent({@required this.news});
+
+  @override
+  List<Object> get props => [news];
+}
+
+class SendShareNewsEvent extends UserEventEvent {
+  final News news;
+
+  const SendShareNewsEvent({@required this.news});
+
+  @override
+  List<Object> get props => [news];
+}
+
+class SendBookmarkNewsEvent extends UserEventEvent {
+  final News news;
+
+  const SendBookmarkNewsEvent({@required this.news});
 
   @override
   List<Object> get props => [news];

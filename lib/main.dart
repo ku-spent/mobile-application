@@ -10,6 +10,7 @@ import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 
 import 'package:spent/presentation/theme.dart';
@@ -79,6 +80,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<LikeNewsBloc>(
           create: (BuildContext context) => getIt<LikeNewsBloc>(),
+        ),
+        BlocProvider<ShareNewsBloc>(
+          create: (BuildContext context) => getIt<ShareNewsBloc>(),
         ),
       ],
       child: MaterialApp(

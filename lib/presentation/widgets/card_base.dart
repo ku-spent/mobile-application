@@ -11,6 +11,8 @@ import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
+import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
@@ -43,16 +45,19 @@ class _CardBaseState extends State<CardBase> {
   News _news;
   bool _isBookmarked;
   UserAction _userAction;
-  UserEventBloc _userEventBloc;
-  SaveBookmarkBloc _saveBookmarkBloc;
+
   LikeNewsBloc _likeNewsBloc;
+  ShareNewsBloc _shareNewsBloc;
+  SaveHistoryBloc _saveHistoryBloc;
+  SaveBookmarkBloc _saveBookmarkBloc;
 
   @override
   void initState() {
     super.initState();
-    _userEventBloc = BlocProvider.of<UserEventBloc>(context);
-    _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
     _likeNewsBloc = BlocProvider.of<LikeNewsBloc>(context);
+    _shareNewsBloc = BlocProvider.of<ShareNewsBloc>(context);
+    _saveHistoryBloc = BlocProvider.of<SaveHistoryBloc>(context);
+    _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
     _news = widget.news;
     _isBookmarked = _news.isBookmarked;
     _userAction = _news.userAction;
@@ -60,7 +65,7 @@ class _CardBaseState extends State<CardBase> {
 
   void _goToLink(BuildContext context) async {
     ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
-    _userEventBloc.add(ReadNewsEvent(news: _news));
+    _saveHistoryBloc.add(SaveHistory(news: _news));
   }
 
   void _goToQuerySourcePage() {
@@ -155,7 +160,8 @@ class _CardBaseState extends State<CardBase> {
             _setUserAction(state.result.userAction);
           }
         }),
-        BlocListener<UserEventBloc, UserEventState>(listener: (context, state) {}),
+        BlocListener<SaveHistoryBloc, SaveHistoryState>(listener: (context, state) {}),
+        BlocListener<ShareNewsBloc, ShareNewsState>(listener: (context, state) {}),
       ],
       child: Container(
         margin: EdgeInsets.only(bottom: 16.0),
