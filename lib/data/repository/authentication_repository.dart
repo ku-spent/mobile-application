@@ -6,6 +6,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';
@@ -152,11 +153,6 @@ class AuthenticationRepository {
     return token;
   }
 
-  // Future<User> getUserFromSession() async {
-  //   final user = await _getUserFromCognitoUser(_cognitoUser);
-  //   return user;
-  // }
-
   Future<void> setUserSessionFromToken(Token token) async {
     final idToken = CognitoIdToken(token.idToken);
     final accessToken = CognitoAccessToken(token.accessToken);
@@ -187,30 +183,4 @@ class AuthenticationRepository {
     await Amplify.DataStore.clear();
     await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
   }
-
-  // Future<User> _getUserFromCognitoUser(CognitoUser cognitoUser) async {
-  //   final userAttributes = await cognitoUser.getUserAttributes();
-  //   final User user = User.fromCognitoAttributes(userAttributes);
-  //   return user;
-  // }
-
-  // Future<AwsSigV4Client> getAwsSigV4Client() async {
-  //   if (!isValidSession()) return null;
-  //   await credentials.getAwsCredentials(_session.getIdToken().getJwtToken());
-  //   final awsSigV4Client = AwsSigV4Client(
-  //     credentials.accessKeyId,
-  //     credentials.secretAccessKey,
-  //     'https://8ovk4f09tf.execute-api.ap-southeast-1.amazonaws.com/dev',
-  //     sessionToken: credentials.sessionToken,
-  //     region: AWS_REGION,
-  //   );
-  //   return awsSigV4Client;
-  // }
-
-  // Future<User> getUserFromSession(Token token) async {
-  //   final cognitoUser = await userPool.getCurrentUser();
-  //   final user = await _getUserFromCognitoUser(cognitoUser);
-  //   return user;
-  // }
-
 }
