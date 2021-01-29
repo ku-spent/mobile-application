@@ -1,23 +1,20 @@
 import 'dart:io';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:spent/di/di.dart';
-import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
-import 'package:spent/presentation/pages/bookmark_page.dart';
+import 'package:spent/presentation/pages/me_page.dart';
+import 'package:spent/presentation/pages/notification_page.dart';
+import 'package:spent/presentation/pages/explore_page.dart';
 
 // Page
-import 'package:spent/presentation/pages/following_page.dart';
 import 'package:spent/presentation/pages/home_page.dart';
-
-import 'package:spent/presentation/widgets/bottom_navbar.dart';
-import 'package:spent/presentation/widgets/keep_alive_page.dart';
-import 'package:spent/presentation/widgets/nav_drawer.dart';
+import 'package:spent/presentation/widgets/app_retain_widget.dart';
 
 class AppScreen extends StatefulWidget {
   AppScreen({Key key}) : super(key: key);
@@ -29,9 +26,7 @@ class AppScreen extends StatefulWidget {
 class _AppScreenState extends State<AppScreen> {
   final _channel = const MethodChannel('com.example.spent/app_retain');
   final ScrollController _homeScrollController = ScrollController();
-  final ScrollController _followingScrollController = ScrollController();
-  final ScrollController _bookmarkScrollController = ScrollController();
-  ScrollController _currentScrollController;
+  PersistentTabController _controller;
 
   final PageController _pageController = PageController(
     initialPage: 0,
@@ -40,58 +35,74 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   void initState() {
-    _currentScrollController = _homeScrollController;
+    _controller = PersistentTabController(initialIndex: 0);
     super.initState();
   }
 
-  void _onPageChanged(BuildContext context, int index) {
-    if (_pageController.page == 0.0) {
-      _currentScrollController = _homeScrollController;
-    } else if (_pageController.page == 1.0) {
-      _currentScrollController = _followingScrollController;
-    } else if (_pageController.page == 2.0) {
-      _currentScrollController = _bookmarkScrollController;
-    } else {
-      _currentScrollController = _homeScrollController;
-    }
-    NavItem item = NavItem.values[index];
-    BlocProvider.of<NavigationBloc>(context).add(NavigateTo(item));
-  }
-
-  void _onClickSearch(context) {
-    ExtendedNavigator.of(context).push(Routes.searchPage);
-  }
-
-  void _scrollToTop() {
-    _currentScrollController.animateTo(_currentScrollController.position.minScrollExtent,
+  void _scrollHomeToTop() {
+    _homeScrollController.animateTo(_homeScrollController.position.minScrollExtent,
         duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);
   }
 
-  Future<bool> onWillPop(BuildContext context) async {
-    try {
-      final _pageController = BlocProvider.of<NavigationBloc>(context).pageController;
-      if (_pageController.page.round() == _pageController.initialPage) {
-        if (_currentScrollController.position.pixels > 0) {
-          _scrollToTop();
-          return false;
-        } else if (Platform.isAndroid) {
-          print('pop');
-          if (Navigator.of(context).canPop()) {
-            return true;
-          } else {
-            _channel.invokeMethod('sendToBackground');
-            return false;
-          }
-        } else {
-          return true;
-        }
+  Future<bool> _onWillPop() async {
+    if (Platform.isAndroid) {
+      print('pop');
+      if (Navigator.of(context).canPop()) {
+        return true;
       } else {
-        _onPageChanged(context, 0);
+        _channel.invokeMethod('sendToBackground');
         return false;
       }
-    } catch (e) {
-      print(e);
+    } else {
+      return true;
     }
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      HomePage(scrollController: _homeScrollController),
+      AppRetainWidget(child: ExplorePage()),
+      AppRetainWidget(child: NotificationPage()),
+      AppRetainWidget(child: MePage()),
+    ];
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.home),
+        title: HomePage.title,
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Theme.of(context).primaryColor,
+        textStyle: GoogleFonts.kanit(fontSize: 12.0),
+        activeColor: Theme.of(context).primaryColorLight,
+        onSelectedTabPressWhenNoScreensPushed: _scrollHomeToTop,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.explore),
+        title: ExplorePage.title,
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Theme.of(context).primaryColor,
+        textStyle: GoogleFonts.kanit(fontSize: 12.0),
+        activeColor: Theme.of(context).primaryColorLight,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.notifications),
+        title: "Notifications",
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Theme.of(context).primaryColor,
+        textStyle: GoogleFonts.kanit(fontSize: 12.0),
+        activeColor: Theme.of(context).primaryColorLight,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.account_circle),
+        title: "Me",
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Theme.of(context).primaryColor,
+        textStyle: GoogleFonts.kanit(fontSize: 12.0),
+        activeColor: Theme.of(context).primaryColorLight,
+      ),
+    ];
   }
 
   @override
@@ -99,32 +110,31 @@ class _AppScreenState extends State<AppScreen> {
     return BlocProvider<NavigationBloc>(
       create: (BuildContext context) => getIt<NavigationBloc>(param1: _pageController),
       child: BlocBuilder<NavigationBloc, NavigationState>(
-        builder: (BuildContext context, NavigationState state) => WillPopScope(
-          onWillPop: () => onWillPop(context),
-          child: Scaffold(
-            drawer: NavDrawer(),
-            appBar: AppBar(
-              title: Text(
-                PageName[state.selectedPage],
-                style: GoogleFonts.kanit(),
-              ),
-              actions: [
-                IconButton(icon: Icon(Icons.search), onPressed: () => _onClickSearch(context)),
-              ],
-            ),
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
-            body: PageView(
-              controller: BlocProvider.of<NavigationBloc>(context).pageController,
-              onPageChanged: (int index) => _onPageChanged(context, index),
-              children: [
-                KeepAlivePage(child: HomePage(scrollController: _homeScrollController)),
-                KeepAlivePage(child: FollowingPage(scrollController: _followingScrollController)),
-                KeepAlivePage(child: BookmarkPage(scrollController: _bookmarkScrollController)),
-              ],
-            ),
-            bottomNavigationBar: BottomNavbar(scrollController: _currentScrollController),
+        builder: (BuildContext context, NavigationState state) => PersistentTabView(
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarsItems(),
+          confineInSafeArea: true,
+          backgroundColor: Colors.white,
+          handleAndroidBackButtonPress: true,
+          resizeToAvoidBottomInset: true,
+          stateManagement: true,
+          navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
+          hideNavigationBarWhenKeyboardShows: true,
+          popActionScreens: PopActionScreensType.all,
+          onWillPop: _onWillPop,
+          popAllScreensOnTapOfSelectedTab: true,
+          itemAnimationProperties: ItemAnimationProperties(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
           ),
+          screenTransitionAnimation: ScreenTransitionAnimation(
+            animateTabTransition: true,
+            curve: Curves.ease,
+            duration: Duration(milliseconds: 200),
+          ),
+          navBarStyle: NavBarStyle.style7, // Choose the nav bar style with this property
         ),
       ),
     );

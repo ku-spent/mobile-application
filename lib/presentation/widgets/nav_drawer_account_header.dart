@@ -7,27 +7,34 @@ import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart'
 class NavDrawerAccountHeader extends StatelessWidget {
   const NavDrawerAccountHeader({Key key}) : super(key: key);
 
+  Widget _build(String imageUrl, String name) {
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 30.0,
+            backgroundColor: Colors.grey,
+            child: ClipOval(child: CachedNetworkImage(imageUrl: imageUrl)),
+          ),
+          Container(width: 12.0),
+          Text(
+            name,
+            style: GoogleFonts.kanit(fontSize: 16.0),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state is AuthenticationAuthenticated) {
-          return UserAccountsDrawerHeader(
-            accountName: Text(state.user.name, style: GoogleFonts.kanit(color: Colors.black87, fontSize: 16.0)),
-            accountEmail: Text(state.user.email, style: GoogleFonts.kanit(color: Colors.black54)),
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.grey,
-              backgroundImage: CachedNetworkImageProvider(state.user.picture),
-            ),
-          );
+          return _build(state.user.picture, state.user.name);
         } else {
-          return UserAccountsDrawerHeader(
-            accountName: null,
-            accountEmail: null,
-          );
+          return _build('', '');
         }
       },
     );

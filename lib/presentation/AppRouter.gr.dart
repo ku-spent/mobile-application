@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../domain/model/ModelProvider.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
+import 'pages/bookmark_page.dart';
 import 'pages/hero_photo_view_page.dart';
 import 'pages/history_page.dart';
 import 'pages/query_page.dart';
@@ -24,7 +25,8 @@ import 'pages/view_url.dart';
 class Routes {
   static const String splashPage = '/';
   static const String appScreen = '/home';
-  static const String historyPage = '/bookmark';
+  static const String bookmarkPage = '/bookmark';
+  static const String historyPage = '/history';
   static const String settingPage = '/setting';
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
@@ -34,6 +36,7 @@ class Routes {
   static const all = <String>{
     splashPage,
     appScreen,
+    bookmarkPage,
     historyPage,
     settingPage,
     aboutPage,
@@ -50,6 +53,7 @@ class AppRouter extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashPage, page: SplashPage),
     RouteDef(Routes.appScreen, page: AppScreen),
+    RouteDef(Routes.bookmarkPage, page: BookmarkPage),
     RouteDef(Routes.historyPage, page: HistoryPage),
     RouteDef(Routes.settingPage, page: SettingPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
@@ -76,6 +80,15 @@ class AppRouter extends RouterBase {
       );
       return CupertinoPageRoute<dynamic>(
         builder: (context) => AppScreen(key: args.key),
+        settings: data,
+      );
+    },
+    BookmarkPage: (data) {
+      final args = data.getArgs<BookmarkPageArguments>(
+        orElse: () => BookmarkPageArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => BookmarkPage(key: args.key),
         settings: data,
       );
     },
@@ -166,6 +179,12 @@ class SplashPageArguments {
 class AppScreenArguments {
   final Key key;
   AppScreenArguments({this.key});
+}
+
+/// BookmarkPage arguments holder class
+class BookmarkPageArguments {
+  final Key key;
+  BookmarkPageArguments({this.key});
 }
 
 /// HistoryPage arguments holder class

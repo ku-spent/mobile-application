@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FollowingPage extends StatefulWidget {
-  final ScrollController scrollController;
-
-  FollowingPage({Key key, @required this.scrollController}) : super(key: key);
+  FollowingPage({Key key}) : super(key: key);
 
   @override
   _FollowingPageState createState() => _FollowingPageState();

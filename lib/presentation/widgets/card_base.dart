@@ -13,7 +13,6 @@ import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
-import 'package:spent/presentation/bloc/user_event/user_event_bloc.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 import 'package:bot_toast/bot_toast.dart';

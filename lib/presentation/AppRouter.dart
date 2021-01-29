@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route_annotations.dart';
 import 'package:spent/presentation/pages/about_page.dart';
 import 'package:spent/presentation/pages/app_screen.dart';
+import 'package:spent/presentation/pages/bookmark_page.dart';
 import 'package:spent/presentation/pages/hero_photo_view_page.dart';
 import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/pages/query_page.dart';
@@ -13,7 +14,8 @@ import 'package:spent/presentation/pages/view_url.dart';
   routes: <AutoRoute>[
     CupertinoRoute(path: '/', page: SplashPage, initial: true),
     CupertinoRoute(path: '/home', page: AppScreen),
-    CupertinoRoute(path: '/bookmark', page: HistoryPage),
+    CupertinoRoute(path: '/bookmark', page: BookmarkPage),
+    CupertinoRoute(path: '/history', page: HistoryPage),
     CupertinoRoute(path: '/setting', page: SettingPage),
     CupertinoRoute(path: '/about', page: AboutPage),
     CupertinoRoute(path: '/search', page: SearchPage),

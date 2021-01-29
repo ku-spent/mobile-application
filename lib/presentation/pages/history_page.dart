@@ -13,6 +13,8 @@ import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HistoryPage extends StatefulWidget {
+  static String title = 'History';
+
   final ScrollController scrollController = ScrollController();
 
   HistoryPage({Key key}) : super(key: key);
@@ -75,11 +77,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        PageName[NavItem.page_history],
-        style: GoogleFonts.kanit(),
-      )),
+      appBar: AppBar(title: Text(HistoryPage.title, style: GoogleFonts.kanit())),
       body: BlocListener<SaveHistoryBloc, SaveHistoryState>(
         listener: (context, state) {
           if (state is SaveHistorySuccess) {

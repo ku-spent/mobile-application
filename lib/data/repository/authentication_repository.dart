@@ -6,7 +6,6 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:spent/amplifyconfiguration.dart';
 import 'package:spent/data/data_source/authentication/authentication_remote_data_source.dart';

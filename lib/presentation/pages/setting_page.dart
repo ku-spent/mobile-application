@@ -13,14 +13,15 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // drawer: NavDrawer(),
-        appBar: AppBar(
-            title: Text(
-          PageName[NavItem.page_setting],
-          style: GoogleFonts.kanit(),
-        )),
-        body: Center(
-          child: Text('Setting'),
-        ));
+      // drawer: NavDrawer(),
+      appBar: AppBar(
+          title: Text(
+        PageName[NavItem.page_setting],
+        style: GoogleFonts.kanit(),
+      )),
+      body: Center(
+        child: Text('Setting'),
+      ),
+    );
   }
 }

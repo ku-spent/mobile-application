@@ -61,6 +61,7 @@ dependencies:
   json_serializable: ^3.5.0
   material_floating_search_bar: ^0.2.2
   path_provider: ^1.6.24
+  persistent_bottom_nav_bar: ^3.1.0
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
   share: ^0.6.5+4
