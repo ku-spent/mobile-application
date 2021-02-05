@@ -40,21 +40,30 @@ class _AppScreenState extends State<AppScreen> {
   }
 
   void _scrollHomeToTop() {
-    _homeScrollController.animateTo(_homeScrollController.position.minScrollExtent,
-        duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);
+    if (_controller.index == 0)
+      _homeScrollController.animateTo(_homeScrollController.position.minScrollExtent,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);
+    else {
+      _controller.jumpToTab(0);
+    }
   }
 
   Future<bool> _onWillPop() async {
-    if (Platform.isAndroid) {
-      print('pop');
-      if (Navigator.of(context).canPop()) {
-        return true;
-      } else {
-        _channel.invokeMethod('sendToBackground');
-        return false;
-      }
+    if (_homeScrollController.offset != 0.0) {
+      _scrollHomeToTop();
+      return false;
     } else {
-      return true;
+      if (Platform.isAndroid) {
+        print('pop');
+        if (Navigator.of(context).canPop()) {
+          return true;
+        } else {
+          _channel.invokeMethod('sendToBackground');
+          return false;
+        }
+      } else {
+        return true;
+      }
     }
   }
 
@@ -76,7 +85,7 @@ class _AppScreenState extends State<AppScreen> {
         activeColorAlternate: Theme.of(context).primaryColor,
         textStyle: GoogleFonts.kanit(fontSize: 12.0),
         activeColor: Theme.of(context).primaryColorLight,
-        onSelectedTabPressWhenNoScreensPushed: _scrollHomeToTop,
+        onPressed: _scrollHomeToTop,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.explore),

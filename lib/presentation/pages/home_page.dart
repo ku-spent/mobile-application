@@ -8,7 +8,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/nav_drawer.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HomePage extends StatefulWidget {
@@ -70,7 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      // drawer: NavDrawer(),
       appBar: AppBar(
         title: Text(
           HomePage.title,
