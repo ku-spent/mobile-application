@@ -23,9 +23,6 @@ extension CardBaseMethod on _CardBaseState {
                   children: [
                     Text(
                       _news.source,
-                      style: GoogleFonts.kanit(
-                        fontWeight: FontWeight.w500,
-                      ),
                     ),
                     Text(
                       timeago.format(_news.pubDate, locale: 'th'),
@@ -36,6 +33,10 @@ extension CardBaseMethod on _CardBaseState {
               ],
             ),
           ),
+        ),
+        _buildIcon(
+          inActive: Icon(Icons.more_vert),
+          onPressed: () {},
         ),
       ],
     );
@@ -48,57 +49,52 @@ extension CardBaseMethod on _CardBaseState {
       child: Text(
         tag,
         overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.kanit(
-          color: Theme.of(context).primaryColor,
-        ),
+        style: GoogleFonts.kanit(color: Theme.of(context).primaryColor.withOpacity(0.9)),
       ),
     );
   }
 
   Widget _buildBottom() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 4.0, top: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Wrap(
-              spacing: 5.0,
-              runSpacing: 5.0,
-              children: [
-                    _news.tags.length > 0 && _news.tags[0] == _news.category
-                        ? Container()
-                        : _buildTag(_news.category, isCategory: true)
-                  ] +
-                  _news.tags
-                      .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
-                      .map((tag) => _buildTag(tag))
-                      .toList(),
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: Wrap(
+            spacing: 5.0,
+            runSpacing: 5.0,
+            children: [
+                  _news.tags.length > 0 && _news.tags[0] == _news.category
+                      ? Container()
+                      : _buildTag(_news.category, isCategory: true)
+                ] +
+                _news.tags
+                    .sublist(0, 1 > _news.tags.length ? _news.tags.length : 1)
+                    .map((tag) => _buildTag(tag))
+                    .toList(),
           ),
-          Row(children: [
-            _buildIcon(
-              isActive: _userAction == UserAction.LIKE,
-              active: Icon(Icons.favorite),
-              inActive: Icon(Icons.favorite_outline),
-              onPressed: _onClickLike,
-              activeColor: Colors.red[400],
-            ),
-            _buildIcon(
-              isActive: _isBookmarked,
-              active: Icon(Icons.bookmark),
-              inActive: Icon(Icons.bookmark_outline),
-              onPressed: _onClickBookmark,
-            ),
-            _buildIcon(
-              isActive: false,
-              active: Icon(Icons.share),
-              inActive: Icon(Icons.share),
-              onPressed: _onClickShare,
-            ),
-          ]),
-        ],
-      ),
+        ),
+        Row(children: [
+          _buildIcon(
+            isActive: _userAction == UserAction.LIKE,
+            active: Icon(Icons.favorite),
+            inActive: Icon(Icons.favorite_outline),
+            onPressed: _onClickLike,
+            activeColor: Colors.red[400],
+          ),
+          _buildIcon(
+            isActive: _isBookmarked,
+            active: Icon(Icons.bookmark),
+            inActive: Icon(Icons.bookmark_outline),
+            onPressed: _onClickBookmark,
+          ),
+          _buildIcon(
+            isActive: false,
+            active: Icon(Icons.share),
+            inActive: Icon(Icons.share),
+            onPressed: _onClickShare,
+          ),
+        ]),
+      ],
     );
   }
 
@@ -123,8 +119,9 @@ extension CardBaseMethod on _CardBaseState {
                   ))
               : Container(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   _news.title,
@@ -138,7 +135,7 @@ extension CardBaseMethod on _CardBaseState {
                         padding: EdgeInsets.only(top: 4.0),
                         child: Text(
                           _news.summary,
-                          style: Theme.of(context).textTheme.bodyText2,
+                          style: GoogleFonts.kanit(color: Colors.black.withOpacity(0.7)),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
@@ -146,7 +143,7 @@ extension CardBaseMethod on _CardBaseState {
                     : Container(),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

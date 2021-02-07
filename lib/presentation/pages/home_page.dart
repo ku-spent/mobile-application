@@ -60,9 +60,10 @@ class _HomePageState extends State<HomePage> {
     _feedBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
   }
 
-  Widget _buildItem(BuildContext context, News news) {
+  Widget _buildItem({News news, int i = -1}) {
     return CardBase(
       news: news,
+      isSecondary: i % 4 != 0,
     );
   }
 
@@ -110,20 +111,20 @@ class _HomePageState extends State<HomePage> {
                     return SizeFadeTransition(
                       key: ValueKey(result.id),
                       animation: animation,
-                      child: _buildItem(context, result),
+                      child: _buildItem(news: result, i: i),
                     );
                   },
                   updateItemBuilder: (context, animation, result) {
                     return FadeTransition(
                       key: ValueKey(result.id),
                       opacity: animation,
-                      child: _buildItem(context, result),
+                      child: _buildItem(news: result),
                     );
                   },
                   removeItemBuilder: (context, animation, result) {
                     return FadeTransition(
                       opacity: animation,
-                      child: _buildItem(context, result),
+                      child: _buildItem(news: result),
                     );
                   },
                 )

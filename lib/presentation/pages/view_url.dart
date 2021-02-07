@@ -63,11 +63,12 @@ class _ViewUrlState extends State<ViewUrl> {
   void _onSelectPageOption(String option) async {
     if (option == QueryPageOptions.open) {
       final String url = _news.url;
-      if (await canLaunch(url)) {
-        await launch(url, enableJavaScript: false);
-      } else {
-        throw 'Could not launch $url';
-      }
+      await launch(url, enableJavaScript: false);
+      // if (await canLaunch(url)) {
+      //    await launch(url, enableJavaScript: false);
+      // } else {
+      //   throw 'Could not launch $url';
+      // }
     }
   }
 

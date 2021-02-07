@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share/share.dart';
 
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -21,12 +20,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 part 'card_base.part.dart';
+part 'card_base_secondary.part.dart';
 
 class CardBase extends StatefulWidget {
   final News news;
   final bool showPicture;
   final bool showSummary;
   final bool isSubCard;
+  final bool isSecondary;
 
   CardBase({
     Key key,
@@ -34,6 +35,7 @@ class CardBase extends StatefulWidget {
     this.showPicture = true,
     this.showSummary = true,
     this.isSubCard = false,
+    this.isSecondary = false,
   }) : super(key: key);
 
   @override
@@ -115,8 +117,7 @@ class _CardBaseState extends State<CardBase> {
   }
 
   void _onClickShare() async {
-    final RenderBox box = context.findRenderObject();
-    await Share.share(_news.url, subject: _news.title, sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+    _shareNewsBloc.add(ShareNews(context: context, news: _news));
   }
 
   void _setUserAction(UserAction userAction) {
@@ -131,13 +132,28 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
-  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive, Color activeColor}) {
+  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive = false, Color activeColor}) {
     final _activeColor = activeColor != null ? activeColor : Theme.of(context).primaryColor;
     return IconButton(
       splashColor: _activeColor.withOpacity(0.2),
       color: isActive ? _activeColor : Colors.grey,
       onPressed: onPressed,
       icon: isActive ? active : inActive,
+    );
+  }
+
+  Widget _buildPrimary() {
+    return Container(
+      child: Column(
+        children: [
+          _buildHeader(),
+          _buildContent(widget.showPicture),
+          Padding(
+            padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0),
+            child: _buildBottom(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -165,29 +181,14 @@ class _CardBaseState extends State<CardBase> {
       child: Container(
         margin: EdgeInsets.only(bottom: 16.0),
         child: Card(
+          elevation: 0,
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           shadowColor: Theme.of(context).primaryColorLight,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            child: Container(
-              child: Column(
-                children: [
-                  _buildHeader(),
-                  _buildContent(widget.showPicture),
-                  _buildBottom(),
-                ],
-              ),
-            ),
+            child: widget.isSecondary ? _buildSecondary() : _buildPrimary(),
           ),
-        ),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).primaryColorLight.withOpacity(.08),
-              blurRadius: 16.0,
-            ),
-          ],
         ),
       ),
     );
