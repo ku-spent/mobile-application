@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
@@ -48,9 +49,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<NetworkBloc>(
           create: (BuildContext context) => getIt<NetworkBloc>(),
         ),
-        BlocProvider<FeedBloc>(
-          create: (BuildContext context) => getIt<FeedBloc>(),
-        ),
+        // BlocProvider<FeedBloc>(
+        //   create: (BuildContext context) => getIt<FeedBloc>(),
+        // ),
         BlocProvider<SearchBloc>(
           create: (BuildContext context) => getIt<SearchBloc>(),
         ),

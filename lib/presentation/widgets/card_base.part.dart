@@ -103,6 +103,7 @@ extension CardBaseMethod on _CardBaseState {
       splashColor: Colors.blue.withAlpha(30),
       onTap: () => _goToLink(context),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           showPicture
               ? Padding(

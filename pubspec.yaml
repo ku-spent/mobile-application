@@ -60,6 +60,7 @@ dependencies:
   intl: ^0.16.1
   json_serializable: ^3.5.0
   material_floating_search_bar: ^0.2.2
+  md2_tab_indicator: ^1.0.2
   path_provider: ^1.6.24
   persistent_bottom_nav_bar: ^3.1.0
   pull_to_refresh: ^1.6.2

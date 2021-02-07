@@ -170,41 +170,38 @@ class _ViewUrlState extends State<ViewUrl> {
     return BlocProvider<SuggestFeedBloc>(
       lazy: false,
       create: (BuildContext context) => getIt<SuggestFeedBloc>()..add(InitialSuggestFeed(curNews: _news)),
-      child: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-        if (state is FeedLoaded)
-          return Scaffold(
-            backgroundColor: _backgroundColor,
-            extendBodyBehindAppBar: true,
-            body: CustomScrollView(
-              physics: BouncingScrollPhysics(),
-              slivers: [
-                _buildAppbar(),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  Container(
-                    margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 16.0)),
-                        Container(height: 8.0),
-                        _buildSourceTitle(_news),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Container(child: _buildHTML(_news)),
-                  _buildBadge(),
-                  Container(height: 8.0),
-                  Divider(),
-                  SuggestCarousel(
-                    curNews: _news,
-                  ),
-                ])),
-              ],
-            ),
-          );
-      }),
+      child: Scaffold(
+        backgroundColor: _backgroundColor,
+        extendBodyBehindAppBar: true,
+        body: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            _buildAppbar(),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Container(
+                margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                    Container(height: 8.0),
+                    _buildSourceTitle(_news),
+                  ],
+                ),
+              ),
+              Divider(),
+              Container(child: _buildHTML(_news)),
+              _buildBadge(),
+              Container(height: 8.0),
+              Divider(),
+              SuggestCarousel(
+                curNews: _news,
+              ),
+            ])),
+          ],
+        ),
+      ),
     );
   }
 }

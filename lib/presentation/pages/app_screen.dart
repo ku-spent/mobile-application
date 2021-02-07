@@ -23,10 +23,11 @@ class AppScreen extends StatefulWidget {
   _AppScreenState createState() => _AppScreenState();
 }
 
-class _AppScreenState extends State<AppScreen> {
+class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMixin {
   final _channel = const MethodChannel('com.example.spent/app_retain');
   final ScrollController _homeScrollController = ScrollController();
   PersistentTabController _controller;
+  TabController _tabController;
 
   final PageController _pageController = PageController(
     initialPage: 0,
@@ -36,6 +37,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
+    _tabController = TabController(vsync: this, length: 8);
     super.initState();
   }
 
@@ -49,7 +51,10 @@ class _AppScreenState extends State<AppScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    if (_homeScrollController.offset != 0.0) {
+    if (_tabController.index != 0) {
+      _tabController.animateTo(0);
+      return false;
+    } else if (_homeScrollController.offset != 0.0) {
       _scrollHomeToTop();
       return false;
     } else {
@@ -69,7 +74,7 @@ class _AppScreenState extends State<AppScreen> {
 
   List<Widget> _buildScreens() {
     return [
-      HomePage(scrollController: _homeScrollController),
+      HomePage(scrollController: _homeScrollController, tabController: _tabController),
       AppRetainWidget(child: ExplorePage()),
       AppRetainWidget(child: NotificationPage()),
       AppRetainWidget(child: MePage()),

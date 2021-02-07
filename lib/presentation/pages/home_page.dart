@@ -2,62 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
-import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
+import 'package:spent/presentation/pages/feed_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/retry_error.dart';
+import 'package:spent/presentation/widgets/nav_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static String title = 'Home';
 
   final ScrollController scrollController;
+  final TabController tabController;
 
-  HomePage({Key key, @required this.scrollController}) : super(key: key);
+  HomePage({Key key, @required this.scrollController, @required this.tabController}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  FeedBloc _feedBloc;
-  final _scrollThreshold = 200.0;
-  ScrollController _scrollController = ScrollController();
-  final RefreshController _refreshController = RefreshController();
+  ScrollController _scrollController;
+  TabController _tabController;
+
+  final _tabbarLength = 8;
 
   @override
   void initState() {
     super.initState();
     _scrollController = widget.scrollController;
-    _scrollController.addListener(_onScroll);
-    _feedBloc = BlocProvider.of<FeedBloc>(context);
-    Future.delayed(Duration.zero, () async {
-      _fetchFeeds();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    super.dispose();
-  }
-
-  void _onScroll() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-      _fetchFeeds();
-    }
-  }
-
-  void _fetchFeeds() {
-    _feedBloc.add(FetchFeed());
-  }
-
-  void _onRefresh() async {
-    _feedBloc.add(RefreshFeed(callback: () => {_refreshController.refreshCompleted()}));
+    _tabController = widget.tabController;
   }
 
   Widget _buildItem({News news, int i = -1}) {
@@ -67,74 +43,60 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // drawer: NavDrawer(),
-      appBar: AppBar(
-        title: Text(
-          HomePage.title,
-          style: GoogleFonts.kanit(),
+  Widget _buildAppbar() {
+    return AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      flexibleSpace: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(top: 4.0, right: 36.0),
+          child: TabBar(
+            controller: _tabController,
+            labelStyle: GoogleFonts.kanit(fontWeight: FontWeight.w500, fontSize: 18.0),
+            unselectedLabelStyle: GoogleFonts.kanit(fontSize: 16.0),
+            indicatorSize: TabBarIndicatorSize.label,
+            labelColor: Colors.white,
+            isScrollable: true,
+            indicator: MD2Indicator(
+              indicatorHeight: 3,
+              indicatorSize: MD2IndicatorSize.full,
+              indicatorColor: Colors.white,
+            ),
+            tabs: <Widget>[
+              Tab(text: "สำหรับคุณ"),
+              Tab(text: "ล่าสุด"),
+              Tab(text: Category.politics),
+              Tab(text: Category.economic),
+              Tab(text: Category.sport),
+              Tab(text: Category.technology),
+              Tab(text: Category.localNews),
+              Tab(text: Category.movie),
+            ],
+          ),
         ),
       ),
-      backgroundColor: Colors.white,
-      body: BlocBuilder<FeedBloc, FeedState>(builder: (context, state) {
-        if (state is FeedInitial || state is FeedLoading) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is FeedLoaded) {
-          if (state.feeds.isEmpty) {
-            return Center(
-              child: Text('no feeds'),
-            );
-          }
-          return SmartRefresher(
-            enablePullDown: true,
-            enablePullUp: state.hasMore,
-            header: WaterDropMaterialHeader(),
-            physics: BouncingScrollPhysics(),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
-            child: ListView(
-              shrinkWrap: true,
-              controller: _scrollController,
-              children: [
-                ImplicitlyAnimatedList<News>(
-                  primary: false,
-                  shrinkWrap: true,
-                  items: state.feeds,
-                  physics: const BouncingScrollPhysics(),
-                  removeDuration: const Duration(milliseconds: 200),
-                  insertDuration: const Duration(milliseconds: 200),
-                  updateDuration: const Duration(milliseconds: 200),
-                  areItemsTheSame: (a, b) => a.id == b.id,
-                  itemBuilder: (context, animation, result, i) {
-                    return SizeFadeTransition(
-                      key: ValueKey(result.id),
-                      animation: animation,
-                      child: _buildItem(news: result, i: i),
-                    );
-                  },
-                  updateItemBuilder: (context, animation, result) {
-                    return FadeTransition(
-                      key: ValueKey(result.id),
-                      opacity: animation,
-                      child: _buildItem(news: result),
-                    );
-                  },
-                  removeItemBuilder: (context, animation, result) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: _buildItem(news: result),
-                    );
-                  },
-                )
-              ],
-            ),
-          );
-        } else if (state is FeedError) {
-          return RetryError(callback: _onRefresh);
-        }
-      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: _tabbarLength,
+      child: Scaffold(
+          endDrawer: NavDrawer(),
+          appBar: _buildAppbar(),
+          body: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              FeedPage(scrollController: _scrollController, buildFeedItem: _buildItem),
+              FeedPage(buildFeedItem: _buildItem),
+              Center(child: Text(Category.politics)),
+              Center(child: Text(Category.economic)),
+              Center(child: Text(Category.sport)),
+              Center(child: Text(Category.technology)),
+              Center(child: Text(Category.localNews)),
+              Center(child: Text(Category.movie)),
+            ],
+          )),
     );
   }
 }
