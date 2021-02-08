@@ -179,7 +179,7 @@ class _CardBaseState extends State<CardBase> {
         BlocListener<ShareNewsBloc, ShareNewsState>(listener: (context, state) {}),
       ],
       child: Container(
-        margin: EdgeInsets.only(bottom: 16.0),
+        margin: EdgeInsets.only(bottom: 4.0),
         child: Card(
           elevation: 0,
           margin: EdgeInsets.zero,

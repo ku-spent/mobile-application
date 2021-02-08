@@ -14,9 +14,12 @@ import '../presentation/bloc/authentication/authentication_bloc.dart';
 import '../data/data_source/authentication/authentication_remote_data_source.dart';
 import '../data/repository/authentication_repository.dart';
 import '../presentation/bloc/bookmark/bookmark_bloc.dart';
+import '../presentation/bloc/explore/explore_bloc.dart';
+import '../data/repository/explore.repository.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
 import '../domain/use_case/get_bookmark_use_case.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
+import '../domain/use_case/get_explore_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
 import '../domain/use_case/get_suggestion_use_case.dart';
 import '../domain/use_case/get_view_news_history_use_case.dart';
@@ -51,6 +54,7 @@ import '../presentation/bloc/share_news/share_news_bloc.dart';
 import '../domain/use_case/share_news_use_case.dart';
 import '../presentation/bloc/signin/signin_bloc.dart';
 import '../presentation/bloc/suggest/suggest_bloc.dart';
+import '../data/data_source/trending/trending_remote_data_source.dart';
 import '../presentation/bloc/user_event/user_event_bloc.dart';
 import '../data/repository/user_event_repository.dart';
 import '../data/repository/user_repository.dart';
@@ -96,6 +100,8 @@ GetIt $initGetIt(
   gh.factory<SendEventShareNewsUseCase>(() => SendEventShareNewsUseCase());
   gh.factory<SendEventViewNewsUseCase>(() => SendEventViewNewsUseCase());
   gh.factory<ShareNewsUseCase>(() => ShareNewsUseCase());
+  gh.factory<TrendingRemoteDataSource>(
+      () => TrendingRemoteDataSource(get<AmplifyHttpManager>()));
   gh.factory<UserEventBloc>(() => UserEventBloc(
         get<SendEventViewNewsUseCase>(),
         get<SendEventBookmarkNewsUseCase>(),
@@ -109,6 +115,8 @@ GetIt $initGetIt(
       () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
   gh.factory<UserSignOutUseCase>(
       () => UserSignOutUseCase(get<AuthenticationRepository>()));
+  gh.factory<ExploreRepository>(
+      () => ExploreRepository(get<TrendingRemoteDataSource>()));
   gh.factoryParam<NavigationBloc, PageController, dynamic>(
       (pageController, _) =>
           NavigationBloc(pageController, get<AuthenticationBloc>()));
@@ -122,6 +130,11 @@ GetIt $initGetIt(
         get<AuthenticationRepository>(),
         get<UserRepository>(),
         get<NewsRepository>(),
+      ));
+  gh.factory<GetExploreUseCase>(() => GetExploreUseCase(
+        get<ExploreRepository>(),
+        get<UserRepository>(),
+        get<AuthenticationRepository>(),
       ));
   gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(
         get<NewsRepository>(),
@@ -149,6 +162,7 @@ GetIt $initGetIt(
           get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SuggestFeedBloc>(() =>
       SuggestFeedBloc(get<GetSuggestionNewsUseCase>(), get<NetworkBloc>()));
+  gh.factory<ExploreBloc>(() => ExploreBloc(get<GetExploreUseCase>()));
   gh.factory<FeedBloc>(
       () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
 
