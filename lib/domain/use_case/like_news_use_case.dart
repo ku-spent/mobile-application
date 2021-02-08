@@ -13,8 +13,8 @@ class LikeNewsUseCase {
   const LikeNewsUseCase(this._authenticationRepository, this._userRepository);
 
   Future<LikeNewsResult> call(News news) async {
-    User user = await _authenticationRepository.getCurrentUser();
-    UserNewsAction userNewsAction = await _userRepository.getUserNewsActionByNewsId(user, news);
+    final User user = await _authenticationRepository.getCurrentUser();
+    final UserNewsAction userNewsAction = await _userRepository.getUserNewsActionByNewsId(user, news);
     if (userNewsAction != null) {
       news.userAction = UserAction.NONE;
       await _userRepository.deleteUserNewsAction(userNewsAction);

@@ -14,13 +14,13 @@ class SearchItemFuse {
   }
 
   SearchItemFuse() {
-    List<SearchItem> catogoryList = _mapToFuzzy(
+    final List<SearchItem> catogoryList = _mapToFuzzy(
       items: Category.values,
       type: SearchItem.category,
       description: SearchItem.categoryDescription,
     );
 
-    List<SearchItem> sourceList = _mapToFuzzy(
+    final List<SearchItem> sourceList = _mapToFuzzy(
       items: NewsSource.values,
       type: SearchItem.source,
       description: SearchItem.sourceDescription,

@@ -18,7 +18,7 @@ class GetExploreUseCase {
     int size = 5,
   }) async {
     User user = await _authenticationRepository.getCurrentUser();
-    Trending trending = await _exploreRepository.getTrendingFromRemote(from, size);
+    final Trending trending = await _exploreRepository.getTrendingFromRemote(from, size);
     // List<TrendingTopic> trendingTopics = await Future.wait(trending.trendingTopics.map((trendingTopic) =>
     //     Future.wait(trendingTopic.newsList.map((news) => _userRepository.mapUserActionToNews(user, news)))));
     return trending;

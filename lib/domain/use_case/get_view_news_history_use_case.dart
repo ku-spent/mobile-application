@@ -15,11 +15,12 @@ class GetViewNewsHistoryUseCase {
   const GetViewNewsHistoryUseCase(this._authenticationRepository, this._userRepository, this._newsRepository);
 
   Future<List<News>> call() async {
-    User user = await _authenticationRepository.getCurrentUser();
-    List<History> histories = await _userRepository.getNewsHistoryByUser(user);
-    List<News> newsList = await Future.wait(histories.map((history) => _newsRepository.getNewsById(history.newsId)));
+    final User user = await _authenticationRepository.getCurrentUser();
+    final List<History> histories = await _userRepository.getNewsHistoryByUser(user);
+    List<News> newsList =
+        await Future.wait(histories.sublist(0, 10).map((history) => _newsRepository.getNewsById(history.newsId)));
     newsList = newsList.where((news) => news != null).toList();
-    List<News> mappedUserNews =
+    final List<News> mappedUserNews =
         await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
     return mappedUserNews;
   }

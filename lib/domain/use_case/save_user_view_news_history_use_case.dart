@@ -13,8 +13,8 @@ class SaveUserViewNewsHistoryUseCase {
   const SaveUserViewNewsHistoryUseCase(this._authenticationRepository, this._userRepository);
 
   Future<void> call(News news) async {
-    User user = await _authenticationRepository.getCurrentUser();
-    History oldHistory = await _userRepository.getHistoryByNewsId(user, news);
+    final User user = await _authenticationRepository.getCurrentUser();
+    final History oldHistory = await _userRepository.getHistoryByNewsId(user, news);
     if (oldHistory != null) {
       final newHistory = History();
       await _userRepository.updateNewsHistory(oldHistory, newHistory);

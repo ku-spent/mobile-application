@@ -18,11 +18,11 @@ class GetSuggestionNewsUseCase {
     News curNews,
     bool isRemote = false,
   }) async {
-    User user = await _authenticationRepository.getCurrentUser();
-    List<News> newsList = isRemote
+    final User user = await _authenticationRepository.getCurrentUser();
+    final List<News> newsList = isRemote
         ? await _newsRepository.getSuggestionNewsFromRemote(from, size, curNews)
         : await _newsRepository.getSuggestionNewsFromLocal(from, size, curNews);
-    List<News> mappedUserNews =
+    final List<News> mappedUserNews =
         await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
     return mappedUserNews;
   }

@@ -19,11 +19,11 @@ class GetNewsFeedUseCase {
     String query,
     bool isRemote = false,
   }) async {
-    User user = await _authenticationRepository.getCurrentUser();
-    List<News> newsList = isRemote
+    final User user = await _authenticationRepository.getCurrentUser();
+    final List<News> newsList = isRemote
         ? await _newsRepository.getNewsFromRemote(from, size, queryField, query)
         : await _newsRepository.getNewsFromLocal(from, size, queryField, query);
-    List<News> mappedUserNews =
+    final List<News> mappedUserNews =
         await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
     return mappedUserNews;
   }

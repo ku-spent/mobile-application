@@ -6,7 +6,7 @@ class UserEventRepository {
   const UserEventRepository();
 
   Future<void> sendReadNewsEvent(String url) async {
-    AnalyticsEvent event = AnalyticsEvent("PasswordReset");
+    final AnalyticsEvent event = AnalyticsEvent("PasswordReset");
     event.properties.addStringProperty("url", url);
   }
 }

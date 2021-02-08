@@ -47,10 +47,10 @@ class AuthenticationRepository {
 
   Future<void> _configureAmplify() async {
     // Add Pinpoint and Cognito Plugins, or any other plugins you want to use
-    AmplifyAPI api = AmplifyAPI();
-    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
-    AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
+    final AmplifyAPI api = AmplifyAPI();
+    final AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+    final AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
+    final AmplifyDataStore datastorePlugin = AmplifyDataStore(modelProvider: ModelProvider.instance);
 
     await Amplify.addPlugins([authPlugin, analyticsPlugin, datastorePlugin, api]);
 
@@ -78,7 +78,7 @@ class AuthenticationRepository {
 
   Future<bool> isLogin() async {
     final userBox = await Hive.openBox(userBoxName);
-    bool isLogin = userBox.get(isLoginKey);
+    final bool isLogin = userBox.get(isLoginKey);
     return isLogin;
   }
 
@@ -102,8 +102,8 @@ class AuthenticationRepository {
   Future<User> getCurrentUser() async {
     // cache
     if (_user != null) return _user;
-    String userId = _session.idToken.payload['sub'];
-    User user = (await Amplify.DataStore.query(
+    final String userId = _session.idToken.payload['sub'];
+    final User user = (await Amplify.DataStore.query(
       User.classType,
       where: User.ID.eq(userId),
     ))[0];
@@ -120,13 +120,13 @@ class AuthenticationRepository {
   }
 
   String getUserId() {
-    String userId = _session.idToken.payload['sub'];
+    final String userId = _session.idToken.payload['sub'];
     return userId;
   }
 
   Future<Map<String, String>> getUserMap() async {
     final cognitoAttributes = await _cognitoUser.getUserAttributes();
-    Map<String, String> userMap = {'name': '', 'email': '', 'picture': '', 'sub': ''};
+    final Map<String, String> userMap = {'name': '', 'email': '', 'picture': '', 'sub': ''};
     for (CognitoUserAttribute attribute in cognitoAttributes) {
       if (userMap.containsKey(attribute.name)) {
         userMap[attribute.name] = attribute.value;

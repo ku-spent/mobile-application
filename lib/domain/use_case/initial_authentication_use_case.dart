@@ -11,7 +11,7 @@ class InitialAuthenticationUseCase {
     try {
       print('initial authentication');
       final isConfigured = await _authenticationRepository.initAmplify();
-      bool isLogin = await _authenticationRepository.isLogin();
+      final bool isLogin = await _authenticationRepository.isLogin();
       if (!isLogin) return false;
       await Future.delayed(const Duration(milliseconds: 400), () => {});
       print('initial authentication usecase $isConfigured');

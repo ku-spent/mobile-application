@@ -12,7 +12,7 @@ class ExploreRepository {
     int from,
     int size,
   ) async {
-    Trending trending = await _trendingRemoteDataSource.getTrending(from, size);
+    final Trending trending = await _trendingRemoteDataSource.getTrending(from, size);
     return trending;
   }
 }

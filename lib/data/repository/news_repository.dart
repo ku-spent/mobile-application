@@ -15,7 +15,7 @@ class NewsRepository {
     int size,
     News curNews,
   ) async {
-    List<News> newsList = await _newsRemoteDataSource.getSuggestionNews(from, size, curNews);
+    final List<News> newsList = await _newsRemoteDataSource.getSuggestionNews(from, size, curNews);
     await _newsLocalDataSource.cacheNews(newsList);
     return newsList;
   }
@@ -35,7 +35,7 @@ class NewsRepository {
     String queryField,
     String query,
   ) async {
-    List<News> newsList = await _newsRemoteDataSource.getFeeds(from, size, queryField, query);
+    final List<News> newsList = await _newsRemoteDataSource.getFeeds(from, size, queryField, query);
     await _newsLocalDataSource.cacheNews(newsList);
     return newsList;
   }
@@ -52,9 +52,11 @@ class NewsRepository {
 
   Future<News> getNewsById(String id) async {
     try {
-      News cachedNews = await _newsLocalDataSource.getNewsById(id);
+      final News cachedNews = await _newsLocalDataSource.getNewsById(id);
       if (cachedNews == null) {
-        return await _newsRemoteDataSource.getNewsById(id);
+        final News news = await _newsRemoteDataSource.getNewsById(id);
+        await _newsLocalDataSource.cacheNews([news]);
+        return news;
       } else {
         return cachedNews;
       }

@@ -13,8 +13,8 @@ class SaveBookmarkUseCase {
   const SaveBookmarkUseCase(this._authenticationRepository, this._userRepository);
 
   Future<SaveBookmarkResult> call(News news) async {
-    User user = await _authenticationRepository.getCurrentUser();
-    Bookmark bookmark = await _userRepository.getBookmarkByNewsId(user, news);
+    final User user = await _authenticationRepository.getCurrentUser();
+    final Bookmark bookmark = await _userRepository.getBookmarkByNewsId(user, news);
     if (bookmark != null) {
       news.isBookmarked = false;
       await _userRepository.deleteBookmark(bookmark);

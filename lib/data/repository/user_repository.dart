@@ -12,8 +12,8 @@ class UserRepository {
   const UserRepository(this._userStorage);
 
   Future<News> mapUserActionToNews(User user, News news) async {
-    Bookmark bookmark = await getBookmarkByNewsId(user, news);
-    UserNewsAction userNewsAction = await getUserNewsActionByNewsId(user, news);
+    final Bookmark bookmark = await getBookmarkByNewsId(user, news);
+    final UserNewsAction userNewsAction = await getUserNewsActionByNewsId(user, news);
     news.isBookmarked = bookmark != null;
     news.userAction =
         userNewsAction != null && userNewsAction.action == UserAction.LIKE ? UserAction.LIKE : UserAction.NONE;

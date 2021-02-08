@@ -11,7 +11,7 @@ class NewsLocalDataSource implements NewsDataSource {
   Future<List<News>> getSuggestionNews(int from, int size, News curNews) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);
-      List<News> news =
+      final List<News> news =
           newsBox.values.where((news) => news.toJson()['category'] == curNews.category).toList().reversed.toList();
       return news;
     } catch (e) {
@@ -24,7 +24,8 @@ class NewsLocalDataSource implements NewsDataSource {
   Future<List<News>> getFeeds(int from, int size, String queryField, String query) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);
-      List<News> news = newsBox.values.where((news) => news.toJson()[queryField] == query).toList().reversed.toList();
+      final List<News> news =
+          newsBox.values.where((news) => news.toJson()[queryField] == query).toList().reversed.toList();
       return news;
     } catch (e) {
       print(e);
@@ -36,7 +37,7 @@ class NewsLocalDataSource implements NewsDataSource {
   Future<News> getNewsById(String id) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);
-      News news = newsBox.values.singleWhere((news) => news.id == id);
+      final News news = newsBox.values.singleWhere((news) => news.id == id);
       return news;
     } catch (e) {
       return null;
