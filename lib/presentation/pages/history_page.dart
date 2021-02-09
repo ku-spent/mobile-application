@@ -70,6 +70,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget _buildItem(BuildContext context, News news) {
     return CardBase(
       news: news,
+      showSummary: false,
       showPicture: false,
     );
   }

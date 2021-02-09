@@ -126,6 +126,7 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
       child: BlocBuilder<NavigationBloc, NavigationState>(
         builder: (BuildContext context, NavigationState state) => PersistentTabView(
           context,
+          decoration: NavBarDecoration(boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)]),
           controller: _controller,
           screens: _buildScreens(),
           items: _navBarsItems(),

@@ -84,7 +84,7 @@ class _SearchBarState extends State<SearchBar> {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (BuildContext context, SearchState state) {
         return FloatingSearchAppBar(
-          elevation: 12,
+          elevation: 1,
           alwaysOpened: true,
           hideKeyboardOnDownScroll: true,
           controller: _controller,
