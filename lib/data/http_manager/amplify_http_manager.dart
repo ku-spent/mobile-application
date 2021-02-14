@@ -14,9 +14,8 @@ class AmplifyHttpManager {
       final String jsonString = utf8.decode(String.fromCharCodes(response.data).trim().runes.toList());
       final Map<String, dynamic> res = jsonDecode(jsonString);
       return res;
-    } on ApiError catch (error) {
-      print(error.details);
-      throw error;
+    } on ApiException catch (e) {
+      print('GET call failed: $e');
     }
   }
 }
