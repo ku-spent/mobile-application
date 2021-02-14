@@ -47,7 +47,7 @@ class NewsRemoteDataSource implements NewsDataSource {
       final List items = response['data']['hits'];
       final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
       return newsList;
-    } on ApiError catch (error) {
+    } catch (error) {
       print(error.details);
       throw error;
     }
