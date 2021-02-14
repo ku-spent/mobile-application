@@ -18,8 +18,9 @@ import 'package:spent/presentation/widgets/source_icon.dart';
 
 class ExplorePage extends StatefulWidget {
   static String title = 'Explore';
+  final ScrollController scrollController;
 
-  ExplorePage({Key key}) : super(key: key);
+  ExplorePage({Key key, @required this.scrollController}) : super(key: key);
 
   @override
   _ExplorePageState createState() => _ExplorePageState();
@@ -27,14 +28,15 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClientMixin<ExplorePage> {
   ExploreBloc _feedBloc;
+  ScrollController _scrollController;
 
   final _scrollThreshold = 200.0;
-  final ScrollController _scrollController = ScrollController();
   final RefreshController _refreshController = RefreshController();
 
   @override
   void initState() {
     _feedBloc = BlocProvider.of<ExploreBloc>(context);
+    _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _fetchExplore();
     super.initState();
