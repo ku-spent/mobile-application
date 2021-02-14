@@ -9,8 +9,8 @@ import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
-import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/bloc/suggest/suggest_bloc.dart';
+import 'package:spent/presentation/pages/css.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:badges/badges.dart';
@@ -42,7 +42,10 @@ class _ViewUrlState extends State<ViewUrl> {
   ) {
     final String url = attributes['src'];
     final String tag = _news.id + url;
-    return Center(child: HeroImageViewWidget(tag: tag, url: url));
+    return Container(
+      margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+      child: Center(child: HeroImageViewWidget(tag: tag, url: url)),
+    );
   }
 
   Widget _buildHTML(News news) {
@@ -52,10 +55,50 @@ class _ViewUrlState extends State<ViewUrl> {
       customRender: Map.from({'img': _imageRender}),
       style: {
         "html": Style(
-            backgroundColor: _backgroundColor,
-            fontFamily: GoogleFonts.sarabun().fontFamily,
-            margin: EdgeInsets.symmetric(horizontal: 8.0)),
-        "a": Style(textDecoration: TextDecoration.none, color: Colors.black87),
+          backgroundColor: _backgroundColor,
+          fontFamily: GoogleFonts.sarabun().fontFamily,
+        ),
+        "h1": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "h2": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "h3": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "h4": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "h5": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "h6": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+        ),
+        "p": Style(
+          padding: EdgeInsets.symmetric(vertical: 12.0),
+          margin: EdgeInsets.symmetric(horizontal: 10.0),
+          lineHeight: 1.6,
+          letterSpacing: 0.4,
+          fontSize: FontSize(18.0),
+        ),
+        "strong": Style(
+          fontWeight: FontWeight.bold,
+          margin: EdgeInsets.symmetric(horizontal: 10.0),
+          lineHeight: 1.6,
+          letterSpacing: 0.4,
+          fontSize: FontSize(18.0),
+        ),
+        "a": Style(
+          textDecoration: TextDecoration.none,
+          color: Colors.black87,
+          margin: EdgeInsets.symmetric(horizontal: 10.0),
+        ),
+        "ul": Style(
+          margin: EdgeInsets.symmetric(horizontal: 10.0),
+          padding: EdgeInsets.only(left: 4.0),
+        )
       },
     );
   }
@@ -184,7 +227,7 @@ class _ViewUrlState extends State<ViewUrl> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                    Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 24.0)),
                     Container(height: 8.0),
                     _buildSourceTitle(_news),
                   ],

@@ -1,6 +1,6 @@
 class SendEvent {
-  static final String viewNewsEvent = 'VIEW_NEWS';
-  static final String likeNewsEvent = 'LIKE_NEWS';
-  static final String bookmarkNewsEvent = 'BOOKMARK_NEWS';
-  static final String shareNewsEvent = 'SHARE_NEWS';
+  static final String viewNewsEvent = 'news_viewed';
+  static final String likeNewsEvent = 'news_liked';
+  static final String bookmarkNewsEvent = 'news_bookmarked';
+  static final String shareNewsEvent = 'news_shared';
 }

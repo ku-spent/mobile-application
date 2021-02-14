@@ -23,6 +23,10 @@ class IdentifyUserUseCase {
       final userId = (await Amplify.Auth.getCurrentUser()).userId;
 
       Amplify.Analytics.identifyUser(userId: userId, userProfile: userProfile);
+
+      final AnalyticsProperties globalProperties = AnalyticsProperties();
+      globalProperties.addStringProperty('user_id', userId);
+      Amplify.Analytics.registerGlobalProperties(globalProperties: globalProperties);
     } catch (e) {
       print(e);
     }
