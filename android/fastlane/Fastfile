@@ -18,12 +18,13 @@ default_platform(:android)
 platform :android do
     desc "<Enter a description>"
     lane :android_beta_app do
+        flutterVersion = flutter_version()
         gradle(
             task: 'bundle',
             build_type: 'Release',
             properties: {
-                "versionName" => flutter_version()["version_name"],
-                "versionCode" => flutter_version()["version_code"]
+                "versionName" => flutterVersion["version_name"],
+                "versionCode" => flutterVersion["version_code"]
             }
         )
         firebase_app_distribution(
