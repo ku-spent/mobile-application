@@ -111,6 +111,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: 1.22.5
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -130,10 +134,7 @@ jobs:
       #   with:
       #     name: release-apk
       #     path: build/app/outputs/apk/release/app-release.apk
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          flutter-version: 1.22.5
+
       - name: Install Flutter dependencies
         run: flutter pub get
       - name: Build apk
