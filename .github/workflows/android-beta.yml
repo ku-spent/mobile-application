@@ -23,11 +23,11 @@ jobs:
         with:
           java-version: 1.8
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-          working-directory: ./android
           bundler-cache: true
+          working-directory: ./android
       - name: Install Flutter dependencies
         run: flutter pub get
       - name: Build apk
