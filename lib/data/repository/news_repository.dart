@@ -13,7 +13,9 @@ class NewsRepository {
 
   Future<Recommendation> getRecommendations(String userId) async {
     final Recommendation recommendation = await _newsRemoteDataSource.getRecommendations(userId);
-    await _newsLocalDataSource.cacheNews(recommendation.newsList);
+    final List<News> newsList = await Future.wait(recommendation.newsIdList.map((id) => getNewsById(id)));
+    await _newsLocalDataSource.cacheNews(newsList);
+    recommendation.newsList = newsList;
     return recommendation;
   }
 
