@@ -32,9 +32,6 @@ class InitialAuthenticationUseCase {
       return true;
     } catch (err) {
       print(err);
-      // bool isLogin = await _authenticationRepository.isLogin();
-      // print('offline login $isLogin');
-      // return isLogin;
     }
   }
 }

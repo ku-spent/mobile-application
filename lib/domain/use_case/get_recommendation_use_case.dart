@@ -17,14 +17,10 @@ class GetRecommendationsUseCase {
     int from = 0,
     int size = 5,
   }) async {
-    try {
-      final User user = await _authenticationRepository.getCurrentUser();
-      final Recommendation recommendation = await _newsRepository.getRecommendations(user.id);
-      // final List<News> mappedUserNews =
-      //     await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
-      return recommendation;
-    } catch (err) {
-      print(err);
-    }
+    final User user = await _authenticationRepository.getCurrentUser();
+    final Recommendation recommendation = await _newsRepository.getRecommendations(user.id);
+    // final List<News> mappedUserNews =
+    //     await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
+    return recommendation;
   }
 }
