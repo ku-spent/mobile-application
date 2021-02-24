@@ -20,10 +20,8 @@ class NewsRemoteDataSource implements NewsDataSource {
       },
     );
     final Map<String, dynamic> response = await _httpManager.get(restOptions);
-    // final List items = response['data']['hits'];
     final List<String> newsIdList = List<String>.from(response['data']['itemList'].map((e) => e['ItemId']).toList());
-    final List<News> newsList = await Future.wait(newsIdList.map((id) => getNewsById(id)));
-    final recommendation = Recommendation(newsList: newsList, recommendationID: response['RecommendationId']);
+    final recommendation = Recommendation(newsIdList: newsIdList, recommendationID: response['RecommendationId']);
     return recommendation;
   }
 
