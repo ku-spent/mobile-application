@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/repository/authentication_repository.dart';
 
@@ -25,6 +26,10 @@ class InitialAuthenticationUseCase {
         }
       }
       return isConfigured;
+    } on AmplifyAlreadyConfiguredException {
+      print('amplify already configured');
+      await _authenticationRepository.initCognito();
+      return true;
     } catch (err) {
       print(err);
       // bool isLogin = await _authenticationRepository.isLogin();

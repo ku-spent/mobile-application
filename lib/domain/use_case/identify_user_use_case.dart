@@ -12,7 +12,7 @@ class IdentifyUserUseCase {
 
   Future<void> call() async {
     try {
-      final isValidSession = _authenticationRepository.isValidSession();
+      final isValidSession = await _authenticationRepository.isValidSession();
       if (!isValidSession) return null;
 
       final user = await _authenticationRepository.getCurrentUser();

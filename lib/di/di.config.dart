@@ -21,6 +21,7 @@ import '../domain/use_case/get_bookmark_use_case.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_explore_use_case.dart';
 import '../domain/use_case/get_news_feed_use_case.dart';
+import '../domain/use_case/get_recommendation_use_case.dart';
 import '../domain/use_case/get_suggestion_use_case.dart';
 import '../domain/use_case/get_view_news_history_use_case.dart';
 import '../presentation/bloc/history/history_bloc.dart';
@@ -36,6 +37,7 @@ import '../data/data_source/news/news_local_data_source.dart';
 import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
 import '../presentation/bloc/query/query_bloc.dart';
+import '../presentation/bloc/recommendation/recommendation_bloc.dart';
 import '../presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
 import '../domain/use_case/save_bookmark_use_case.dart';
 import '../presentation/bloc/save_history/save_history_bloc.dart';
@@ -141,6 +143,11 @@ GetIt $initGetIt(
         get<UserRepository>(),
         get<AuthenticationRepository>(),
       ));
+  gh.factory<GetRecommendationsUseCase>(() => GetRecommendationsUseCase(
+        get<NewsRepository>(),
+        get<UserRepository>(),
+        get<AuthenticationRepository>(),
+      ));
   gh.factory<GetSuggestionNewsUseCase>(() => GetSuggestionNewsUseCase(
         get<NewsRepository>(),
         get<UserRepository>(),
@@ -155,6 +162,8 @@ GetIt $initGetIt(
       LikeNewsUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<QueryFeedBloc>(
       () => QueryFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
+  gh.factory<RecommendationBloc>(() =>
+      RecommendationBloc(get<GetRecommendationsUseCase>(), get<NetworkBloc>()));
   gh.factory<SaveBookmarkUseCase>(() => SaveBookmarkUseCase(
       get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>

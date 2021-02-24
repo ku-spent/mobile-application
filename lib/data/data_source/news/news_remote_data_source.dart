@@ -3,12 +3,29 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/amplify_http_manager.dart';
 import 'package:spent/domain/model/News.dart';
+import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsRemoteDataSource implements NewsDataSource {
   final AmplifyHttpManager _httpManager;
 
   const NewsRemoteDataSource(this._httpManager);
+
+  @override
+  Future<Recommendation> getRecommendations(String userId) async {
+    final RestOptions restOptions = RestOptions(
+      path: "/recommendations",
+      queryParameters: {
+        'id': userId,
+      },
+    );
+    final Map<String, dynamic> response = await _httpManager.get(restOptions);
+    // final List items = response['data']['hits'];
+    final List<String> newsIdList = List<String>.from(response['data']['itemList'].map((e) => e['ItemId']).toList());
+    final List<News> newsList = await Future.wait(newsIdList.map((id) => getNewsById(id)));
+    final recommendation = Recommendation(newsList: newsList, recommendationID: response['RecommendationId']);
+    return recommendation;
+  }
 
   @override
   Future<List<News>> getSuggestionNews(int from, int size, News curNews) async {
