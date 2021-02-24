@@ -8,6 +8,7 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/pages/feed_page.dart';
+import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/nav_drawer.dart';
 
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
           body: TabBarView(
             controller: _tabController,
             children: <Widget>[
-              FeedPage(scrollController: _scrollController, buildFeedItem: _buildItem),
+              ForYouPage(scrollController: _scrollController, buildRecommendationItem: _buildItem),
               FeedPage(buildFeedItem: _buildItem),
               Center(child: Text(Category.politics)),
               Center(child: Text(Category.economic)),

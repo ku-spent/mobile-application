@@ -1,7 +1,7 @@
 APP_NAME = SPENT
 
 beta-android:
-	flutter clean && flutter pub get && cd android && fastlane android_beta_app
+	flutter clean && flutter pub get && flutter build apk --release && cd android && fastlane android_beta_app
 
 beta-ios:
 	echo "beta ios"

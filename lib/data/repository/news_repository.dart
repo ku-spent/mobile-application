@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_local_data_source.dart';
 import 'package:spent/data/data_source/news/news_remote_data_source.dart';
 import 'package:spent/domain/model/News.dart';
+import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsRepository {
@@ -9,6 +10,12 @@ class NewsRepository {
   final NewsLocalDataSource _newsLocalDataSource;
 
   const NewsRepository(this._newsRemoteDataSource, this._newsLocalDataSource);
+
+  Future<Recommendation> getRecommendations(String userId) async {
+    final Recommendation recommendation = await _newsRemoteDataSource.getRecommendations(userId);
+    await _newsLocalDataSource.cacheNews(recommendation.newsList);
+    return recommendation;
+  }
 
   Future<List<News>> getSuggestionNewsFromRemote(
     int from,

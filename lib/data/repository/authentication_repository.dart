@@ -86,13 +86,14 @@ class AuthenticationRepository {
     _httpManager.accessToken = _session.accessToken.getJwtToken();
   }
 
-  bool isValidSession() {
+  Future<bool> isValidSession() async {
     if (_cognitoUser == null || _session == null) {
       return false;
     }
 
     if (!_session.isValid()) {
-      return false;
+      _session = await _cognitoUser.refreshSession(_session.refreshToken);
+      return _session.isValid();
     }
 
     return true;
