@@ -11,6 +11,7 @@ import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/domain/model/trending_topic.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/explore/explore_bloc.dart';
+import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 import 'package:spent/presentation/widgets/section.dart';
@@ -119,6 +120,51 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     );
   }
 
+  void _goToQuerySourcePage(String source) {
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        query: source,
+        queryField: QueryField.source,
+        coverUrl: NewsSource.newsSourceCover[source],
+        isShowTitle: true,
+      ),
+    );
+  }
+
+  Widget _buildSource(String source) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[100]),
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      width: 100.0,
+      height: 90.0,
+      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          onTap: () => _goToQuerySourcePage(source),
+          splashColor: Colors.blue.withAlpha(30),
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                SourceIcon(source: source),
+                Container(height: 8.0),
+                Text(
+                  source,
+                  style: GoogleFonts.kanit(fontSize: 12.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSources() {
     return Section(
         title: 'แหล่งข่าว',
@@ -132,28 +178,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
               child: Padding(
                 padding: EdgeInsets.only(left: 8.0),
                 child: Row(
-                  children: NewsSource.values
-                      .map((source) => Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey[100]),
-                              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                            ),
-                            width: 100.0,
-                            height: 90.0,
-                            margin: EdgeInsets.symmetric(horizontal: 4.0),
-                            padding: EdgeInsets.all(12.0),
-                            child: Column(
-                              children: [
-                                SourceIcon(source: source),
-                                Container(height: 8.0),
-                                Text(
-                                  source,
-                                  style: GoogleFonts.kanit(fontSize: 12.0),
-                                ),
-                              ],
-                            ),
-                          ))
-                      .toList(),
+                  children: NewsSource.values.map(_buildSource).toList(),
                 ),
               ),
             ),
