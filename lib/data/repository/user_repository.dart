@@ -4,6 +4,7 @@ import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/User.dart';
+import 'package:spent/helper/pagination.dart';
 
 @singleton
 class UserRepository {
@@ -34,8 +35,8 @@ class UserRepository {
     return history;
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user) async {
-    final histories = await _userStorage.getNewsHistoryByUser(user);
+  Future<List<History>> getNewsHistoryByUser(User user, PaginationOption paginationOption) async {
+    final histories = await _userStorage.getNewsHistoryByUser(user, paginationOption: paginationOption);
     return histories;
   }
 
@@ -53,8 +54,8 @@ class UserRepository {
     return bookmark;
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user) async {
-    final bookmarks = await _userStorage.getBookmarksByUser(user);
+  Future<List<Bookmark>> getBookmarksByUser(User user, PaginationOption paginationOption) async {
+    final bookmarks = await _userStorage.getBookmarksByUser(user, paginationOption: paginationOption);
     return bookmarks;
   }
 

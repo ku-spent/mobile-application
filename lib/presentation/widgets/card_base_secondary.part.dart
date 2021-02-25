@@ -108,7 +108,7 @@ extension CardBaseSecondaryMethod on _CardBaseState {
                 ],
               ),
             ),
-            _buildBottom(),
+            widget.showBottom ? _buildBottom() : Container(height: 8.0),
           ],
         ),
       ),

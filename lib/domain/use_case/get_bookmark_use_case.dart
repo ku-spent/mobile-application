@@ -4,6 +4,7 @@ import 'package:spent/data/repository/news_repository.dart';
 import 'package:spent/data/repository/user_repository.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/News.dart';
+import 'package:spent/helper/pagination.dart';
 
 @injectable
 class GetBookmarkUseCase {
@@ -13,9 +14,10 @@ class GetBookmarkUseCase {
 
   const GetBookmarkUseCase(this._authenticationRepository, this._userRepository, this._newsRepository);
 
-  Future<List<News>> call() async {
+  Future<List<News>> call({from = 0, size = 10}) async {
     final User user = await _authenticationRepository.getCurrentUser();
-    final List<Bookmark> bookmarks = await _userRepository.getBookmarksByUser(user);
+    final PaginationOption paginationOption = PaginationOption(from, size);
+    final List<Bookmark> bookmarks = await _userRepository.getBookmarksByUser(user, paginationOption);
     List<News> newsList = await Future.wait(bookmarks.map((bookmark) => _newsRepository.getNewsById(bookmark.newsId)));
     newsList = newsList.where((news) => news != null).toList();
     final List<News> mappedUserNews =

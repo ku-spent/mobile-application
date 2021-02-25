@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/helper/pagination.dart';
 
 @singleton
 class UserStorage {
@@ -42,14 +43,15 @@ class UserStorage {
     }
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user) async {
+  Future<List<History>> getNewsHistoryByUser(User user, {PaginationOption paginationOption}) async {
     final histories = await Amplify.DataStore.query(
       History.classType,
       where: History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE')),
       sortBy: [History.UPDATEDAT.descending()],
+      pagination: paginationOption,
     );
     // sort desc
-    histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    // histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
     return histories;
   }
@@ -83,14 +85,14 @@ class UserStorage {
     }
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user) async {
+  Future<List<Bookmark>> getBookmarksByUser(User user, {PaginationOption paginationOption}) async {
     final bookmarks = await Amplify.DataStore.query(
       Bookmark.classType,
       where: Bookmark.USERID.eq(user.id),
       sortBy: [Bookmark.UPDATEDAT.descending()],
+      pagination: paginationOption,
     );
     // sort desc
-    bookmarks.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return bookmarks;
   }
 
@@ -108,6 +110,7 @@ class UserStorage {
   }
 
   Future<void> deleteUserNewsAction(UserNewsAction userNewsAction) async {
+    print(userNewsAction.getInstanceType().modelName());
     await Amplify.DataStore.delete(userNewsAction);
   }
 

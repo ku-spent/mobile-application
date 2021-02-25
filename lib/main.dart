@@ -23,7 +23,6 @@ import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart'
 import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
-import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/di/di.dart';

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
@@ -12,6 +13,7 @@ part 'bookmark_state.dart';
 
 @singleton
 class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
+  final int fetchSize = 10;
   final GetBookmarkUseCase _bookmarkUseCase;
 
   BookmarkBloc(this._bookmarkUseCase) : super(BookmarkInitial());
@@ -27,10 +29,29 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     }
   }
 
+  Stream<BookmarkState> _mapBookmarkLoadedState(FetchBookmark event) async* {
+    try {
+      final curState = state;
+      if (curState is BookmarkInitial) {
+        yield BookmarkLoading();
+        final List<News> bookmarksNews = await _bookmarkUseCase.call(from: 0, size: fetchSize);
+        yield BookmarkLoaded(news: bookmarksNews, hasMore: bookmarksNews.length == fetchSize);
+      } else if (curState is BookmarkLoaded) {
+        final List<News> bookmarksNews = await _bookmarkUseCase.call(from: curState.news.length, size: fetchSize);
+        yield bookmarksNews.isEmpty
+            ? curState.copyWith(hasMore: false)
+            : BookmarkLoaded(news: curState.news + bookmarksNews, hasMore: true);
+      }
+    } catch (e) {
+      print(e);
+      yield BookmarkLoadError();
+    }
+  }
+
   Stream<BookmarkState> _mapRefreshBookmarkLoadedState(RefreshBookmark event) async* {
     try {
-      List<News> bookmarksNews = await _bookmarkUseCase.call();
-      yield BookmarkLoaded(bookmarksNews);
+      final List<News> bookmarksNews = await _bookmarkUseCase.call(from: 0, size: fetchSize);
+      yield BookmarkLoaded(news: bookmarksNews, hasMore: bookmarksNews.length == fetchSize);
     } catch (e) {
       print(e);
       yield BookmarkLoadError();
@@ -41,14 +62,8 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     }
   }
 
-  Stream<BookmarkState> _mapBookmarkLoadedState(FetchBookmark event) async* {
-    yield BookmarkLoading();
-    try {
-      List<News> bookmarksNews = await _bookmarkUseCase.call();
-      yield BookmarkLoaded(bookmarksNews);
-    } catch (e) {
-      print(e);
-      yield BookmarkLoadError();
-    }
+  @override
+  Stream<Transition<BookmarkEvent, BookmarkState>> transformEvents(Stream<BookmarkEvent> events, transitionFn) {
+    return super.transformEvents(events.debounceTime(const Duration(milliseconds: 500)), transitionFn);
   }
 }

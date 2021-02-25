@@ -26,8 +26,10 @@ class CardBase extends StatefulWidget {
   final News news;
   final bool showPicture;
   final bool showSummary;
+  final bool showBottom;
   final bool isSubCard;
   final bool isSecondary;
+  final EdgeInsets margin;
 
   CardBase({
     Key key,
@@ -36,6 +38,8 @@ class CardBase extends StatefulWidget {
     this.showSummary = true,
     this.isSubCard = false,
     this.isSecondary = false,
+    this.showBottom = true,
+    this.margin = const EdgeInsets.only(bottom: 8.0),
   }) : super(key: key);
 
   @override
@@ -148,10 +152,12 @@ class _CardBaseState extends State<CardBase> {
         children: [
           _buildHeader(),
           _buildContent(widget.showPicture),
-          Padding(
-            padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0),
-            child: _buildBottom(),
-          ),
+          widget.showBottom
+              ? Padding(
+                  padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0),
+                  child: _buildBottom(),
+                )
+              : Container(height: 8.0),
         ],
       ),
     );
@@ -179,7 +185,7 @@ class _CardBaseState extends State<CardBase> {
         BlocListener<ShareNewsBloc, ShareNewsState>(listener: (context, state) {}),
       ],
       child: Container(
-        margin: EdgeInsets.only(bottom: 4.0),
+        margin: widget.margin,
         child: Card(
           elevation: 0,
           margin: EdgeInsets.zero,

@@ -1,12 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
-import 'package:spent/presentation/bloc/feed/feed_bloc.dart';
 import 'package:spent/presentation/pages/feed_page.dart';
 import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';

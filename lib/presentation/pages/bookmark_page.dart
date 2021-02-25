@@ -47,7 +47,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      // _fetchHistories();
+      _fetchBookmarks();
     }
   }
 
@@ -68,6 +68,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget _buildItem(BuildContext context, News news) {
     return CardBase(
       news: news,
+      isSecondary: true,
+      showBottom: false,
     );
   }
 
@@ -89,7 +91,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
         },
         child: BlocBuilder<BookmarkBloc, BookmarkState>(
           builder: (context, state) {
-            if (state is BookmarkLoaded) {
+            if (state is BookmarkInitial || state is BookmarkLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is BookmarkLoaded) {
               if (state.news.isEmpty) {
                 return Center(
                   child: Text('no bookmarks'),
@@ -97,45 +101,49 @@ class _BookmarkPageState extends State<BookmarkPage> {
               } else {
                 return SmartRefresher(
                   enablePullDown: true,
-                  // enablePullUp: state.hasMore,
+                  enablePullUp: state.hasMore,
                   header: WaterDropMaterialHeader(),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
-                  child: ImplicitlyAnimatedList<News>(
+                  child: ListView(
                     shrinkWrap: true,
-                    items: state.news,
-                    physics: const NeverScrollableScrollPhysics(),
-                    removeDuration: const Duration(milliseconds: 200),
-                    insertDuration: const Duration(milliseconds: 200),
-                    updateDuration: const Duration(milliseconds: 200),
-                    areItemsTheSame: (a, b) => a.id == b.id,
-                    itemBuilder: (context, animation, result, i) {
-                      return SizeFadeTransition(
-                        key: ValueKey(result.id),
-                        animation: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    updateItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        key: ValueKey(result.id),
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    removeItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
+                    controller: _scrollController,
+                    children: [
+                      ImplicitlyAnimatedList<News>(
+                        shrinkWrap: true,
+                        items: state.news,
+                        physics: const NeverScrollableScrollPhysics(),
+                        removeDuration: const Duration(milliseconds: 200),
+                        insertDuration: const Duration(milliseconds: 200),
+                        updateDuration: const Duration(milliseconds: 200),
+                        areItemsTheSame: (a, b) => a.id == b.id,
+                        itemBuilder: (context, animation, result, i) {
+                          return SizeFadeTransition(
+                            key: ValueKey(result.id),
+                            animation: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        updateItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            key: ValueKey(result.id),
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        removeItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 );
               }
             } else if (state is BookmarkLoadError) {
               return RetryError(callback: _onRefresh);
-            } else {
-              return Center(child: CircularProgressIndicator());
             }
           },
         ),

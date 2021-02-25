@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
-import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
@@ -34,7 +34,6 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
-
     Future.delayed(Duration.zero, () async {
       _historyBloc = BlocProvider.of<HistoryBloc>(context);
       _fetchHistories();
@@ -51,7 +50,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      // _fetchHistories();
+      _fetchHistories();
     }
   }
 
@@ -68,10 +67,25 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Widget _buildItem(BuildContext context, News news) {
-    return CardBase(
-      news: news,
-      showSummary: false,
-      showPicture: false,
+    return Container(
+      margin: EdgeInsets.only(bottom: 8.0),
+      child: Slidable(
+        actionPane: const SlidableBehindActionPane(),
+        child: CardBase(
+          news: news,
+          isSecondary: true,
+          showBottom: false,
+          margin: EdgeInsets.zero,
+        ),
+        secondaryActions: [
+          IconSlideAction(
+            caption: 'Delete',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () => {},
+          ),
+        ],
+      ),
     );
   }
 
@@ -87,7 +101,9 @@ class _HistoryPageState extends State<HistoryPage> {
         },
         child: BlocBuilder<HistoryBloc, HistoryState>(
           builder: (context, state) {
-            if (state is HistoryLoaded) {
+            if (state is HistoryInitial || state is HistoryLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is HistoryLoaded) {
               if (state.news.isEmpty) {
                 return Center(
                   child: Text('no histories'),
@@ -95,45 +111,50 @@ class _HistoryPageState extends State<HistoryPage> {
               } else {
                 return SmartRefresher(
                   enablePullDown: true,
-                  // enablePullUp: state.hasMore,
+                  enablePullUp: state.hasMore,
                   header: WaterDropMaterialHeader(),
+                  physics: BouncingScrollPhysics(),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
-                  child: ImplicitlyAnimatedList<News>(
+                  child: ListView(
                     shrinkWrap: true,
-                    items: state.news,
-                    physics: const NeverScrollableScrollPhysics(),
-                    removeDuration: const Duration(milliseconds: 200),
-                    insertDuration: const Duration(milliseconds: 200),
-                    updateDuration: const Duration(milliseconds: 200),
-                    areItemsTheSame: (a, b) => a.id == b.id,
-                    itemBuilder: (context, animation, result, i) {
-                      return SizeFadeTransition(
-                        key: ValueKey(result.id),
-                        animation: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    updateItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        key: ValueKey(result.id),
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
-                    removeItemBuilder: (context, animation, result) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: _buildItem(context, result),
-                      );
-                    },
+                    controller: _scrollController,
+                    children: [
+                      ImplicitlyAnimatedList<News>(
+                        shrinkWrap: true,
+                        items: state.news,
+                        physics: const NeverScrollableScrollPhysics(),
+                        removeDuration: const Duration(milliseconds: 200),
+                        insertDuration: const Duration(milliseconds: 200),
+                        updateDuration: const Duration(milliseconds: 200),
+                        areItemsTheSame: (a, b) => a.id == b.id,
+                        itemBuilder: (context, animation, result, i) {
+                          return SizeFadeTransition(
+                            key: ValueKey(result.id),
+                            animation: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        updateItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            key: ValueKey(result.id),
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        removeItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 );
               }
             } else if (state is HistoryLoadError) {
               return RetryError(callback: _onRefresh);
-            } else {
-              return Center(child: CircularProgressIndicator());
             }
           },
         ),
