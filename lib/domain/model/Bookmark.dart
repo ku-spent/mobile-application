@@ -23,6 +23,7 @@ class Bookmark extends Model {
   final String id;
   final String userId;
   final String newsId;
+  final String newsTitle;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -38,6 +39,7 @@ class Bookmark extends Model {
       {@required this.id,
       @required this.userId,
       @required this.newsId,
+      @required this.newsTitle,
       @required this.createdAt,
       @required this.updatedAt});
 
@@ -45,12 +47,14 @@ class Bookmark extends Model {
       {@required String id,
       @required String userId,
       @required String newsId,
+      @required String newsTitle,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return Bookmark._internal(
         id: id == null ? UUID.getUUID() : id,
         userId: userId,
         newsId: newsId,
+        newsTitle: newsTitle,
         createdAt: createdAt,
         updatedAt: updatedAt);
   }
@@ -66,6 +70,7 @@ class Bookmark extends Model {
         id == other.id &&
         userId == other.userId &&
         newsId == other.newsId &&
+        newsTitle == other.newsTitle &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
   }
@@ -81,6 +86,7 @@ class Bookmark extends Model {
     buffer.write("id=" + id + ", ");
     buffer.write("userId=" + userId + ", ");
     buffer.write("newsId=" + newsId + ", ");
+    buffer.write("newsTitle=" + newsTitle + ", ");
     buffer.write("createdAt=" + (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") + ", ");
     buffer.write("updatedAt=" + (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
     buffer.write("}");
@@ -92,12 +98,14 @@ class Bookmark extends Model {
       {@required String id,
       @required String userId,
       @required String newsId,
+      @required String newsTitle,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
     return Bookmark(
         id: id ?? this.id,
         userId: userId ?? this.userId,
         newsId: newsId ?? this.newsId,
+        newsTitle: newsTitle ?? this.newsTitle,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -106,6 +114,7 @@ class Bookmark extends Model {
       : id = json['id'],
         userId = json['userId'],
         newsId = json['newsId'],
+        newsTitle = json['newsTitle'],
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -113,6 +122,7 @@ class Bookmark extends Model {
         'id': id,
         'userId': userId,
         'newsId': newsId,
+        'newsTitle': newsTitle,
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
       };
@@ -120,6 +130,7 @@ class Bookmark extends Model {
   static final QueryField ID = QueryField(fieldName: "bookmark.id");
   static final QueryField USERID = QueryField(fieldName: "userId");
   static final QueryField NEWSID = QueryField(fieldName: "newsId");
+  static final QueryField NEWSTITLE = QueryField(fieldName: "newsTitle");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
@@ -141,6 +152,9 @@ class Bookmark extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: Bookmark.NEWSID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: Bookmark.NEWSTITLE, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: Bookmark.CREATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));

@@ -5,12 +5,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
+import 'package:spent/presentation/widgets/search_bar.dart';
 
 class HistoryPage extends StatefulWidget {
   static String title = 'History';
@@ -25,9 +27,24 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   HistoryBloc _historyBloc;
+  FloatingSearchBarController _controller = FloatingSearchBarController();
   ScrollController _scrollController;
   final _scrollThreshold = 200.0;
   final RefreshController _refreshController = RefreshController();
+  final actions = [
+    FloatingSearchBarAction(
+      showIfOpened: false,
+      child: CircularButton(
+        icon: const Icon(
+          Icons.fiber_new_sharp,
+        ),
+        onPressed: () {},
+      ),
+    ),
+    FloatingSearchBarAction.searchToClear(
+      showIfClosed: false,
+    ),
+  ];
 
   @override
   void initState() {
@@ -109,47 +126,68 @@ class _HistoryPageState extends State<HistoryPage> {
                   child: Text('no histories'),
                 );
               } else {
-                return SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: state.hasMore,
-                  header: WaterDropMaterialHeader(),
-                  physics: BouncingScrollPhysics(),
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  child: ListView(
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    children: [
-                      ImplicitlyAnimatedList<News>(
+                return FloatingSearchAppBar(
+                  elevation: 1,
+                  controller: _controller,
+                  clearQueryOnClose: false,
+                  hintStyle: GoogleFonts.kanit(),
+                  hint: 'ค้นหา ข่าว, แหล่งข่าว, ประเภทข่าว',
+                  iconColor: Colors.grey,
+                  color: Colors.white,
+                  colorOnScroll: Colors.white,
+                  liftOnScrollElevation: 4,
+                  transitionDuration: const Duration(milliseconds: 300),
+                  transitionCurve: Curves.easeInOutCubic,
+                  actions: actions,
+                  // progress: state is SearchLoading,
+                  debounceDelay: const Duration(milliseconds: 500),
+                  // onQueryChanged: _onQueryChanged,
+                  // onSubmitted: _onSumitted,
+                  body: Expanded(
+                    child: SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: state.hasMore,
+                      header: WaterDropMaterialHeader(),
+                      physics: BouncingScrollPhysics(),
+                      controller: _refreshController,
+                      onRefresh: _onRefresh,
+                      child: ListView(
                         shrinkWrap: true,
-                        items: state.news,
-                        physics: const NeverScrollableScrollPhysics(),
-                        removeDuration: const Duration(milliseconds: 200),
-                        insertDuration: const Duration(milliseconds: 200),
-                        updateDuration: const Duration(milliseconds: 200),
-                        areItemsTheSame: (a, b) => a.id == b.id,
-                        itemBuilder: (context, animation, result, i) {
-                          return SizeFadeTransition(
-                            key: ValueKey(result.id),
-                            animation: animation,
-                            child: _buildItem(context, result),
-                          );
-                        },
-                        updateItemBuilder: (context, animation, result) {
-                          return FadeTransition(
-                            key: ValueKey(result.id),
-                            opacity: animation,
-                            child: _buildItem(context, result),
-                          );
-                        },
-                        removeItemBuilder: (context, animation, result) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: _buildItem(context, result),
-                          );
-                        },
+                        controller: _scrollController,
+                        children: [
+                          ImplicitlyAnimatedList<News>(
+                            shrinkWrap: true,
+                            items: state.news,
+                            physics: const NeverScrollableScrollPhysics(),
+                            removeDuration: const Duration(milliseconds: 200),
+                            insertDuration: const Duration(milliseconds: 200),
+                            updateDuration: const Duration(milliseconds: 200),
+                            areItemsTheSame: (a, b) => a.id == b.id,
+                            itemBuilder: (context, animation, result, i) {
+                              return SizeFadeTransition(
+                                key: ValueKey(result.id),
+                                animation: animation,
+                                child: _buildItem(context, result),
+                              );
+                            },
+                            updateItemBuilder: (context, animation, result) {
+                              return FadeTransition(
+                                key: ValueKey(result.id),
+                                opacity: animation,
+                                child: _buildItem(context, result),
+                              );
+                            },
+                            removeItemBuilder: (context, animation, result) {
+                              return FadeTransition(
+                                key: ValueKey(result.id),
+                                opacity: animation,
+                                child: _buildItem(context, result),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 );
               }

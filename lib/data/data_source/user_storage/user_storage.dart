@@ -14,6 +14,7 @@ class UserStorage {
     final history = History(
       id: UUID.getUUID(),
       newsId: news.id,
+      newsTitle: news.title,
       userId: user.id,
       status: HistoryStatus.ACTIVE,
       createdAt: DateTime.now(),
@@ -61,6 +62,7 @@ class UserStorage {
     final bookmark = Bookmark(
       id: UUID.getUUID(),
       newsId: news.id,
+      newsTitle: news.title,
       userId: user.id,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),

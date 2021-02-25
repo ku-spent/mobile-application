@@ -63,6 +63,7 @@ type Bookmark
   userId: ID!
   # user: User! @connection(fields: ["userId"])
   newsId: ID!
+  newsTitle: String!
   # news: News! @connection(fields: ["newsId"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -78,6 +79,7 @@ type History
   userId: ID!
   # user: User! @connection(fields: ["userId"])
   newsId: ID!
+  newsTitle: String!
   # news: News! @connection(fields: ["newsId"])
   status: HistoryStatus!
   createdAt: AWSDateTime!
