@@ -30,13 +30,17 @@ class UserRepository {
     await _userStorage.updateNewsHistory(oldHistory, newHistory);
   }
 
+  Future<void> deleteNewsHistory(History history) async {
+    await _userStorage.deleteNewsHistory(history);
+  }
+
   Future<History> getHistoryByNewsId(User user, News news) async {
     final history = await _userStorage.getHistoryByNewsId(user, news);
     return history;
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user, PaginationOption paginationOption) async {
-    final histories = await _userStorage.getNewsHistoryByUser(user, paginationOption: paginationOption);
+  Future<List<History>> getNewsHistoryByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final histories = await _userStorage.getNewsHistoryByUser(user, query: query, paginationOption: paginationOption);
     return histories;
   }
 
@@ -54,8 +58,8 @@ class UserRepository {
     return bookmark;
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user, PaginationOption paginationOption) async {
-    final bookmarks = await _userStorage.getBookmarksByUser(user, paginationOption: paginationOption);
+  Future<List<Bookmark>> getBookmarksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final bookmarks = await _userStorage.getBookmarksByUser(user, query: query, paginationOption: paginationOption);
     return bookmarks;
   }
 

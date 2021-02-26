@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/News.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:spent/domain/model/Recommendation.dart';
 import 'package:spent/domain/use_case/get_recommendation_use_case.dart';

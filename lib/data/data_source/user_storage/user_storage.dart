@@ -14,7 +14,7 @@ class UserStorage {
     final history = History(
       id: UUID.getUUID(),
       newsId: news.id,
-      newsTitle: news.title,
+      newsTitle: news.title.toLowerCase(),
       userId: user.id,
       status: HistoryStatus.ACTIVE,
       createdAt: DateTime.now(),
@@ -31,6 +31,10 @@ class UserStorage {
     await Amplify.DataStore.save(history);
   }
 
+  Future<void> deleteNewsHistory(History history) async {
+    await Amplify.DataStore.delete(history);
+  }
+
   Future<History> getHistoryByNewsId(User user, News news) async {
     try {
       final List<History> histories = await Amplify.DataStore.query(
@@ -44,10 +48,12 @@ class UserStorage {
     }
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user, {PaginationOption paginationOption}) async {
+  Future<List<History>> getNewsHistoryByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE'));
+    final where = query == null ? baseWhere : baseWhere.and(History.NEWSTITLE.contains(query));
     final histories = await Amplify.DataStore.query(
       History.classType,
-      where: History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE')),
+      where: where,
       sortBy: [History.UPDATEDAT.descending()],
       pagination: paginationOption,
     );
@@ -62,7 +68,7 @@ class UserStorage {
     final bookmark = Bookmark(
       id: UUID.getUUID(),
       newsId: news.id,
-      newsTitle: news.title,
+      newsTitle: news.title.toLowerCase(),
       userId: user.id,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -87,10 +93,12 @@ class UserStorage {
     }
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user, {PaginationOption paginationOption}) async {
+  Future<List<Bookmark>> getBookmarksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = Bookmark.USERID.eq(user.id);
+    final where = query == null ? baseWhere : baseWhere.and(Bookmark.NEWSTITLE.contains(query));
     final bookmarks = await Amplify.DataStore.query(
       Bookmark.classType,
-      where: Bookmark.USERID.eq(user.id),
+      where: where,
       sortBy: [Bookmark.UPDATEDAT.descending()],
       pagination: paginationOption,
     );

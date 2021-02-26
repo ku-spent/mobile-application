@@ -15,10 +15,11 @@ class GetViewNewsHistoryUseCase {
 
   const GetViewNewsHistoryUseCase(this._authenticationRepository, this._userRepository, this._newsRepository);
 
-  Future<List<News>> call({int from, int size}) async {
+  Future<List<News>> call({String query, int from, int size}) async {
     final User user = await _authenticationRepository.getCurrentUser();
     final PaginationOption paginationOption = PaginationOption(from, size);
-    final List<History> histories = await _userRepository.getNewsHistoryByUser(user, paginationOption);
+    final List<History> histories = await _userRepository.getNewsHistoryByUser(user,
+        query: query.toLowerCase(), paginationOption: paginationOption);
     List<News> newsList = await Future.wait(histories.map((history) => _newsRepository.getNewsById(history.newsId)));
     newsList = newsList.where((news) => news != null).toList();
     final List<News> mappedUserNews =

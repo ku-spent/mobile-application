@@ -10,8 +10,8 @@ import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/explore/explore_bloc.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
-import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
-import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
+import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 
@@ -76,11 +76,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<BookmarkBloc>(
           create: (BuildContext context) => getIt<BookmarkBloc>(),
         ),
-        BlocProvider<SaveBookmarkBloc>(
-          create: (BuildContext context) => getIt<SaveBookmarkBloc>(),
+        BlocProvider<ManageBookmarkBloc>(
+          create: (BuildContext context) => getIt<ManageBookmarkBloc>(),
         ),
-        BlocProvider<SaveHistoryBloc>(
-          create: (BuildContext context) => getIt<SaveHistoryBloc>(),
+        BlocProvider<ManageHistoryBloc>(
+          create: (BuildContext context) => getIt<ManageHistoryBloc>(),
         ),
         BlocProvider<LikeNewsBloc>(
           create: (BuildContext context) => getIt<LikeNewsBloc>(),

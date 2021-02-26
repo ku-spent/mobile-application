@@ -10,7 +10,6 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/suggest/suggest_bloc.dart';
-import 'package:spent/presentation/pages/css.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:badges/badges.dart';

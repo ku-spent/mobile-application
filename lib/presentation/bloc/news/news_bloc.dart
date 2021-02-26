@@ -6,19 +6,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
-import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
-import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
+import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 
 part 'news_event.dart';
 part 'news_state.dart';
 
 @singleton
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
-  SaveHistoryBloc _saveHistoryBloc;
-  SaveBookmarkBloc _saveBookmarkBloc;
+  ManageHistoryBloc _manageHistoryBloc;
+  ManageBookmarkBloc _manageBookmarkBloc;
   LikeNewsBloc _likeNewsBloc;
 
-  NewsBloc(this._saveBookmarkBloc, this._saveHistoryBloc, this._likeNewsBloc) : super(NewsInitial());
+  NewsBloc(this._manageBookmarkBloc, this._manageHistoryBloc, this._likeNewsBloc) : super(NewsInitial());
 
   @override
   Stream<NewsState> mapEventToState(

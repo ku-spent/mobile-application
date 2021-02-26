@@ -26,6 +26,8 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
       yield* _mapBookmarkLoadedState(event);
     } else if (event is RefreshBookmark) {
       yield* _mapRefreshBookmarkLoadedState(event);
+    } else if (event is RemoveNewsFromList) {
+      yield* _mapRemoveNewsFromListState(event);
     }
   }
 
@@ -33,11 +35,12 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     try {
       final curState = state;
       if (curState is BookmarkInitial) {
-        yield BookmarkLoading();
-        final List<News> bookmarksNews = await _bookmarkUseCase.call(from: 0, size: fetchSize);
+        // yield BookmarkLoading();
+        final List<News> bookmarksNews = await _bookmarkUseCase.call(query: '', from: 0, size: fetchSize);
         yield BookmarkLoaded(news: bookmarksNews, hasMore: bookmarksNews.length == fetchSize);
       } else if (curState is BookmarkLoaded) {
-        final List<News> bookmarksNews = await _bookmarkUseCase.call(from: curState.news.length, size: fetchSize);
+        final List<News> bookmarksNews =
+            await _bookmarkUseCase.call(query: event.query, from: curState.news.length, size: fetchSize);
         yield bookmarksNews.isEmpty
             ? curState.copyWith(hasMore: false)
             : BookmarkLoaded(news: curState.news + bookmarksNews, hasMore: true);
@@ -50,7 +53,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
 
   Stream<BookmarkState> _mapRefreshBookmarkLoadedState(RefreshBookmark event) async* {
     try {
-      final List<News> bookmarksNews = await _bookmarkUseCase.call(from: 0, size: fetchSize);
+      final List<News> bookmarksNews = await _bookmarkUseCase.call(query: event.query, from: 0, size: fetchSize);
       yield BookmarkLoaded(news: bookmarksNews, hasMore: bookmarksNews.length == fetchSize);
     } catch (e) {
       print(e);
@@ -59,6 +62,21 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
       if (event.callback != null) {
         event.callback();
       }
+    }
+  }
+
+  Stream<BookmarkState> _mapRemoveNewsFromListState(RemoveNewsFromList event) async* {
+    try {
+      final curState = state;
+      if (curState is BookmarkLoaded) {
+        yield curState.copyWith(
+          news: curState.news.where((element) => element.id != event.news.id).toList(),
+          hasMore: curState.hasMore,
+        );
+      }
+    } catch (e) {
+      print(e);
+      yield BookmarkLoadError();
     }
   }
 

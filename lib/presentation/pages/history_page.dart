@@ -2,17 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
-import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/in_page_search_bar.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
-import 'package:spent/presentation/widgets/search_bar.dart';
 
 class HistoryPage extends StatefulWidget {
   static String title = 'History';
@@ -26,25 +24,13 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  String _query = '';
   HistoryBloc _historyBloc;
-  FloatingSearchBarController _controller = FloatingSearchBarController();
+  ManageHistoryBloc _manageHistoryBloc;
   ScrollController _scrollController;
+
   final _scrollThreshold = 200.0;
   final RefreshController _refreshController = RefreshController();
-  final actions = [
-    FloatingSearchBarAction(
-      showIfOpened: false,
-      child: CircularButton(
-        icon: const Icon(
-          Icons.fiber_new_sharp,
-        ),
-        onPressed: () {},
-      ),
-    ),
-    FloatingSearchBarAction.searchToClear(
-      showIfClosed: false,
-    ),
-  ];
 
   @override
   void initState() {
@@ -53,7 +39,8 @@ class _HistoryPageState extends State<HistoryPage> {
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () async {
       _historyBloc = BlocProvider.of<HistoryBloc>(context);
-      _fetchHistories();
+      _manageHistoryBloc = BlocProvider.of<ManageHistoryBloc>(context);
+      _refreshHistories();
     });
   }
 
@@ -66,21 +53,32 @@ class _HistoryPageState extends State<HistoryPage> {
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
+    if ((maxScroll - currentScroll) > 0 && (maxScroll - currentScroll <= _scrollThreshold)) {
       _fetchHistories();
     }
   }
 
   void _fetchHistories() {
-    _historyBloc.add(FetchHistory());
+    _historyBloc.add(FetchHistory(query: _query));
   }
 
   void _refreshHistories() {
-    _historyBloc.add(RefreshHistory());
+    _historyBloc.add(RefreshHistory(query: _query));
   }
 
   void _onRefresh() async {
-    _historyBloc.add(RefreshHistory(callback: _refreshController.refreshCompleted));
+    _historyBloc.add(RefreshHistory(query: _query, callback: _refreshController.refreshCompleted));
+  }
+
+  void _onDelete(News news) async {
+    _manageHistoryBloc.add(DeleteHistory(news: news));
+  }
+
+  void _onQueryChanged(String query) {
+    setState(() {
+      _query = query;
+    });
+    _refreshHistories();
   }
 
   Widget _buildItem(BuildContext context, News news) {
@@ -99,7 +97,7 @@ class _HistoryPageState extends State<HistoryPage> {
             caption: 'Delete',
             color: Colors.red,
             icon: Icons.delete,
-            onTap: () => {},
+            onTap: () => _onDelete(news),
           ),
         ],
       ),
@@ -109,11 +107,12 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(HistoryPage.title, style: GoogleFonts.kanit())),
-      body: BlocListener<SaveHistoryBloc, SaveHistoryState>(
+      body: BlocListener<ManageHistoryBloc, ManageHistoryState>(
         listener: (context, state) {
           if (state is SaveHistorySuccess) {
             _refreshHistories();
+          } else if (state is DeleteHistorySuccess) {
+            _historyBloc.add(RemoveHistoryFromList(news: state.news));
           }
         },
         child: BlocBuilder<HistoryBloc, HistoryState>(
@@ -121,76 +120,57 @@ class _HistoryPageState extends State<HistoryPage> {
             if (state is HistoryInitial || state is HistoryLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is HistoryLoaded) {
-              if (state.news.isEmpty) {
-                return Center(
-                  child: Text('no histories'),
-                );
-              } else {
-                return FloatingSearchAppBar(
-                  elevation: 1,
-                  controller: _controller,
-                  clearQueryOnClose: false,
-                  hintStyle: GoogleFonts.kanit(),
-                  hint: 'ค้นหา ข่าว, แหล่งข่าว, ประเภทข่าว',
-                  iconColor: Colors.grey,
-                  color: Colors.white,
-                  colorOnScroll: Colors.white,
-                  liftOnScrollElevation: 4,
-                  transitionDuration: const Duration(milliseconds: 300),
-                  transitionCurve: Curves.easeInOutCubic,
-                  actions: actions,
-                  // progress: state is SearchLoading,
-                  debounceDelay: const Duration(milliseconds: 500),
-                  // onQueryChanged: _onQueryChanged,
-                  // onSubmitted: _onSumitted,
-                  body: Expanded(
-                    child: SmartRefresher(
-                      enablePullDown: true,
-                      enablePullUp: state.hasMore,
-                      header: WaterDropMaterialHeader(),
-                      physics: BouncingScrollPhysics(),
-                      controller: _refreshController,
-                      onRefresh: _onRefresh,
-                      child: ListView(
+              return InPageSearchBar(
+                title: HistoryPage.title,
+                hint: 'ค้นหา',
+                onQueryChanged: _onQueryChanged,
+                onSubmitted: _onQueryChanged,
+                body: SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: state.hasMore,
+                  header: WaterDropMaterialHeader(),
+                  physics: BouncingScrollPhysics(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  child: ListView(
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    children: [
+                      state.news.isEmpty ? Center(child: Text('no history.')) : Container(),
+                      ImplicitlyAnimatedList<News>(
                         shrinkWrap: true,
-                        controller: _scrollController,
-                        children: [
-                          ImplicitlyAnimatedList<News>(
-                            shrinkWrap: true,
-                            items: state.news,
-                            physics: const NeverScrollableScrollPhysics(),
-                            removeDuration: const Duration(milliseconds: 200),
-                            insertDuration: const Duration(milliseconds: 200),
-                            updateDuration: const Duration(milliseconds: 200),
-                            areItemsTheSame: (a, b) => a.id == b.id,
-                            itemBuilder: (context, animation, result, i) {
-                              return SizeFadeTransition(
-                                key: ValueKey(result.id),
-                                animation: animation,
-                                child: _buildItem(context, result),
-                              );
-                            },
-                            updateItemBuilder: (context, animation, result) {
-                              return FadeTransition(
-                                key: ValueKey(result.id),
-                                opacity: animation,
-                                child: _buildItem(context, result),
-                              );
-                            },
-                            removeItemBuilder: (context, animation, result) {
-                              return FadeTransition(
-                                key: ValueKey(result.id),
-                                opacity: animation,
-                                child: _buildItem(context, result),
-                              );
-                            },
-                          ),
-                        ],
+                        items: state.news,
+                        physics: const NeverScrollableScrollPhysics(),
+                        removeDuration: const Duration(milliseconds: 100),
+                        insertDuration: const Duration(milliseconds: 100),
+                        updateDuration: const Duration(milliseconds: 100),
+                        areItemsTheSame: (a, b) => a.id == b.id,
+                        itemBuilder: (context, animation, result, i) {
+                          return SizeFadeTransition(
+                            key: ValueKey(result.id),
+                            animation: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        updateItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            key: ValueKey(result.id),
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
+                        removeItemBuilder: (context, animation, result) {
+                          return FadeTransition(
+                            key: ValueKey(result.id),
+                            opacity: animation,
+                            child: _buildItem(context, result),
+                          );
+                        },
                       ),
-                    ),
+                    ],
                   ),
-                );
-              }
+                ),
+              );
             } else if (state is HistoryLoadError) {
               return RetryError(callback: _onRefresh);
             }

@@ -27,6 +27,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       yield* _mapHistoryLoadedState(event);
     } else if (event is RefreshHistory) {
       yield* _mapRefreshHistoryLoadedState(event);
+    } else if (event is RemoveHistoryFromList) {
+      yield* _mapRemoveHistoryFromListState(event);
     }
   }
 
@@ -34,12 +36,12 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     try {
       final curState = state;
       if (curState is HistoryInitial) {
-        yield HistoryLoading();
-        final List<News> newsHistories = await _getViewNewsHistoryUseCase.call(from: 0, size: fetchSize);
+        // yield HistoryLoading();
+        final List<News> newsHistories = await _getViewNewsHistoryUseCase.call(query: '', from: 0, size: fetchSize);
         yield HistoryLoaded(news: newsHistories, hasMore: newsHistories.length == fetchSize);
       } else if (curState is HistoryLoaded) {
         final List<News> newsHistories =
-            await _getViewNewsHistoryUseCase.call(from: curState.news.length, size: fetchSize);
+            await _getViewNewsHistoryUseCase.call(query: event.query, from: curState.news.length, size: fetchSize);
         yield newsHistories.isEmpty
             ? curState.copyWith(hasMore: false)
             : HistoryLoaded(news: curState.news + newsHistories, hasMore: true);
@@ -52,7 +54,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
 
   Stream<HistoryState> _mapRefreshHistoryLoadedState(RefreshHistory event) async* {
     try {
-      final List<News> newsHistories = await _getViewNewsHistoryUseCase.call(from: 0, size: fetchSize);
+      final List<News> newsHistories =
+          await _getViewNewsHistoryUseCase.call(query: event.query, from: 0, size: fetchSize);
       yield HistoryLoaded(news: newsHistories, hasMore: newsHistories.length == fetchSize);
     } catch (e) {
       print(e);
@@ -61,6 +64,21 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       if (event.callback != null) {
         event.callback();
       }
+    }
+  }
+
+  Stream<HistoryState> _mapRemoveHistoryFromListState(RemoveHistoryFromList event) async* {
+    try {
+      final curState = state;
+      if (curState is HistoryLoaded) {
+        yield curState.copyWith(
+          news: curState.news.where((element) => element.id != event.news.id).toList(),
+          hasMore: curState.hasMore,
+        );
+      }
+    } catch (e) {
+      print(e);
+      yield HistoryLoadError();
     }
   }
 
