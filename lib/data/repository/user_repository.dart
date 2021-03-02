@@ -1,10 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:spent/data/data_source/user_storage/user_storage.dart';
-import 'package:spent/domain/model/History.dart';
-import 'package:spent/domain/model/ModelProvider.dart';
-import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/User.dart';
+
 import 'package:spent/helper/pagination.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/data/data_source/user_storage/user_storage.dart';
 
 @singleton
 class UserRepository {
@@ -19,6 +17,19 @@ class UserRepository {
     news.userAction =
         userNewsAction != null && userNewsAction.action == UserAction.LIKE ? UserAction.LIKE : UserAction.NONE;
     return news;
+  }
+
+  // BLock
+  Future<List<Block>> getBlocksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    return _userStorage.getBlocksByUser(user);
+  }
+
+  Future<void> saveBlock(User user, String name, BlockTypes type) async {
+    await _userStorage.saveBlock(user, name, type);
+  }
+
+  Future<void> deleteBlock(Block block) async {
+    await _userStorage.deleteBlock(block);
   }
 
   // History

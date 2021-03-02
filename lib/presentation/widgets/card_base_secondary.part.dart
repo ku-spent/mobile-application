@@ -36,7 +36,7 @@ extension CardBaseSecondaryMethod on _CardBaseState {
         ),
         _buildIcon(
           inActive: Icon(Icons.more_vert),
-          onPressed: () {},
+          onPressed: _settingModalBottomSheet,
         ),
       ],
     );

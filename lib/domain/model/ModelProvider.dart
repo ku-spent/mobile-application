@@ -14,10 +14,13 @@
 */
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:spent/domain/model/Block.dart';
 import 'Bookmark.dart';
 import 'History.dart';
 import 'News.dart';
 import 'User.dart';
+import 'Block.dart';
+import 'BlockTypes.dart';
 import 'UserNewsAction.dart';
 
 export 'Bookmark.dart';
@@ -27,12 +30,21 @@ export 'News.dart';
 export 'User.dart';
 export 'UserAction.dart';
 export 'UserNewsAction.dart';
+export 'Block.dart';
+export 'BlockTypes.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "8895a2a1631fee4b81fa047ed1cc5f2a";
+  String version = "92b6a8666e8ec38a96a773af1fa4a4be";
   @override
-  List<ModelSchema> modelSchemas = [Bookmark.schema, History.schema, News.schema, User.schema, UserNewsAction.schema];
+  List<ModelSchema> modelSchemas = [
+    Bookmark.schema,
+    History.schema,
+    News.schema,
+    User.schema,
+    UserNewsAction.schema,
+    Block.schema,
+  ];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
@@ -40,34 +52,19 @@ class ModelProvider implements ModelProviderInterface {
   ModelType getModelTypeByModelName(String modelName) {
     switch (modelName) {
       case "Bookmark":
-        {
-          return Bookmark.classType;
-        }
-        break;
+        return Bookmark.classType;
       case "History":
-        {
-          return History.classType;
-        }
-        break;
+        return History.classType;
       case "News":
-        {
-          return News.classType;
-        }
-        break;
+        return News.classType;
       case "User":
-        {
-          return User.classType;
-        }
-        break;
+        return User.classType;
       case "UserNewsAction":
-        {
-          return UserNewsAction.classType;
-        }
-        break;
+        return UserNewsAction.classType;
+      case "Block":
+        return Block.classType;
       default:
-        {
-          throw Exception("Failed to find model in model provider.");
-        }
+        throw Exception("Failed to find model in model provider.");
     }
   }
 }

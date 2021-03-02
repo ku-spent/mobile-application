@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
-import 'package:spent/presentation/pages/home_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
@@ -185,4 +185,20 @@ class QueryPageOptions {
   static const List<String> choices = <String>[
     block,
   ];
+}
+
+class BottomLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Center(
+        child: SizedBox(
+          width: 33,
+          height: 33,
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
 }

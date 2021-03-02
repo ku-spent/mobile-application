@@ -9,6 +9,36 @@ import 'package:spent/helper/pagination.dart';
 class UserStorage {
   const UserStorage();
 
+  // BLock
+  Future<List<Block>> getBlocksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = Block.USERID.eq(user.id);
+    final where = query == null ? baseWhere : baseWhere.and(Block.NAME.contains(query));
+    final List<Block> blocks = await Amplify.DataStore.query(
+      Block.classType,
+      where: where,
+      sortBy: [History.UPDATEDAT.descending()],
+      pagination: paginationOption,
+    );
+    return blocks;
+  }
+
+  Future<void> saveBlock(User user, String name, BlockTypes type) async {
+    final block = Block(
+      id: UUID.getUUID(),
+      userId: user.id,
+      name: name,
+      type: type,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    await Amplify.DataStore.save(block);
+  }
+
+  Future<void> deleteBlock(Block block) async {
+    await Amplify.DataStore.delete(block);
+  }
+
   // History
   Future<void> saveNewsHistory(User user, News news) async {
     final history = History(

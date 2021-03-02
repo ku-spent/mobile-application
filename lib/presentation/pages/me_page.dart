@@ -5,6 +5,7 @@ import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/pages/bookmark_page.dart';
 import 'package:spent/presentation/pages/history_page.dart';
+import 'package:spent/presentation/widgets/list_item.dart';
 import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
 
 class MePage extends StatefulWidget {
@@ -38,42 +39,36 @@ class _MePageState extends State<MePage> {
         child: Container(
           color: Colors.white,
           child: ListView(
-            // padding: EdgeInsets.only(top: 56.0),
             children: <Widget>[
               NavDrawerAccountHeader(),
-              ListTile(
+              ListItem(
                 title: Text(BookmarkPage.title),
                 leading: Icon(Icons.bookmark),
                 onTap: () => _handleItemClick(context, Routes.bookmarkPage),
-                contentPadding: _listPadding,
               ),
-              ListTile(
+              ListItem(
                 title: Text(HistoryPage.title),
                 leading: Icon(Icons.history),
                 onTap: () => _handleItemClick(context, Routes.historyPage),
-                contentPadding: _listPadding,
               ),
               Padding(
                 padding: _listPadding,
                 child: Divider(),
               ),
-              ListTile(
+              ListItem(
                 leading: Icon(Icons.settings),
                 title: Text('การตั้งค่า'),
                 onTap: () => {_handleItemClick(context, Routes.settingPage)},
-                contentPadding: _listPadding,
               ),
-              ListTile(
+              ListItem(
                 leading: Icon(Icons.info_outline),
                 title: Text('เกี่ยวกับ'),
                 onTap: () => {_handleItemClick(context, Routes.aboutPage)},
-                contentPadding: _listPadding,
               ),
-              ListTile(
+              ListItem(
                 leading: Icon(Icons.exit_to_app),
                 title: Text('ออกจากระบบ'),
                 onTap: () => {_handleSignout(context)},
-                contentPadding: _listPadding,
               ),
             ],
           ),

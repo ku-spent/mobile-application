@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
@@ -178,22 +179,6 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
       ),
       // ),
-    );
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(),
-        ),
-      ),
     );
   }
 }

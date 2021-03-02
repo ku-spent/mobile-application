@@ -7,9 +7,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:spent/presentation/AppRouter.gr.dart';
+import 'package:spent/presentation/bloc/block/block_bloc.dart';
 import 'package:spent/presentation/bloc/explore/explore_bloc.dart';
 import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
+import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
@@ -52,9 +54,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ExploreBloc>(
           create: (BuildContext context) => getIt<ExploreBloc>(),
         ),
-        // BlocProvider<FeedBloc>(
-        //   create: (BuildContext context) => getIt<FeedBloc>(),
-        // ),
+        BlocProvider<BlockBloc>(
+          create: (BuildContext context) => getIt<BlockBloc>(),
+        ),
         BlocProvider<SearchBloc>(
           create: (BuildContext context) => getIt<SearchBloc>(),
         ),
@@ -81,6 +83,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ManageHistoryBloc>(
           create: (BuildContext context) => getIt<ManageHistoryBloc>(),
+        ),
+        BlocProvider<ManageBlockBloc>(
+          create: (BuildContext context) => getIt<ManageBlockBloc>(),
         ),
         BlocProvider<LikeNewsBloc>(
           create: (BuildContext context) => getIt<LikeNewsBloc>(),

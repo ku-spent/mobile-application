@@ -5,27 +5,28 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:spent/domain/model/ModelProvider.dart';
-import 'package:spent/domain/model/News.dart';
-import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
-import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
-import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/bloc/block/block_bloc.dart';
+import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 import 'package:spent/presentation/widgets/in_page_search_bar.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
-class BookmarkPage extends StatefulWidget {
-  static String title = 'Bookmark';
+class SettingBlockPage extends StatefulWidget {
+  static String title = 'Sources & topics you see less of';
 
-  BookmarkPage({Key key}) : super(key: key);
+  final ScrollController scrollController = ScrollController();
+
+  SettingBlockPage({Key key}) : super(key: key);
 
   @override
-  _BookmarkPageState createState() => _BookmarkPageState();
+  _SettingBlockPageState createState() => _SettingBlockPageState();
 }
 
-class _BookmarkPageState extends State<BookmarkPage> {
+class _SettingBlockPageState extends State<SettingBlockPage> {
   String _query = '';
-  BookmarkBloc _bookmarkBloc;
-  ManageBookmarkBloc _manageBookmarkBloc;
+  BlockBloc _historyBloc;
+  ManageBlockBloc _manageBlockBloc;
   ScrollController _scrollController;
 
   final _scrollThreshold = 200.0;
@@ -34,12 +35,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     Future.delayed(Duration.zero, () async {
-      _bookmarkBloc = BlocProvider.of<BookmarkBloc>(context);
-      _manageBookmarkBloc = BlocProvider.of<ManageBookmarkBloc>(context);
-      _refreshBookmarks();
+      _historyBloc = BlocProvider.of<BlockBloc>(context);
+      _manageBlockBloc = BlocProvider.of<ManageBlockBloc>(context);
+      _refreshBlocks();
     });
   }
 
@@ -53,52 +54,45 @@ class _BookmarkPageState extends State<BookmarkPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if ((maxScroll - currentScroll) > 0 && (maxScroll - currentScroll <= _scrollThreshold)) {
-      _fetchBookmarks();
+      _fetchHistories();
     }
   }
 
-  void _fetchBookmarks() {
-    print('fetch bookmarks');
-    _bookmarkBloc.add(FetchBookmark(query: _query));
+  void _fetchHistories() {
+    _historyBloc.add(FetchBlock(query: _query));
   }
 
-  void _refreshBookmarks() {
-    print('refresh bookmarks');
-    _bookmarkBloc.add(RefreshBookmark(query: _query));
+  void _refreshBlocks() {
+    _historyBloc.add(RefreshBlock(query: _query));
   }
 
   void _onRefresh() async {
-    _bookmarkBloc.add(RefreshBookmark(query: _query, callback: () => {_refreshController.refreshCompleted()}));
+    _historyBloc.add(RefreshBlock(query: _query, callback: _refreshController.refreshCompleted));
   }
 
-  void _onDelete(News news) async {
-    _manageBookmarkBloc.add(DeleteBookmark(news: news));
+  void _onDelete(Block block) async {
+    _manageBlockBloc.add(DeleteBlock(block: block));
   }
 
   void _onQueryChanged(String query) {
     setState(() {
       _query = query;
     });
-    _refreshBookmarks();
+    _refreshBlocks();
   }
 
-  Widget _buildItem(BuildContext context, News news) {
+  Widget _buildItem(BuildContext context, Block block) {
     return Container(
       margin: EdgeInsets.only(bottom: 8.0),
       child: Slidable(
         actionPane: const SlidableBehindActionPane(),
-        child: CardBase(
-          news: news,
-          isSecondary: true,
-          showBottom: false,
-          margin: EdgeInsets.zero,
-        ),
+        child: ListTile(title: Text(block.name)),
         secondaryActions: [
           IconSlideAction(
             caption: 'Delete',
             color: Colors.red,
             icon: Icons.delete,
-            onTap: () => _onDelete(news),
+            onTap: () => _onDelete(block),
           ),
         ],
       ),
@@ -108,23 +102,21 @@ class _BookmarkPageState extends State<BookmarkPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocListener<ManageBookmarkBloc, ManageBookmarkState>(
+      body: BlocListener<ManageBlockBloc, ManageBlockState>(
         listener: (context, state) {
-          if (state is SaveBookmarkSuccess) {
-            print('save ${state.news.id}');
-            _refreshBookmarks();
-          } else if (state is DeleteBookmarkSuccess) {
-            _bookmarkBloc.add(RemoveNewsFromList(news: state.news));
+          if (state is SaveBlockSuccess) {
+            _refreshBlocks();
+          } else if (state is DeleteBlockSuccess) {
+            _historyBloc.add(RemoveBlockFromList(block: state.block));
           }
         },
-        child: BlocBuilder<BookmarkBloc, BookmarkState>(
+        child: BlocBuilder<BlockBloc, BlockState>(
           builder: (context, state) {
-            if (state is BookmarkInitial || state is BookmarkLoading) {
+            if (state is BlockInitial || state is BlockLoading) {
               return Center(child: CircularProgressIndicator());
-            } else if (state is BookmarkLoaded) {
+            } else if (state is BlockLoaded) {
               return InPageSearchBar(
-                title: BookmarkPage.title,
+                title: SettingBlockPage.title,
                 hint: 'ค้นหา',
                 onQueryChanged: _onQueryChanged,
                 onSubmitted: _onQueryChanged,
@@ -139,10 +131,10 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     shrinkWrap: true,
                     controller: _scrollController,
                     children: [
-                      state.news.isEmpty ? Center(child: Text('no bookmarks.')) : Container(),
-                      ImplicitlyAnimatedList<News>(
+                      state.blocks.isEmpty ? Center(child: Text('no history.')) : Container(),
+                      ImplicitlyAnimatedList<Block>(
                         shrinkWrap: true,
-                        items: state.news,
+                        items: state.blocks,
                         physics: const NeverScrollableScrollPhysics(),
                         removeDuration: const Duration(milliseconds: 100),
                         insertDuration: const Duration(milliseconds: 100),
@@ -174,12 +166,13 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   ),
                 ),
               );
-            } else if (state is BookmarkLoadError) {
+            } else if (state is BlockLoadError) {
               return RetryError(callback: _onRefresh);
             }
           },
         ),
       ),
+      // ),
     );
   }
 }

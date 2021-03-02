@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:spent/domain/model/ModelProvider.dart';
+
 import 'package:spent/domain/model/category.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/pages/feed_page.dart';
 import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
@@ -95,22 +96,6 @@ class _HomePageState extends State<HomePage> {
               Center(child: Text(Category.movie)),
             ],
           )),
-    );
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(),
-        ),
-      ),
     );
   }
 }
