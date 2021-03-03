@@ -21,7 +21,7 @@ class UserRepository {
 
   // BLock
   Future<List<Block>> getBlocksByUser(User user, {String query, PaginationOption paginationOption}) async {
-    return _userStorage.getBlocksByUser(user);
+    return _userStorage.getBlocksByUser(user, query: query, paginationOption: paginationOption);
   }
 
   Future<void> saveBlock(User user, String name, BlockTypes type) async {

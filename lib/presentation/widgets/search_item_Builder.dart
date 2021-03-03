@@ -53,7 +53,7 @@ class SearchItemBuilder extends StatelessWidget {
                       ),
                       Text(
                         result.description,
-                        style: Theme.of(context).textTheme.caption.copyWith(color: Colors.grey.shade600),
+                        style: Theme.of(context).textTheme.caption.copyWith(color: Colors.grey[600]),
                       ),
                     ],
                   ),

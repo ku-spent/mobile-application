@@ -9,6 +9,7 @@ import 'package:spent/presentation/widgets/multi_select_badge.dart';
 
 void showNewsBottomSheet(BuildContext context, News news) {
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     useRootNavigator: true,
     shape: RoundedRectangleBorder(

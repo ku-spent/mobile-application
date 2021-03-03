@@ -14,7 +14,7 @@ import 'package:spent/presentation/widgets/in_page_search_bar.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class BookmarkPage extends StatefulWidget {
-  static String title = 'Bookmark';
+  static String title = 'บุ๊คมาร์ค';
 
   BookmarkPage({Key key}) : super(key: key);
 

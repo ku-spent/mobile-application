@@ -9,13 +9,17 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink(
-      color: Theme.of(context).primaryColor,
-      child: ListTile(
-        title: title,
-        leading: leading,
-        onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+        splashColor: Colors.blue.withAlpha(30),
+        child: ListTile(
+          title: title,
+          leading: leading,
+          onTap: onTap,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
+        ),
       ),
     );
   }

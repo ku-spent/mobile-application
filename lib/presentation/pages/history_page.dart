@@ -14,7 +14,7 @@ import 'package:spent/presentation/widgets/in_page_search_bar.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HistoryPage extends StatefulWidget {
-  static String title = 'History';
+  static String title = 'ดูล่าสุด';
 
   final ScrollController scrollController = ScrollController();
 

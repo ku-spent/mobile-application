@@ -13,7 +13,7 @@ import 'package:spent/presentation/widgets/in_page_search_bar.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class SettingBlockPage extends StatefulWidget {
-  static String title = 'Sources & topics you see less of';
+  static String title = 'การซ่อนแหล่งข่าว & หัวข้อ';
 
   final ScrollController scrollController = ScrollController();
 
@@ -81,12 +81,63 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
     _refreshBlocks();
   }
 
+  Icon _buildIconType(BlockTypes type) {
+    if (type == BlockTypes.CATEGORY || type == BlockTypes.TAG)
+      return Icon(Icons.category);
+    else if (type == BlockTypes.SOURCE) return Icon(Icons.rss_feed);
+    return null;
+  }
+
   Widget _buildItem(BuildContext context, Block block) {
     return Container(
       margin: EdgeInsets.only(bottom: 8.0),
       child: Slidable(
         actionPane: const SlidableBehindActionPane(),
-        child: ListTile(title: Text(block.name)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: () {
+                Future.delayed(
+                  const Duration(milliseconds: 100),
+                  () => {},
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 36,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 500),
+                        child: _buildIconType(block.type),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            block.name,
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          Text(
+                            block.type == BlockTypes.SOURCE ? 'แหล่งข่าว' : 'หัวข้อ',
+                            style: Theme.of(context).textTheme.caption.copyWith(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Divider(height: 16.0),
+          ],
+        ),
         secondaryActions: [
           IconSlideAction(
             caption: 'Delete',
