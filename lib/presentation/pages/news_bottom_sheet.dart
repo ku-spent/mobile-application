@@ -77,7 +77,7 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
     return ListTile(
       leading: isSelected ? Icon(Icons.check_circle, color: Colors.green[400]) : Icon(icon),
       trailing: isSelected
-          ? Text('UNDO', style: GoogleFonts.kanit(color: Theme.of(context).primaryColor, fontSize: 16.0))
+          ? Text('เลิกทำ', style: GoogleFonts.kanit(color: Theme.of(context).primaryColor, fontSize: 16.0))
           : null,
       title: isSelected ? Text(title, style: GoogleFonts.kanit(color: Colors.grey)) : Text(title),
       onTap: onTap,
@@ -92,7 +92,7 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(height: 18.0),
-            Text('What do you want less of?',
+            Text('หัวข้อไหนที่คุณต้องการจะเห็นน้อยลง',
                 style: GoogleFonts.kanit(
                   // color: Theme.of(context).primaryColor,
                   fontSize: 22.0,
@@ -119,7 +119,7 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
               },
               child: Padding(
                 padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
-                child: Text('Cancel',
+                child: Text('ยกเลิก',
                     style: GoogleFonts.kanit(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16.0,
@@ -130,7 +130,7 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
             onPressed: _canDone ? onDone : null,
             child: Padding(
               padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0, bottom: 4.0),
-              child: Text('Done',
+              child: Text('เสร็จสิ้น',
                   style: GoogleFonts.kanit(
                     color: _canDone ? Theme.of(context).primaryColor : Colors.grey,
                     fontSize: 16.0,
@@ -151,13 +151,13 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
           children: <Widget>[
             _buildListTile(
               icon: Icons.block_flipped,
-              title: 'Block ${widget.news.source}',
+              title: 'ซ่อนข่าวจาก ${widget.news.source}',
               isSelected: _isSelectedBlock,
               onTap: onClickBlock,
             ),
             _buildListTile(
               icon: Icons.remove_circle_outline,
-              title: 'See less like this',
+              title: 'ซ่อนโพสต์',
               isSelected: _isSelectedSeeLess,
               onTap: onClickSeeLess,
             ),

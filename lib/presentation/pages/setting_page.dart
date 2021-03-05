@@ -1,10 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spent/presentation/AppRouter.gr.dart';
-import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
-import 'package:spent/presentation/pages/setting_block_page.dart';
+
 import 'package:spent/presentation/widgets/list_item.dart';
+import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 
 class SettingPage extends StatefulWidget {
   SettingPage({Key key}) : super(key: key);
@@ -24,7 +23,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildTitle(String title) => Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 8.0, left: 18.0),
-        child: Text(title, style: GoogleFonts.kanit(fontSize: 15.0, color: Colors.grey[600])),
+        child: Text(title, style: GoogleFonts.kanit(fontSize: 15.0, color: Colors.grey[700])),
       );
 
   void _handleItemClick(BuildContext context, String route) {

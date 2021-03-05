@@ -14,7 +14,6 @@ import 'package:spent/presentation/pages/explore_page.dart';
 
 // Page
 import 'package:spent/presentation/pages/home_page.dart';
-import 'package:spent/presentation/pages/setting_block_page.dart';
 import 'package:spent/presentation/widgets/app_retain_widget.dart';
 
 class AppScreen extends StatefulWidget {

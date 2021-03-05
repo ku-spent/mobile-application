@@ -20,7 +20,6 @@ import 'History.dart';
 import 'News.dart';
 import 'User.dart';
 import 'Block.dart';
-import 'BlockTypes.dart';
 import 'UserNewsAction.dart';
 
 export 'Bookmark.dart';

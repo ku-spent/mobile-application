@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 
 import 'package:spent/domain/model/Block.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
-import 'package:spent/domain/use_case/delete_block_use_case.dart';
 import 'package:spent/domain/use_case/get_blocks_use_case.dart';
 
 part 'block_event.dart';
