@@ -25,8 +25,10 @@ class AppScreen extends StatefulWidget {
 
 class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMixin {
   final _channel = const MethodChannel('com.example.spent/app_retain');
-  final ScrollController _homePageScrollController = ScrollController();
+  final int _tabbarLength = 2;
   final ScrollController _explorePageScrollController = ScrollController();
+  int _curTabIndex = 0;
+  List<ScrollController> _tabScrollControllerList;
   PersistentTabController _controller;
   TabController _tabController;
 
@@ -37,13 +39,20 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
 
   @override
   void initState() {
+    assert(_tabbarLength > 0);
     _controller = PersistentTabController(initialIndex: 0);
-    _tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: _tabbarLength);
+    _tabScrollControllerList = List.generate(_tabbarLength, (_) => ScrollController());
     super.initState();
   }
 
+  void _setCurTabIndex(int index) {
+    setState(() {
+      _curTabIndex = index;
+    });
+  }
+
   void _scrollPageToTop(ScrollController scrollController, int index) {
-    print("${_controller.index} $index");
     if (_controller.index == index)
       scrollController.animateTo(scrollController.position.minScrollExtent,
           duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);
@@ -53,7 +62,7 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
   }
 
   void _scrollHomePageToTop() {
-    _scrollPageToTop(_homePageScrollController, 0);
+    _scrollPageToTop(_tabScrollControllerList[_curTabIndex], 0);
   }
 
   void _scrollExplorePageToTop() {
@@ -64,7 +73,7 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
     if (_tabController.index != 0) {
       _tabController.animateTo(0);
       return false;
-    } else if (_homePageScrollController.offset != 0.0) {
+    } else if (_tabScrollControllerList[0].offset != 0.0) {
       _scrollHomePageToTop();
       return false;
     } else {
@@ -84,7 +93,12 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
 
   List<Widget> _buildScreens() {
     return [
-      HomePage(scrollController: _homePageScrollController, tabController: _tabController),
+      HomePage(
+        scrollControllerList: _tabScrollControllerList,
+        tabController: _tabController,
+        tabLength: _tabbarLength,
+        onTabChange: _setCurTabIndex,
+      ),
       AppRetainWidget(child: ExplorePage(scrollController: _explorePageScrollController)),
       AppRetainWidget(child: NotificationPage()),
       AppRetainWidget(child: MePage()),

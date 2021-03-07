@@ -10,27 +10,38 @@ import 'package:spent/presentation/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
   static String title = 'Home';
-
-  final ScrollController scrollController;
+  final void Function(int) onTabChange;
   final TabController tabController;
+  final int tabLength;
+  final List<ScrollController> scrollControllerList;
 
-  HomePage({Key key, @required this.scrollController, @required this.tabController}) : super(key: key);
+  HomePage(
+      {Key key,
+      @required this.scrollControllerList,
+      @required this.tabController,
+      @required this.tabLength,
+      @required this.onTabChange})
+      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController _scrollController;
+  int _tabbarLength;
   TabController _tabController;
-
-  final int _tabbarLength = 2;
+  List<ScrollController> _scrollControllerList;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = widget.scrollController;
+    _tabbarLength = widget.tabLength;
     _tabController = widget.tabController;
+    _scrollControllerList = widget.scrollControllerList;
+    _tabController.addListener(() {
+      print("tab change ${_tabController.index}");
+      widget.onTabChange(_tabController.index);
+    });
   }
 
   Widget _buildItem({News news, int i = -1}) {
@@ -84,8 +95,8 @@ class _HomePageState extends State<HomePage> {
           body: TabBarView(
             controller: _tabController,
             children: <Widget>[
-              ForYouPage(scrollController: _scrollController, buildRecommendationItem: _buildItem),
-              FeedPage(buildFeedItem: _buildItem),
+              ForYouPage(scrollController: _scrollControllerList[0], buildRecommendationItem: _buildItem),
+              FeedPage(scrollController: _scrollControllerList[1], buildFeedItem: _buildItem),
               // Center(child: Text(Category.politics)),
               // Center(child: Text(Category.economic)),
               // Center(child: Text(Category.sport)),
