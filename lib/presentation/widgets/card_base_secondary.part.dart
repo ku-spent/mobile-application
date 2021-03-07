@@ -34,7 +34,8 @@ extension CardBaseSecondaryMethod on _CardBaseState {
             ),
           ),
         ),
-        _buildIcon(
+        ClickableIcon(
+          active: Icon(Icons.more_vert),
           inActive: Icon(Icons.more_vert),
           onPressed: _settingModalBottomSheet,
         ),

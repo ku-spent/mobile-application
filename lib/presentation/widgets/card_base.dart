@@ -13,6 +13,7 @@ import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/pages/news_bottom_sheet.dart';
+import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -144,16 +145,6 @@ class _CardBaseState extends State<CardBase> {
     showNewsBottomSheet(context, _news);
   }
 
-  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive = false, Color activeColor}) {
-    final _activeColor = activeColor != null ? activeColor : Theme.of(context).primaryColor;
-    return IconButton(
-      splashColor: _activeColor.withOpacity(0.2),
-      color: isActive ? _activeColor : Colors.grey,
-      onPressed: onPressed,
-      icon: isActive ? active : inActive,
-    );
-  }
-
   Widget _buildPrimary() {
     return Container(
       child: Column(
@@ -195,8 +186,6 @@ class _CardBaseState extends State<CardBase> {
             _setUserAction(state.result.userAction);
           }
         }),
-        BlocListener<ManageHistoryBloc, ManageHistoryState>(listener: (context, state) {}),
-        BlocListener<ShareNewsBloc, ShareNewsState>(listener: (context, state) {}),
       ],
       child: Container(
         margin: widget.margin,

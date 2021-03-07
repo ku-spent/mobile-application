@@ -38,11 +38,12 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
   @override
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
-    _tabController = TabController(vsync: this, length: 8);
+    _tabController = TabController(vsync: this, length: 2);
     super.initState();
   }
 
   void _scrollPageToTop(ScrollController scrollController, int index) {
+    print("${_controller.index} $index");
     if (_controller.index == index)
       scrollController.animateTo(scrollController.position.minScrollExtent,
           duration: Duration(milliseconds: 300), curve: Curves.easeOutExpo);

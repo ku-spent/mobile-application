@@ -1,7 +1,9 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -97,14 +99,9 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
-              onTap: () {
-                Future.delayed(
-                  const Duration(milliseconds: 100),
-                  () => {},
-                );
-              },
+              onTap: () {},
               child: Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 12.0, bottom: 16.0),
                 child: Row(
                   children: [
                     SizedBox(
@@ -135,7 +132,7 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
                 ),
               ),
             ),
-            Divider(height: 16.0),
+            Divider(height: 0.0),
           ],
         ),
         secondaryActions: [
@@ -159,6 +156,10 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
             _refreshBlocks();
           } else if (state is DeleteBlockSuccess) {
             _historyBloc.add(RemoveBlockFromList(block: state.block));
+            BotToast.showText(
+              text: 'ลบเสร็จสิ้น',
+              textStyle: GoogleFonts.kanit(color: Colors.white),
+            );
           }
         },
         child: BlocBuilder<BlockBloc, BlockState>(

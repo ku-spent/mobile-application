@@ -68,6 +68,7 @@ dependencies:
   pull_to_refresh: ^1.6.2
   rxdart: ^0.24.1
   share: ^0.6.5+4
+  smart_select: ^4.3.2
   timeago: ^2.0.27
   url_launcher: ^5.7.10
   webview_flutter: ^1.0.7

@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
-import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/pages/feed_page.dart';
 import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/nav_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static String title = 'Home';
@@ -26,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController;
   TabController _tabController;
 
-  final _tabbarLength = 8;
+  final int _tabbarLength = 2;
 
   @override
   void initState() {
@@ -47,14 +45,14 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Theme.of(context).primaryColor,
       flexibleSpace: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(top: 4.0, right: 36.0),
+          padding: EdgeInsets.only(top: 4.0, right: 24.0, left: 24.0),
           child: TabBar(
             controller: _tabController,
             labelStyle: GoogleFonts.kanit(fontWeight: FontWeight.w500, fontSize: 18.0),
             unselectedLabelStyle: GoogleFonts.kanit(fontSize: 16.0),
-            indicatorSize: TabBarIndicatorSize.label,
+            indicatorSize: TabBarIndicatorSize.tab,
             labelColor: Colors.white,
-            isScrollable: true,
+            // isScrollable: true,
             indicator: MD2Indicator(
               indicatorHeight: 3,
               indicatorSize: MD2IndicatorSize.full,
@@ -63,12 +61,12 @@ class _HomePageState extends State<HomePage> {
             tabs: <Widget>[
               Tab(text: "สำหรับคุณ"),
               Tab(text: "ล่าสุด"),
-              Tab(text: Category.politics),
-              Tab(text: Category.economic),
-              Tab(text: Category.sport),
-              Tab(text: Category.technology),
-              Tab(text: Category.localNews),
-              Tab(text: Category.movie),
+              // Tab(text: Category.politics),
+              // Tab(text: Category.economic),
+              // Tab(text: Category.sport),
+              // Tab(text: Category.technology),
+              // Tab(text: Category.localNews),
+              // Tab(text: Category.movie),
             ],
           ),
         ),
@@ -81,19 +79,19 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: _tabbarLength,
       child: Scaffold(
-          endDrawer: NavDrawer(),
+          // endDrawer: NavDrawer(),
           appBar: _buildAppbar(),
           body: TabBarView(
             controller: _tabController,
             children: <Widget>[
               ForYouPage(scrollController: _scrollController, buildRecommendationItem: _buildItem),
               FeedPage(buildFeedItem: _buildItem),
-              Center(child: Text(Category.politics)),
-              Center(child: Text(Category.economic)),
-              Center(child: Text(Category.sport)),
-              Center(child: Text(Category.technology)),
-              Center(child: Text(Category.localNews)),
-              Center(child: Text(Category.movie)),
+              // Center(child: Text(Category.politics)),
+              // Center(child: Text(Category.economic)),
+              // Center(child: Text(Category.sport)),
+              // Center(child: Text(Category.technology)),
+              // Center(child: Text(Category.localNews)),
+              // Center(child: Text(Category.movie)),
             ],
           )),
     );

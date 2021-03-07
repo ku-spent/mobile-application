@@ -41,7 +41,11 @@ class RecommendationBloc extends Bloc<RecommendationEvent, RecommendationState> 
           from: 0,
           size: fetchSize,
         );
-        yield RecommendationLoaded(recommendations: recommendations, hasMore: false);
+        print(recommendations);
+        if (recommendations == null)
+          yield RecommendationError();
+        else
+          yield RecommendationLoaded(recommendations: recommendations, hasMore: false);
       }
       // else if (curState is RecommendationLoaded) {
       //   final recommendations = await _getNewsRecommendationsUseCase.call(
@@ -68,8 +72,12 @@ class RecommendationBloc extends Bloc<RecommendationEvent, RecommendationState> 
         from: 0,
         size: fetchSize,
       );
-      yield RecommendationLoaded(recommendations: recommendations, hasMore: false);
-      if (callback != null) callback();
+      if (recommendations == null)
+        yield RecommendationError();
+      else {
+        yield RecommendationLoaded(recommendations: recommendations, hasMore: false);
+        if (callback != null) callback();
+      }
     } catch (_) {
       yield RecommendationError();
     }

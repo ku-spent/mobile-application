@@ -14,6 +14,7 @@ import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 import 'package:badges/badges.dart';
 import 'package:spent/presentation/widgets/suggest_carousel.dart';
+import 'package:spent/presentation/widgets/webview_bottom.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewUrl extends StatefulWidget {
@@ -106,11 +107,6 @@ class _ViewUrlState extends State<ViewUrl> {
     if (option == QueryPageOptions.open) {
       final String url = _news.url;
       await launch(url, enableJavaScript: false);
-      // if (await canLaunch(url)) {
-      //    await launch(url, enableJavaScript: false);
-      // } else {
-      //   throw 'Could not launch $url';
-      // }
     }
   }
 
@@ -213,6 +209,7 @@ class _ViewUrlState extends State<ViewUrl> {
       lazy: false,
       create: (BuildContext context) => getIt<SuggestFeedBloc>()..add(InitialSuggestFeed(curNews: _news)),
       child: Scaffold(
+        bottomNavigationBar: WebViewBottom(news: _news),
         backgroundColor: _backgroundColor,
         extendBodyBehindAppBar: true,
         body: CustomScrollView(

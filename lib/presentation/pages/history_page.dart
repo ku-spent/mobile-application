@@ -1,7 +1,9 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
 import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -114,6 +116,10 @@ class _HistoryPageState extends State<HistoryPage> {
             _refreshHistories();
           } else if (state is DeleteHistorySuccess) {
             _historyBloc.add(RemoveHistoryFromList(news: state.news));
+            BotToast.showText(
+              text: 'ลบเสร็จสิ้น',
+              textStyle: GoogleFonts.kanit(color: Colors.white),
+            );
           }
         },
         child: BlocBuilder<HistoryBloc, HistoryState>(
