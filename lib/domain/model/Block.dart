@@ -13,7 +13,7 @@
 * permissions and limitations under the License.
 */
 
-import 'package:spent/domain/model/BlockTypes.dart';
+import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
 

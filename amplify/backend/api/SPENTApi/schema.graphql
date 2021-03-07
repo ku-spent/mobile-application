@@ -97,7 +97,6 @@ type Block
   # @model(queries: null)
   @auth(rules: [{ allow: owner }])
   @key(name: "byUser", fields: ["userId", "updatedAt"])
-  @key(name: "byName", fields: ["name", "updatedAt"])
   @key(name: "byType", fields: ["type", "updatedAt"]) {
   id: ID!
   userId: ID!

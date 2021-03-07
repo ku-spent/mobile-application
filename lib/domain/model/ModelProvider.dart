@@ -34,7 +34,7 @@ export 'BlockTypes.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "92b6a8666e8ec38a96a773af1fa4a4be";
+  String version = "f0fcc18245c1d1637031b337dffc7b9e";
   @override
   List<ModelSchema> modelSchemas = [
     Bookmark.schema,

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,7 +46,6 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
   }
 
   void onMultiSelectChange(List<Choice> selectedList) {
-    print(selectedList);
     setState(() {
       _selectedList = selectedList;
     });
@@ -68,6 +68,10 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
     final List<BlockChoice> sourceBlock =
         _isSelectedBlock ? [BlockChoice(name: widget.news.source, type: BlockTypes.SOURCE)] : [];
     _manageBlockBloc.add(SaveBlock(blockChoices: _selectedList + sourceBlock));
+    BotToast.showText(
+      text: 'คุณจะเห็นข่าวที่คล้ายกันน้อยลง',
+      textStyle: GoogleFonts.kanit(color: Colors.white),
+    );
     Navigator.pop(context);
   }
 

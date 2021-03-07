@@ -13,6 +13,10 @@ class SaveBlockUseCase {
 
   Future<void> call(String name, BlockTypes type) async {
     final User user = await _authenticationRepository.getCurrentUser();
-    await _userRepository.saveBlock(user, name, type);
+    final Block block = await _userRepository.getBlocksByUserAndName(user, name);
+    final isExist = block != null;
+    if (!isExist) {
+      await _userRepository.saveBlock(user, name, type);
+    }
   }
 }

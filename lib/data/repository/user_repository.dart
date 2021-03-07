@@ -24,6 +24,10 @@ class UserRepository {
     return _userStorage.getBlocksByUser(user, query: query, paginationOption: paginationOption);
   }
 
+  Future<Block> getBlocksByUserAndName(User user, String name) async {
+    return _userStorage.getBlocksByUserAndName(user, name);
+  }
+
   Future<void> saveBlock(User user, String name, BlockTypes type) async {
     await _userStorage.saveBlock(user, name, type);
   }

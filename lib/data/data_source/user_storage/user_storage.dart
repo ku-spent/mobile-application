@@ -22,6 +22,15 @@ class UserStorage {
     return blocks;
   }
 
+  Future<Block> getBlocksByUserAndName(User user, String name) async {
+    final List<Block> blocks = await Amplify.DataStore.query(
+      Block.classType,
+      where: Block.USERID.eq(user.id).and(Block.NAME.eq(name)),
+    );
+    final Block block = blocks.isNotEmpty ? blocks[0] : null;
+    return block;
+  }
+
   Future<void> saveBlock(User user, String name, BlockTypes type) async {
     final block = Block(
       id: UUID.getUUID(),

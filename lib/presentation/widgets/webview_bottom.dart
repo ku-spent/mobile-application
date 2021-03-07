@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/UserAction.dart';
-import 'package:spent/domain/model/UserNewsAction.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
