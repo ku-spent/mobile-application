@@ -10,6 +10,7 @@ class SendEventViewNewsUseCase {
 
   Future<void> call(News news) async {
     AnalyticsEvent analyticsEvent = AnalyticsEvent(SendEvent.viewNewsEvent);
+    print("send ${news.id}");
     analyticsEvent.properties.addStringProperty("news_id", news.id);
     await Amplify.Analytics.recordEvent(event: analyticsEvent);
   }

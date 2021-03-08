@@ -16,11 +16,9 @@ class LikeNewsUseCase {
     final User user = await _authenticationRepository.getCurrentUser();
     final UserNewsAction userNewsAction = await _userRepository.getUserNewsActionByNewsId(user, news);
     if (userNewsAction != null) {
-      news.userAction = UserAction.NONE;
       await _userRepository.deleteUserNewsAction(userNewsAction);
       return LikeNewsResult(userAction: UserAction.NONE);
     } else {
-      news.userAction = UserAction.LIKE;
       await _userRepository.saveUserNewsAction(user, news);
       return LikeNewsResult(userAction: UserAction.LIKE);
     }

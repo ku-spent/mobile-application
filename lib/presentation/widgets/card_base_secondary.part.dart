@@ -34,9 +34,10 @@ extension CardBaseSecondaryMethod on _CardBaseState {
             ),
           ),
         ),
-        _buildIcon(
+        ClickableIcon(
+          active: Icon(Icons.more_vert),
           inActive: Icon(Icons.more_vert),
-          onPressed: () {},
+          onPressed: _settingModalBottomSheet,
         ),
       ],
     );
@@ -108,7 +109,7 @@ extension CardBaseSecondaryMethod on _CardBaseState {
                 ],
               ),
             ),
-            _buildBottom(),
+            widget.showBottom ? _buildBottom() : Container(height: 8.0),
           ],
         ),
       ),

@@ -34,9 +34,10 @@ extension CardBaseMethod on _CardBaseState {
             ),
           ),
         ),
-        _buildIcon(
+        ClickableIcon(
+          active: Icon(Icons.more_vert),
           inActive: Icon(Icons.more_vert),
-          onPressed: () {},
+          onPressed: _settingModalBottomSheet,
         ),
       ],
     );
@@ -74,20 +75,20 @@ extension CardBaseMethod on _CardBaseState {
           ),
         ),
         Row(children: [
-          _buildIcon(
+          ClickableIcon(
             isActive: _userAction == UserAction.LIKE,
             active: Icon(Icons.favorite),
             inActive: Icon(Icons.favorite_outline),
             onPressed: _onClickLike,
             activeColor: Colors.red[400],
           ),
-          _buildIcon(
+          ClickableIcon(
             isActive: _isBookmarked,
             active: Icon(Icons.bookmark),
             inActive: Icon(Icons.bookmark_outline),
             onPressed: _onClickBookmark,
           ),
-          _buildIcon(
+          ClickableIcon(
             isActive: false,
             active: Icon(Icons.share),
             inActive: Icon(Icons.share),

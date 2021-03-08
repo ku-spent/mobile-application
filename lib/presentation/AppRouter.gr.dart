@@ -18,6 +18,7 @@ import 'pages/hero_photo_view_page.dart';
 import 'pages/history_page.dart';
 import 'pages/query_page.dart';
 import 'pages/search_page.dart';
+import 'pages/setting_block_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
 import 'pages/view_url.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String appScreen = '/home';
   static const String bookmarkPage = '/bookmark';
   static const String historyPage = '/history';
+  static const String settingBlockPage = '/setting/blocks';
   static const String settingPage = '/setting';
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
@@ -38,6 +40,7 @@ class Routes {
     appScreen,
     bookmarkPage,
     historyPage,
+    settingBlockPage,
     settingPage,
     aboutPage,
     searchPage,
@@ -55,6 +58,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.appScreen, page: AppScreen),
     RouteDef(Routes.bookmarkPage, page: BookmarkPage),
     RouteDef(Routes.historyPage, page: HistoryPage),
+    RouteDef(Routes.settingBlockPage, page: SettingBlockPage),
     RouteDef(Routes.settingPage, page: SettingPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
@@ -98,6 +102,15 @@ class AppRouter extends RouterBase {
       );
       return CupertinoPageRoute<dynamic>(
         builder: (context) => HistoryPage(key: args.key),
+        settings: data,
+      );
+    },
+    SettingBlockPage: (data) {
+      final args = data.getArgs<SettingBlockPageArguments>(
+        orElse: () => SettingBlockPageArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => SettingBlockPage(key: args.key),
         settings: data,
       );
     },
@@ -191,6 +204,12 @@ class BookmarkPageArguments {
 class HistoryPageArguments {
   final Key key;
   HistoryPageArguments({this.key});
+}
+
+/// SettingBlockPage arguments holder class
+class SettingBlockPageArguments {
+  final Key key;
+  SettingBlockPageArguments({this.key});
 }
 
 /// SettingPage arguments holder class

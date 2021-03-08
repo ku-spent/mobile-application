@@ -7,13 +7,30 @@ abstract class HistoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchHistory extends HistoryEvent {}
+class FetchHistory extends HistoryEvent {
+  final String query;
 
-class RefreshHistory extends HistoryEvent {
-  final Function callback;
-
-  const RefreshHistory({this.callback});
+  const FetchHistory({this.query});
 
   @override
-  List<Object> get props => [callback];
+  List<Object> get props => [query];
+}
+
+class RefreshHistory extends HistoryEvent {
+  final String query;
+  final Function callback;
+
+  const RefreshHistory({this.query, this.callback});
+
+  @override
+  List<Object> get props => [query, callback];
+}
+
+class RemoveHistoryFromList extends HistoryEvent {
+  final News news;
+
+  const RemoveHistoryFromList({this.news});
+
+  @override
+  List<Object> get props => [news];
 }

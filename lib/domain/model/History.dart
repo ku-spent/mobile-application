@@ -24,6 +24,7 @@ class History extends Model {
   final String id;
   final String userId;
   final String newsId;
+  final String newsTitle;
   final HistoryStatus status;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -40,6 +41,7 @@ class History extends Model {
       {@required this.id,
       @required this.userId,
       @required this.newsId,
+      @required this.newsTitle,
       @required this.status,
       @required this.createdAt,
       @required this.updatedAt});
@@ -48,6 +50,7 @@ class History extends Model {
       {@required String id,
       @required String userId,
       @required String newsId,
+      @required String newsTitle,
       @required HistoryStatus status,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
@@ -55,6 +58,7 @@ class History extends Model {
         id: id == null ? UUID.getUUID() : id,
         userId: userId,
         newsId: newsId,
+        newsTitle: newsTitle,
         status: status,
         createdAt: createdAt,
         updatedAt: updatedAt);
@@ -71,6 +75,7 @@ class History extends Model {
         id == other.id &&
         userId == other.userId &&
         newsId == other.newsId &&
+        newsTitle == other.newsTitle &&
         status == other.status &&
         createdAt == other.createdAt &&
         updatedAt == other.updatedAt;
@@ -87,12 +92,10 @@ class History extends Model {
     buffer.write("id=" + id + ", ");
     buffer.write("userId=" + userId + ", ");
     buffer.write("newsId=" + newsId + ", ");
+    buffer.write("newsTitle=" + newsTitle + ", ");
     buffer.write("status=" + enumToString(status) + ", ");
-    buffer.write("createdAt=" +
-        (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") +
-        ", ");
-    buffer.write("updatedAt=" +
-        (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
+    buffer.write("createdAt=" + (createdAt != null ? createdAt.toDateTimeIso8601String() : "null") + ", ");
+    buffer.write("updatedAt=" + (updatedAt != null ? updatedAt.toDateTimeIso8601String() : "null"));
     buffer.write("}");
 
     return buffer.toString();
@@ -102,6 +105,7 @@ class History extends Model {
       {@required String id,
       @required String userId,
       @required String newsId,
+      @required String newsTitle,
       @required HistoryStatus status,
       @required DateTime createdAt,
       @required DateTime updatedAt}) {
@@ -109,6 +113,7 @@ class History extends Model {
         id: id ?? this.id,
         userId: userId ?? this.userId,
         newsId: newsId ?? this.newsId,
+        newsTitle: newsTitle ?? this.newsTitle,
         status: status ?? this.status,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
@@ -118,8 +123,8 @@ class History extends Model {
       : id = json['id'],
         userId = json['userId'],
         newsId = json['newsId'],
-        status =
-            enumFromString<HistoryStatus>(json['status'], HistoryStatus.values),
+        newsTitle = json['newsTitle'],
+        status = enumFromString<HistoryStatus>(json['status'], HistoryStatus.values),
         createdAt = DateTimeParse.fromString(json['createdAt']),
         updatedAt = DateTimeParse.fromString(json['updatedAt']);
 
@@ -127,6 +132,7 @@ class History extends Model {
         'id': id,
         'userId': userId,
         'newsId': newsId,
+        'newsTitle': newsTitle,
         'status': enumToString(status),
         'createdAt': createdAt?.toDateTimeIso8601String(),
         'updatedAt': updatedAt?.toDateTimeIso8601String()
@@ -135,11 +141,11 @@ class History extends Model {
   static final QueryField ID = QueryField(fieldName: "history.id");
   static final QueryField USERID = QueryField(fieldName: "userId");
   static final QueryField NEWSID = QueryField(fieldName: "newsId");
+  static final QueryField NEWSTITLE = QueryField(fieldName: "newsTitle");
   static final QueryField STATUS = QueryField(fieldName: "status");
   static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
   static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
-  static var schema =
-      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "History";
     modelSchemaDefinition.pluralName = "Histories";
 
@@ -148,40 +154,28 @@ class History extends Model {
           authStrategy: AuthStrategy.OWNER,
           ownerField: "owner",
           identityClaim: "cognito:username",
-          operations: [
-            ModelOperation.CREATE,
-            ModelOperation.UPDATE,
-            ModelOperation.DELETE,
-            ModelOperation.READ
-          ])
+          operations: [ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ])
     ];
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.USERID,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: History.USERID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.NEWSID,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+        key: History.NEWSID, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.STATUS,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)));
+        key: History.NEWSTITLE, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.CREATEDAT,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: History.STATUS, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: History.UPDATEDAT,
-        isRequired: true,
-        ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+        key: History.CREATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: History.UPDATEDAT, isRequired: true, ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
   });
 }
 

@@ -3,9 +3,10 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
-import 'package:implicitly_animated_reorderable_list/transitions.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:implicitly_animated_reorderable_list/transitions.dart';
+import 'package:implicitly_animated_reorderable_list/implicitly_animated_reorderable_list.dart';
+
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/domain/model/trending_topic.dart';
@@ -132,6 +133,18 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     );
   }
 
+  void _goToQueryCategoryPage(String category) {
+    ExtendedNavigator.of(context).push(
+      Routes.queryPage,
+      arguments: QueryPageArguments(
+        isShowTitle: true,
+        query: category,
+        queryField: QueryField.category,
+        coverUrl: Category.newsCategoryCover[category],
+      ),
+    );
+  }
+
   Widget _buildSource(String source) {
     return Container(
       decoration: BoxDecoration(
@@ -165,26 +178,72 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     );
   }
 
-  Widget _buildSources() {
-    return Section(
-        title: 'แหล่งข่าว',
-        hasSeeMore: false,
-        margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Row(
-                  children: NewsSource.values.map(_buildSource).toList(),
-                ),
-              ),
+  Widget _buildSources() => Section(
+      title: 'แหล่งข่าว',
+      hasSeeMore: false,
+      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Row(children: NewsSource.values.map(_buildSource).toList()),
             ),
-          ],
-        ));
+          ),
+        ],
+      ));
+
+  Widget _buildCategory(String category) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[100]),
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      width: 100.0,
+      height: 56.0,
+      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          onTap: () => _goToQueryCategoryPage(category),
+          splashColor: Colors.blue.withAlpha(30),
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                // SourceIcon(source: source),
+                // Container(height: 8.0),
+                Text(
+                  category,
+                  style: GoogleFonts.kanit(fontSize: 12.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
+
+  Widget _buildCategories() => Section(
+      title: 'ประเภทข่าว',
+      hasSeeMore: false,
+      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Row(children: Category.values.map(_buildCategory).toList()),
+            ),
+          ),
+        ],
+      ));
 
   @override
   Widget build(BuildContext context) {
@@ -225,6 +284,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
                 controller: _scrollController,
                 children: [
                   _buildSources(),
+                  _buildCategories(),
                   _buildTags(state.trending.topics),
                   ImplicitlyAnimatedList<TrendingTopic>(
                     primary: false,

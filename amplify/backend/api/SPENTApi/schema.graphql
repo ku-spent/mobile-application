@@ -9,6 +9,12 @@ enum UserAction {
   NONE
 }
 
+enum BlockTypes {
+  SOURCE
+  CATEGORY
+  TAG
+}
+
 type User @model {
   id: ID!
   name: String!
@@ -63,6 +69,7 @@ type Bookmark
   userId: ID!
   # user: User! @connection(fields: ["userId"])
   newsId: ID!
+  newsTitle: String!
   # news: News! @connection(fields: ["newsId"])
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -78,8 +85,23 @@ type History
   userId: ID!
   # user: User! @connection(fields: ["userId"])
   newsId: ID!
+  newsTitle: String!
   # news: News! @connection(fields: ["newsId"])
   status: HistoryStatus!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Block
+  @model
+  # @model(queries: null)
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUser", fields: ["userId", "updatedAt"])
+  @key(name: "byType", fields: ["type", "updatedAt"]) {
+  id: ID!
+  userId: ID!
+  name: String!
+  type: BlockTypes!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }

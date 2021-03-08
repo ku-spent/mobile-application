@@ -1,9 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:spent/data/data_source/user_storage/user_storage.dart';
-import 'package:spent/domain/model/History.dart';
+
+import 'package:spent/helper/pagination.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
-import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/User.dart';
+import 'package:spent/data/data_source/user_storage/user_storage.dart';
 
 @singleton
 class UserRepository {
@@ -20,6 +19,23 @@ class UserRepository {
     return news;
   }
 
+  // BLock
+  Future<List<Block>> getBlocksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    return _userStorage.getBlocksByUser(user, query: query, paginationOption: paginationOption);
+  }
+
+  Future<Block> getBlocksByUserAndName(User user, String name) async {
+    return _userStorage.getBlocksByUserAndName(user, name);
+  }
+
+  Future<void> saveBlock(User user, String name, BlockTypes type) async {
+    await _userStorage.saveBlock(user, name, type);
+  }
+
+  Future<void> deleteBlock(Block block) async {
+    await _userStorage.deleteBlock(block);
+  }
+
   // History
   Future<void> saveNewsHistory(User user, News news) async {
     await _userStorage.saveNewsHistory(user, news);
@@ -29,13 +45,17 @@ class UserRepository {
     await _userStorage.updateNewsHistory(oldHistory, newHistory);
   }
 
+  Future<void> deleteNewsHistory(History history) async {
+    await _userStorage.deleteNewsHistory(history);
+  }
+
   Future<History> getHistoryByNewsId(User user, News news) async {
     final history = await _userStorage.getHistoryByNewsId(user, news);
     return history;
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user) async {
-    final histories = await _userStorage.getNewsHistoryByUser(user);
+  Future<List<History>> getNewsHistoryByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final histories = await _userStorage.getNewsHistoryByUser(user, query: query, paginationOption: paginationOption);
     return histories;
   }
 
@@ -53,8 +73,8 @@ class UserRepository {
     return bookmark;
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user) async {
-    final bookmarks = await _userStorage.getBookmarksByUser(user);
+  Future<List<Bookmark>> getBookmarksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final bookmarks = await _userStorage.getBookmarksByUser(user, query: query, paginationOption: paginationOption);
     return bookmarks;
   }
 

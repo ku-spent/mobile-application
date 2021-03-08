@@ -6,12 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
+import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
-import 'package:spent/presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
-import 'package:spent/presentation/bloc/save_history/save_history_bloc.dart';
+import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
+import 'package:spent/presentation/pages/news_bottom_sheet.dart';
+import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -26,8 +28,10 @@ class CardBase extends StatefulWidget {
   final News news;
   final bool showPicture;
   final bool showSummary;
+  final bool showBottom;
   final bool isSubCard;
   final bool isSecondary;
+  final EdgeInsets margin;
 
   CardBase({
     Key key,
@@ -36,6 +40,8 @@ class CardBase extends StatefulWidget {
     this.showSummary = true,
     this.isSubCard = false,
     this.isSecondary = false,
+    this.showBottom = true,
+    this.margin = const EdgeInsets.only(bottom: 8.0),
   }) : super(key: key);
 
   @override
@@ -49,16 +55,16 @@ class _CardBaseState extends State<CardBase> {
 
   LikeNewsBloc _likeNewsBloc;
   ShareNewsBloc _shareNewsBloc;
-  SaveHistoryBloc _saveHistoryBloc;
-  SaveBookmarkBloc _saveBookmarkBloc;
+  ManageHistoryBloc _manageHistoryBloc;
+  ManageBookmarkBloc _manageBookmarkBloc;
 
   @override
   void initState() {
     super.initState();
     _likeNewsBloc = BlocProvider.of<LikeNewsBloc>(context);
     _shareNewsBloc = BlocProvider.of<ShareNewsBloc>(context);
-    _saveHistoryBloc = BlocProvider.of<SaveHistoryBloc>(context);
-    _saveBookmarkBloc = BlocProvider.of<SaveBookmarkBloc>(context);
+    _manageHistoryBloc = BlocProvider.of<ManageHistoryBloc>(context);
+    _manageBookmarkBloc = BlocProvider.of<ManageBookmarkBloc>(context);
     _news = widget.news;
     _isBookmarked = _news.isBookmarked;
     _userAction = _news.userAction;
@@ -66,7 +72,7 @@ class _CardBaseState extends State<CardBase> {
 
   void _goToLink(BuildContext context) async {
     ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
-    _saveHistoryBloc.add(SaveHistory(news: _news));
+    _manageHistoryBloc.add(SaveHistory(news: _news));
   }
 
   void _goToQuerySourcePage() {
@@ -113,7 +119,10 @@ class _CardBaseState extends State<CardBase> {
   }
 
   void _onClickBookmark() {
-    _saveBookmarkBloc.add(SaveBookmark(news: _news));
+    if (_isBookmarked)
+      _manageBookmarkBloc.add(DeleteBookmark(news: _news));
+    else
+      _manageBookmarkBloc.add(SaveBookmark(news: _news));
   }
 
   void _onClickShare() async {
@@ -132,14 +141,8 @@ class _CardBaseState extends State<CardBase> {
     });
   }
 
-  Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive = false, Color activeColor}) {
-    final _activeColor = activeColor != null ? activeColor : Theme.of(context).primaryColor;
-    return IconButton(
-      splashColor: _activeColor.withOpacity(0.2),
-      color: isActive ? _activeColor : Colors.grey,
-      onPressed: onPressed,
-      icon: isActive ? active : inActive,
-    );
+  void _settingModalBottomSheet() {
+    showNewsBottomSheet(context, _news);
   }
 
   Widget _buildPrimary() {
@@ -148,10 +151,12 @@ class _CardBaseState extends State<CardBase> {
         children: [
           _buildHeader(),
           _buildContent(widget.showPicture),
-          Padding(
-            padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0),
-            child: _buildBottom(),
-          ),
+          widget.showBottom
+              ? Padding(
+                  padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 4.0),
+                  child: _buildBottom(),
+                )
+              : Container(height: 8.0),
         ],
       ),
     );
@@ -161,11 +166,17 @@ class _CardBaseState extends State<CardBase> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<SaveBookmarkBloc, SaveBookmarkState>(listener: (context, state) {
+        BlocListener<ManageBookmarkBloc, ManageBookmarkState>(listener: (context, state) {
           if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
-            _setIsBookmarked(state.result.isBookmarked);
+            _setIsBookmarked(true);
             BotToast.showText(
-              text: state.result.isBookmarked ? 'Bookmarked' : 'Removed',
+              text: 'Bookmarked',
+              textStyle: GoogleFonts.kanit(color: Colors.white),
+            );
+          } else if (state is DeleteBookmarkSuccess && state.news.id == _news.id) {
+            _setIsBookmarked(false);
+            BotToast.showText(
+              text: 'Removed',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           }
@@ -175,11 +186,9 @@ class _CardBaseState extends State<CardBase> {
             _setUserAction(state.result.userAction);
           }
         }),
-        BlocListener<SaveHistoryBloc, SaveHistoryState>(listener: (context, state) {}),
-        BlocListener<ShareNewsBloc, ShareNewsState>(listener: (context, state) {}),
       ],
       child: Container(
-        margin: EdgeInsets.only(bottom: 4.0),
+        margin: widget.margin,
         child: Card(
           elevation: 0,
           margin: EdgeInsets.zero,

@@ -3,16 +3,57 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/domain/model/History.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/helper/pagination.dart';
 
 @singleton
 class UserStorage {
   const UserStorage();
+
+  // BLock
+  Future<List<Block>> getBlocksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = Block.USERID.eq(user.id);
+    final where = query == null ? baseWhere : baseWhere.and(Block.NAME.contains(query));
+    final List<Block> blocks = await Amplify.DataStore.query(
+      Block.classType,
+      where: where,
+      sortBy: [History.UPDATEDAT.descending()],
+      pagination: paginationOption,
+    );
+    return blocks;
+  }
+
+  Future<Block> getBlocksByUserAndName(User user, String name) async {
+    final List<Block> blocks = await Amplify.DataStore.query(
+      Block.classType,
+      where: Block.USERID.eq(user.id).and(Block.NAME.eq(name)),
+    );
+    final Block block = blocks.isNotEmpty ? blocks[0] : null;
+    return block;
+  }
+
+  Future<void> saveBlock(User user, String name, BlockTypes type) async {
+    final block = Block(
+      id: UUID.getUUID(),
+      userId: user.id,
+      name: name,
+      type: type,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+
+    await Amplify.DataStore.save(block);
+  }
+
+  Future<void> deleteBlock(Block block) async {
+    await Amplify.DataStore.delete(block);
+  }
 
   // History
   Future<void> saveNewsHistory(User user, News news) async {
     final history = History(
       id: UUID.getUUID(),
       newsId: news.id,
+      newsTitle: news.title.toLowerCase(),
       userId: user.id,
       status: HistoryStatus.ACTIVE,
       createdAt: DateTime.now(),
@@ -29,6 +70,10 @@ class UserStorage {
     await Amplify.DataStore.save(history);
   }
 
+  Future<void> deleteNewsHistory(History history) async {
+    await Amplify.DataStore.delete(history);
+  }
+
   Future<History> getHistoryByNewsId(User user, News news) async {
     try {
       final List<History> histories = await Amplify.DataStore.query(
@@ -42,14 +87,17 @@ class UserStorage {
     }
   }
 
-  Future<List<History>> getNewsHistoryByUser(User user) async {
+  Future<List<History>> getNewsHistoryByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE'));
+    final where = query == null ? baseWhere : baseWhere.and(History.NEWSTITLE.contains(query));
     final histories = await Amplify.DataStore.query(
       History.classType,
-      where: History.USERID.eq(user.id).and(History.STATUS.eq('ACTIVE')),
+      where: where,
       sortBy: [History.UPDATEDAT.descending()],
+      pagination: paginationOption,
     );
     // sort desc
-    histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    // histories.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
     return histories;
   }
@@ -59,6 +107,7 @@ class UserStorage {
     final bookmark = Bookmark(
       id: UUID.getUUID(),
       newsId: news.id,
+      newsTitle: news.title.toLowerCase(),
       userId: user.id,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -83,14 +132,16 @@ class UserStorage {
     }
   }
 
-  Future<List<Bookmark>> getBookmarksByUser(User user) async {
+  Future<List<Bookmark>> getBookmarksByUser(User user, {String query, PaginationOption paginationOption}) async {
+    final baseWhere = Bookmark.USERID.eq(user.id);
+    final where = query == null ? baseWhere : baseWhere.and(Bookmark.NEWSTITLE.contains(query));
     final bookmarks = await Amplify.DataStore.query(
       Bookmark.classType,
-      where: Bookmark.USERID.eq(user.id),
+      where: where,
       sortBy: [Bookmark.UPDATEDAT.descending()],
+      pagination: paginationOption,
     );
     // sort desc
-    bookmarks.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return bookmarks;
   }
 
@@ -108,6 +159,7 @@ class UserStorage {
   }
 
   Future<void> deleteUserNewsAction(UserNewsAction userNewsAction) async {
+    print(userNewsAction.getInstanceType().modelName());
     await Amplify.DataStore.delete(userNewsAction);
   }
 

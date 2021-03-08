@@ -54,9 +54,11 @@ class NewsLocalDataSource implements NewsDataSource {
   Future<void> cacheNews(List<News> newsList) async {
     final newsBox = await Hive.openBox<News>(News.boxName);
     newsList.reversed.forEach((news) async {
-      final existNews = await getNewsById(news.id);
-      if (existNews == null) {
-        newsBox.add(news);
+      if (news != null) {
+        final existNews = await getNewsById(news.id);
+        if (existNews == null) {
+          newsBox.add(news);
+        }
       }
     });
   }

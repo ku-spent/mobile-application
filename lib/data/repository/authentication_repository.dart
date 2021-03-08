@@ -181,6 +181,6 @@ class AuthenticationRepository {
     await userBox.put(isLoginKey, false);
     _session.invalidateToken();
     await Amplify.DataStore.clear();
-    await Amplify.Auth.signOut(options: CognitoSignOutOptions(globalSignOut: true));
+    await Amplify.Auth.signOut();
   }
 }

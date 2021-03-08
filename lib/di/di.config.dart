@@ -13,10 +13,15 @@ import '../data/http_manager/app_http_manager.dart';
 import '../presentation/bloc/authentication/authentication_bloc.dart';
 import '../data/data_source/authentication/authentication_remote_data_source.dart';
 import '../data/repository/authentication_repository.dart';
+import '../presentation/bloc/block/block_bloc.dart';
 import '../presentation/bloc/bookmark/bookmark_bloc.dart';
+import '../domain/use_case/delete_block_use_case.dart';
+import '../domain/use_case/delete_bookmark_use_case.dart';
+import '../domain/use_case/delete_user_view_news_history_use_case.dart';
 import '../presentation/bloc/explore/explore_bloc.dart';
 import '../data/repository/explore.repository.dart';
 import '../presentation/bloc/feed/feed_bloc.dart';
+import '../domain/use_case/get_blocks_use_case.dart';
 import '../domain/use_case/get_bookmark_use_case.dart';
 import '../domain/use_case/get_current_user_use_case.dart';
 import '../domain/use_case/get_explore_use_case.dart';
@@ -30,6 +35,9 @@ import '../domain/use_case/identify_user_use_case.dart';
 import '../domain/use_case/initial_authentication_use_case.dart';
 import '../presentation/bloc/like_news/like_news_bloc.dart';
 import '../domain/use_case/like_news_use_case.dart';
+import '../presentation/bloc/manage_block/manage_block_bloc.dart';
+import '../presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
+import '../presentation/bloc/manage_history/manage_history_bloc.dart';
 import '../presentation/bloc/navigation/navigation_bloc.dart';
 import '../presentation/bloc/network/network_bloc.dart';
 import '../presentation/bloc/news/news_bloc.dart';
@@ -38,9 +46,8 @@ import '../data/data_source/news/news_remote_data_source.dart';
 import '../data/repository/news_repository.dart';
 import '../presentation/bloc/query/query_bloc.dart';
 import '../presentation/bloc/recommendation/recommendation_bloc.dart';
-import '../presentation/bloc/save_bookmark/save_bookmark_bloc.dart';
+import '../domain/use_case/save_block_use_case.dart';
 import '../domain/use_case/save_bookmark_use_case.dart';
-import '../presentation/bloc/save_history/save_history_bloc.dart';
 import '../domain/use_case/save_user_view_news_history_use_case.dart';
 import '../presentation/bloc/search/search_bloc.dart';
 import '../data/data_source/search_item/search_item_fuse.dart';
@@ -128,6 +135,15 @@ GetIt $initGetIt(
         get<UserSignInWithAmplifyUseCase>(),
         get<IdentifyUserUseCase>(),
       ));
+  gh.factory<DeleteBlockUseCase>(() => DeleteBlockUseCase(
+      get<AuthenticationRepository>(), get<UserRepository>()));
+  gh.factory<DeleteBookmarkUseCase>(() => DeleteBookmarkUseCase(
+      get<AuthenticationRepository>(), get<UserRepository>()));
+  gh.factory<DeleteUserViewNewsHistoryUseCase>(() =>
+      DeleteUserViewNewsHistoryUseCase(
+          get<AuthenticationRepository>(), get<UserRepository>()));
+  gh.factory<GetBlocksUseCase>(() =>
+      GetBlocksUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<GetBookmarkUseCase>(() => GetBookmarkUseCase(
         get<AuthenticationRepository>(),
         get<UserRepository>(),
@@ -164,6 +180,8 @@ GetIt $initGetIt(
       () => QueryFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
   gh.factory<RecommendationBloc>(() =>
       RecommendationBloc(get<GetRecommendationsUseCase>(), get<NetworkBloc>()));
+  gh.factory<SaveBlockUseCase>(() =>
+      SaveBlockUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveBookmarkUseCase>(() => SaveBookmarkUseCase(
       get<AuthenticationRepository>(), get<UserRepository>()));
   gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
@@ -192,16 +210,25 @@ GetIt $initGetIt(
       ShareNewsBloc(get<ShareNewsUseCase>(), get<UserEventBloc>()));
   gh.singleton<UserRepository>(UserRepository(get<UserStorage>()));
   gh.singleton<HistoryBloc>(HistoryBloc(get<GetViewNewsHistoryUseCase>()));
+  gh.singleton<BlockBloc>(BlockBloc(get<GetBlocksUseCase>()));
   gh.singleton<BookmarkBloc>(BookmarkBloc(get<GetBookmarkUseCase>()));
   gh.singleton<LikeNewsBloc>(
       LikeNewsBloc(get<LikeNewsUseCase>(), get<UserEventBloc>()));
-  gh.singleton<SaveBookmarkBloc>(
-      SaveBookmarkBloc(get<SaveBookmarkUseCase>(), get<UserEventBloc>()));
-  gh.singleton<SaveHistoryBloc>(SaveHistoryBloc(
-      get<SaveUserViewNewsHistoryUseCase>(), get<UserEventBloc>()));
+  gh.singleton<ManageBlockBloc>(
+      ManageBlockBloc(get<SaveBlockUseCase>(), get<DeleteBlockUseCase>()));
+  gh.singleton<ManageBookmarkBloc>(ManageBookmarkBloc(
+    get<SaveBookmarkUseCase>(),
+    get<UserEventBloc>(),
+    get<DeleteBookmarkUseCase>(),
+  ));
+  gh.singleton<ManageHistoryBloc>(ManageHistoryBloc(
+    get<SaveUserViewNewsHistoryUseCase>(),
+    get<DeleteUserViewNewsHistoryUseCase>(),
+    get<UserEventBloc>(),
+  ));
   gh.singleton<NewsBloc>(NewsBloc(
-    get<SaveBookmarkBloc>(),
-    get<SaveHistoryBloc>(),
+    get<ManageBookmarkBloc>(),
+    get<ManageHistoryBloc>(),
     get<LikeNewsBloc>(),
   ));
   return get;
