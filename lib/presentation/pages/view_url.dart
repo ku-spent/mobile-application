@@ -1,21 +1,24 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:intl/intl.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/style.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:spent/di/di.dart';
-import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
+import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/presentation/widgets/source_icon.dart';
+import 'package:spent/presentation/widgets/webview_bottom.dart';
+import 'package:spent/presentation/widgets/suggest_carousel.dart';
 import 'package:spent/presentation/bloc/suggest/suggest_bloc.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
-import 'package:spent/presentation/widgets/source_icon.dart';
-import 'package:badges/badges.dart';
-import 'package:spent/presentation/widgets/suggest_carousel.dart';
-import 'package:spent/presentation/widgets/webview_bottom.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:spent/ext/scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
+import 'package:spent/ext/scroll_bottom_navigation_bar/scroll_bottom_navigation_bar_controller.dart';
 
 class ViewUrl extends StatefulWidget {
   final News news;
@@ -29,11 +32,20 @@ class ViewUrl extends StatefulWidget {
 class _ViewUrlState extends State<ViewUrl> {
   News _news;
   Color _backgroundColor = Colors.white;
+  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _news = widget.news;
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.bottomNavigationBar.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Widget _customImg(
@@ -209,36 +221,44 @@ class _ViewUrlState extends State<ViewUrl> {
       lazy: false,
       create: (BuildContext context) => getIt<SuggestFeedBloc>()..add(InitialSuggestFeed(curNews: _news)),
       child: Scaffold(
-        bottomNavigationBar: WebViewBottom(news: _news),
+        bottomNavigationBar: ScrollBottomNavigationBar(
+          child: WebViewBottom(news: _news),
+          controller: _scrollController,
+        ),
         backgroundColor: _backgroundColor,
         extendBodyBehindAppBar: true,
-        body: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            _buildAppbar(),
-            SliverList(
+        body: ValueListenableBuilder<int>(
+          valueListenable: _scrollController.bottomNavigationBar.tabNotifier,
+          builder: (context, tabIndex, child) => CustomScrollView(
+            physics: BouncingScrollPhysics(),
+            controller: _scrollController,
+            slivers: [
+              _buildAppbar(),
+              SliverList(
                 delegate: SliverChildListDelegate([
-              Container(
-                margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 24.0)),
-                    Container(height: 8.0),
-                    _buildSourceTitle(_news),
-                  ],
-                ),
+                  Container(
+                    margin: EdgeInsets.only(top: 16.0, right: 8.0, bottom: 0.0, left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_news.title, style: GoogleFonts.kanit(fontWeight: FontWeight.bold, fontSize: 24.0)),
+                        Container(height: 8.0),
+                        _buildSourceTitle(_news),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Container(child: _buildHTML(_news)),
+                  _buildBadge(),
+                  Container(height: 8.0),
+                  Divider(),
+                  SuggestCarousel(
+                    curNews: _news,
+                  ),
+                ]),
               ),
-              Divider(),
-              Container(child: _buildHTML(_news)),
-              _buildBadge(),
-              Container(height: 8.0),
-              Divider(),
-              SuggestCarousel(
-                curNews: _news,
-              ),
-            ])),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -70,11 +70,11 @@ extension CardBaseSecondaryMethod on _CardBaseState {
   }
 
   Widget _buildSecondary() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.0),
-      child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
-        onTap: () => _goToLink(context),
+    return InkWell(
+      splashColor: Colors.blue.withAlpha(30),
+      onTap: () => _goToLink(context),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: Column(
           children: [
             _buildSecondaryHeader(),
@@ -84,7 +84,6 @@ extension CardBaseSecondaryMethod on _CardBaseState {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    // width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
