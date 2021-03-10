@@ -9,8 +9,9 @@ abstract class UserEventEvent extends Equatable {
 
 class SendViewNewsEvent extends UserEventEvent {
   final News news;
+  final String recommendationId;
 
-  const SendViewNewsEvent({@required this.news});
+  const SendViewNewsEvent({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];
@@ -18,8 +19,9 @@ class SendViewNewsEvent extends UserEventEvent {
 
 class SendLikeNewsEvent extends UserEventEvent {
   final News news;
+  final String recommendationId;
 
-  const SendLikeNewsEvent({@required this.news});
+  const SendLikeNewsEvent({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];
@@ -27,8 +29,9 @@ class SendLikeNewsEvent extends UserEventEvent {
 
 class SendShareNewsEvent extends UserEventEvent {
   final News news;
+  final String recommendationId;
 
-  const SendShareNewsEvent({@required this.news});
+  const SendShareNewsEvent({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];
@@ -36,8 +39,9 @@ class SendShareNewsEvent extends UserEventEvent {
 
 class SendBookmarkNewsEvent extends UserEventEvent {
   final News news;
+  final String recommendationId;
 
-  const SendBookmarkNewsEvent({@required this.news});
+  const SendBookmarkNewsEvent({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];

@@ -11,6 +11,12 @@ class NewsRepository {
 
   const NewsRepository(this._newsRemoteDataSource, this._newsLocalDataSource);
 
+  Future<List<News>> getNewsRelatedTrend(String trend, int from, int size) async {
+    final List<News> newsList = await _newsRemoteDataSource.getNewsRelatedTrend(trend, from, size);
+    await _newsLocalDataSource.cacheNews(newsList);
+    return newsList;
+  }
+
   Future<Recommendation> getRecommendations(String userId) async {
     final Recommendation recommendation = await _newsRemoteDataSource.getRecommendations(userId);
     List<News> newsList = await Future.wait(recommendation.newsIdList.map((id) => getNewsById(id)));

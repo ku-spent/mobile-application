@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/di/di.dart';
 
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
@@ -9,15 +10,13 @@ import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class QueryPage extends StatefulWidget {
-  final String query;
-  final String queryField;
+  final QueryObject query;
   final String coverUrl;
   final bool isShowTitle;
 
   QueryPage({
     Key key,
     @required this.query,
-    @required this.queryField,
     @required this.coverUrl,
     this.isShowTitle = false,
   }) : super(key: key);
@@ -30,14 +29,13 @@ class _QueryPageState extends State<QueryPage> {
   final ScrollController scrollController = ScrollController();
   final String _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
   String _heroTag;
+  QueryFeedBloc _queryFeedBloc;
 
-  QueryFeedBloc _sourceBloc;
   ScrollController _scrollController;
   bool _isShowFloatingAction = false;
 
   final _minScrollThreshold = 50.0;
   final _scrollThreshold = 200.0;
-  // final RefreshController _refreshController = RefreshController();
 
   @override
   void dispose() {
@@ -50,10 +48,9 @@ class _QueryPageState extends State<QueryPage> {
     _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
     _heroTag = widget.coverUrl + 'cover' + getRandomString(10);
-    Future.delayed(Duration.zero, () {
-      _sourceBloc = BlocProvider.of<QueryFeedBloc>(context);
-      _sourceBloc.add(InitialQueryFeed(query: widget.query, queryField: widget.queryField));
-    });
+    // Future.delayed(Duration.zero, () {
+    _queryFeedBloc = getIt<QueryFeedBloc>()..add(InitialQueryFeed(query: widget.query));
+    // });
   }
 
   void _onScroll() {
@@ -74,11 +71,11 @@ class _QueryPageState extends State<QueryPage> {
   }
 
   void _fetchFeeds() {
-    _sourceBloc.add(FetchQueryFeed());
+    _queryFeedBloc.add(FetchQueryFeed());
   }
 
   void _onRefresh() async {
-    _sourceBloc.add(RefreshQueryFeed(source: widget.query));
+    _queryFeedBloc.add(RefreshQueryFeed());
   }
 
   void _scrollToTop() {
@@ -99,80 +96,83 @@ class _QueryPageState extends State<QueryPage> {
             onPressed: _scrollToTop,
             child: Icon(Icons.arrow_upward_rounded)),
       ),
-      body: BlocBuilder<QueryFeedBloc, QueryFeedState>(builder: (context, state) {
-        if (BlocProvider.of<QueryFeedBloc>(context).query != widget.query || state is QueryFeedInitial) {
-          return Center(child: CircularProgressIndicator());
-        } else if (state is QueryFeedLoaded) {
-          return CustomScrollView(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                  title: widget.isShowTitle
-                      ? Text(
-                          widget.query,
-                          style: GoogleFonts.kanit(),
-                        )
-                      : null,
-                  actions: [
-                    PopupMenuButton(itemBuilder: (BuildContext context) {
-                      return QueryPageOptions.choices
-                          .map((choice) => PopupMenuItem(
-                              value: choice,
-                              child: Row(
-                                children: [
-                                  QueryPageOptions.icons[choice],
-                                  Container(
-                                    width: 16,
-                                  ),
-                                  Text(choice)
-                                ],
-                              )))
-                          .toList();
-                    })
-                  ],
-                  expandedHeight: 190.0,
-                  stretch: true,
-                  leading: IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  backgroundColor: Colors.transparent,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    stretchModes: [
-                      StretchMode.zoomBackground,
+      body: BlocProvider<QueryFeedBloc>(
+        create: (BuildContext context) => _queryFeedBloc,
+        child: BlocBuilder<QueryFeedBloc, QueryFeedState>(builder: (context, state) {
+          if (state is QueryFeedInitial || state is QueryFeedLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is QueryFeedLoaded) {
+            return CustomScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverAppBar(
+                    title: widget.isShowTitle
+                        ? Text(
+                            widget.query.title,
+                            style: GoogleFonts.kanit(),
+                          )
+                        : null,
+                    actions: [
+                      PopupMenuButton(itemBuilder: (BuildContext context) {
+                        return QueryPageOptions.choices
+                            .map((choice) => PopupMenuItem(
+                                value: choice,
+                                child: Row(
+                                  children: [
+                                    QueryPageOptions.icons[choice],
+                                    Container(
+                                      width: 16,
+                                    ),
+                                    Text(choice)
+                                  ],
+                                )))
+                            .toList();
+                      })
                     ],
-                    background: HeroImageViewWidget(tag: _heroTag, url: widget.coverUrl),
-                  )),
-              state.feeds.isEmpty
-                  ? SliverFillRemaining(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text('No Results')],
-                      ),
-                    )
-                  : SliverList(
-                      delegate: SliverChildListDelegate(
-                        List.generate(
-                            state.hasMore ? state.feeds.length + 1 : state.feeds.length,
-                            (index) => index >= state.feeds.length
-                                ? BottomLoader()
-                                : CardBase(
-                                    news: state.feeds[index],
-                                  )),
-                      ),
-                    )
-              // SliverPadding(
-              //     padding: EdgeInsets.only(top: 16.0),
-              //     sliver: ,
-              //   )
-            ],
-          );
-        } else if (state is QueryFeedError) {
-          return RetryError(callback: _onRefresh);
-        }
-      }),
+                    expandedHeight: 190.0,
+                    stretch: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    backgroundColor: Colors.transparent,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      stretchModes: [
+                        StretchMode.zoomBackground,
+                      ],
+                      background: HeroImageViewWidget(tag: _heroTag, url: widget.coverUrl),
+                    )),
+                state.feeds.isEmpty
+                    ? SliverFillRemaining(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text('No Results')],
+                        ),
+                      )
+                    : SliverList(
+                        delegate: SliverChildListDelegate(
+                          List.generate(
+                              state.hasMore ? state.feeds.length + 1 : state.feeds.length,
+                              (index) => index >= state.feeds.length
+                                  ? BottomLoader()
+                                  : CardBase(
+                                      news: state.feeds[index],
+                                    )),
+                        ),
+                      )
+                // SliverPadding(
+                //     padding: EdgeInsets.only(top: 16.0),
+                //     sliver: ,
+                //   )
+              ],
+            );
+          } else if (state is QueryFeedError) {
+            return RetryError(callback: _onRefresh);
+          }
+        }),
+      ),
     );
   }
 }

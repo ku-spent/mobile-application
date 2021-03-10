@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart' as _i31;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../core/IPv6.dart' as _i56;
+import '../core/IPv6.dart' as _i57;
 import '../data/data_source/authentication/authentication_remote_data_source.dart'
     as _i4;
 import '../data/data_source/news/news_local_data_source.dart' as _i10;
@@ -17,7 +17,7 @@ import '../data/data_source/search_item/search_item_fuse.dart' as _i13;
 import '../data/data_source/search_item/search_local_data_source.dart' as _i14;
 import '../data/data_source/search_item/search_remote_data_source.dart' as _i15;
 import '../data/data_source/trending/trending_remote_data_source.dart' as _i23;
-import '../data/data_source/user_storage/user_storage.dart' as _i57;
+import '../data/data_source/user_storage/user_storage.dart' as _i58;
 import '../data/http_manager/amplify_http_manager.dart' as _i3;
 import '../data/http_manager/app_http_manager.dart' as _i5;
 import '../data/repository/authentication_repository.dart' as _i7;
@@ -38,40 +38,41 @@ import '../domain/use_case/get_blocks_use_case.dart' as _i39;
 import '../domain/use_case/get_bookmark_use_case.dart' as _i40;
 import '../domain/use_case/get_current_user_use_case.dart' as _i6;
 import '../domain/use_case/get_explore_use_case.dart' as _i41;
-import '../domain/use_case/get_news_feed_use_case.dart' as _i42;
-import '../domain/use_case/get_recommendation_use_case.dart' as _i43;
-import '../domain/use_case/get_suggestion_use_case.dart' as _i44;
-import '../domain/use_case/get_view_news_history_use_case.dart' as _i45;
+import '../domain/use_case/get_news_feed_trend_use_case.dart' as _i42;
+import '../domain/use_case/get_news_feed_use_case.dart' as _i43;
+import '../domain/use_case/get_recommendation_use_case.dart' as _i44;
+import '../domain/use_case/get_suggestion_use_case.dart' as _i45;
+import '../domain/use_case/get_view_news_history_use_case.dart' as _i46;
 import '../domain/use_case/identify_user_use_case.dart' as _i8;
 import '../domain/use_case/initial_authentication_use_case.dart' as _i9;
-import '../domain/use_case/like_news_use_case.dart' as _i46;
-import '../domain/use_case/save_block_use_case.dart' as _i50;
-import '../domain/use_case/save_bookmark_use_case.dart' as _i51;
-import '../domain/use_case/save_user_view_news_history_use_case.dart' as _i52;
+import '../domain/use_case/like_news_use_case.dart' as _i47;
+import '../domain/use_case/save_block_use_case.dart' as _i51;
+import '../domain/use_case/save_bookmark_use_case.dart' as _i52;
+import '../domain/use_case/save_user_view_news_history_use_case.dart' as _i53;
 import '../domain/use_case/search_use_case.dart' as _i17;
 import '../domain/use_case/share_news_use_case.dart' as _i22;
 import '../domain/use_case/user_signin_with_amplify_use_case.dart' as _i26;
 import '../domain/use_case/user_signin_with_authcode_use_case.dart' as _i27;
 import '../domain/use_case/user_signout_use_case.dart' as _i28;
 import '../presentation/bloc/authentication/authentication_bloc.dart' as _i32;
-import '../presentation/bloc/block/block_bloc.dart' as _i60;
-import '../presentation/bloc/bookmark/bookmark_bloc.dart' as _i61;
-import '../presentation/bloc/explore/explore_bloc.dart' as _i54;
-import '../presentation/bloc/feed/feed_bloc.dart' as _i55;
-import '../presentation/bloc/history/history_bloc.dart' as _i59;
-import '../presentation/bloc/like_news/like_news_bloc.dart' as _i62;
-import '../presentation/bloc/manage_block/manage_block_bloc.dart' as _i63;
-import '../presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart' as _i64;
-import '../presentation/bloc/manage_history/manage_history_bloc.dart' as _i65;
+import '../presentation/bloc/block/block_bloc.dart' as _i61;
+import '../presentation/bloc/bookmark/bookmark_bloc.dart' as _i62;
+import '../presentation/bloc/explore/explore_bloc.dart' as _i55;
+import '../presentation/bloc/feed/feed_bloc.dart' as _i56;
+import '../presentation/bloc/history/history_bloc.dart' as _i60;
+import '../presentation/bloc/like_news/like_news_bloc.dart' as _i63;
+import '../presentation/bloc/manage_block/manage_block_bloc.dart' as _i64;
+import '../presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart' as _i65;
+import '../presentation/bloc/manage_history/manage_history_bloc.dart' as _i66;
 import '../presentation/bloc/navigation/navigation_bloc.dart' as _i30;
-import '../presentation/bloc/network/network_bloc.dart' as _i48;
-import '../presentation/bloc/news/news_bloc.dart' as _i66;
-import '../presentation/bloc/query/query_bloc.dart' as _i47;
-import '../presentation/bloc/recommendation/recommendation_bloc.dart' as _i49;
+import '../presentation/bloc/network/network_bloc.dart' as _i49;
+import '../presentation/bloc/news/news_bloc.dart' as _i67;
+import '../presentation/bloc/query/query_bloc.dart' as _i48;
+import '../presentation/bloc/recommendation/recommendation_bloc.dart' as _i50;
 import '../presentation/bloc/search/search_bloc.dart' as _i33;
-import '../presentation/bloc/share_news/share_news_bloc.dart' as _i58;
+import '../presentation/bloc/share_news/share_news_bloc.dart' as _i59;
 import '../presentation/bloc/signin/signin_bloc.dart' as _i34;
-import '../presentation/bloc/suggest/suggest_bloc.dart' as _i53;
+import '../presentation/bloc/suggest/suggest_bloc.dart' as _i54;
 import '../presentation/bloc/user_event/user_event_bloc.dart'
     as _i24; // ignore_for_file: unnecessary_lambdas
 
@@ -153,72 +154,78 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       get<_i29.ExploreRepository>(),
       get<_i36.UserRepository>(),
       get<_i7.AuthenticationRepository>()));
-  gh.factory<_i42.GetNewsFeedUseCase>(() => _i42.GetNewsFeedUseCase(
+  gh.factory<_i42.GetNewsFeedTrendUseCase>(() => _i42.GetNewsFeedTrendUseCase(
       get<_i12.NewsRepository>(),
       get<_i36.UserRepository>(),
       get<_i7.AuthenticationRepository>()));
-  gh.factory<_i43.GetRecommendationsUseCase>(() =>
-      _i43.GetRecommendationsUseCase(get<_i12.NewsRepository>(),
+  gh.factory<_i43.GetNewsFeedUseCase>(() => _i43.GetNewsFeedUseCase(
+      get<_i12.NewsRepository>(),
+      get<_i36.UserRepository>(),
+      get<_i7.AuthenticationRepository>()));
+  gh.factory<_i44.GetRecommendationsUseCase>(() =>
+      _i44.GetRecommendationsUseCase(get<_i12.NewsRepository>(),
           get<_i36.UserRepository>(), get<_i7.AuthenticationRepository>()));
-  gh.factory<_i44.GetSuggestionNewsUseCase>(() => _i44.GetSuggestionNewsUseCase(
+  gh.factory<_i45.GetSuggestionNewsUseCase>(() => _i45.GetSuggestionNewsUseCase(
       get<_i12.NewsRepository>(),
       get<_i36.UserRepository>(),
       get<_i7.AuthenticationRepository>()));
-  gh.factory<_i45.GetViewNewsHistoryUseCase>(() =>
-      _i45.GetViewNewsHistoryUseCase(get<_i7.AuthenticationRepository>(),
+  gh.factory<_i46.GetViewNewsHistoryUseCase>(() =>
+      _i46.GetViewNewsHistoryUseCase(get<_i7.AuthenticationRepository>(),
           get<_i36.UserRepository>(), get<_i12.NewsRepository>()));
-  gh.factory<_i46.LikeNewsUseCase>(() => _i46.LikeNewsUseCase(
+  gh.factory<_i47.LikeNewsUseCase>(() => _i47.LikeNewsUseCase(
       get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
-  gh.factory<_i47.QueryFeedBloc>(() => _i47.QueryFeedBloc(
-      get<_i42.GetNewsFeedUseCase>(), get<_i48.NetworkBloc>()));
-  gh.factory<_i49.RecommendationBloc>(() => _i49.RecommendationBloc(
-      get<_i43.GetRecommendationsUseCase>(), get<_i48.NetworkBloc>()));
-  gh.factory<_i50.SaveBlockUseCase>(() => _i50.SaveBlockUseCase(
+  gh.factory<_i48.QueryFeedBloc>(() => _i48.QueryFeedBloc(
+      get<_i43.GetNewsFeedUseCase>(),
+      get<_i42.GetNewsFeedTrendUseCase>(),
+      get<_i49.NetworkBloc>()));
+  gh.factory<_i50.RecommendationBloc>(() => _i50.RecommendationBloc(
+      get<_i44.GetRecommendationsUseCase>(), get<_i49.NetworkBloc>()));
+  gh.factory<_i51.SaveBlockUseCase>(() => _i51.SaveBlockUseCase(
       get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
-  gh.factory<_i51.SaveBookmarkUseCase>(() => _i51.SaveBookmarkUseCase(
+  gh.factory<_i52.SaveBookmarkUseCase>(() => _i52.SaveBookmarkUseCase(
       get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
-  gh.factory<_i52.SaveUserViewNewsHistoryUseCase>(() =>
-      _i52.SaveUserViewNewsHistoryUseCase(
+  gh.factory<_i53.SaveUserViewNewsHistoryUseCase>(() =>
+      _i53.SaveUserViewNewsHistoryUseCase(
           get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
-  gh.factory<_i53.SuggestFeedBloc>(() => _i53.SuggestFeedBloc(
-      get<_i44.GetSuggestionNewsUseCase>(), get<_i48.NetworkBloc>()));
-  gh.factory<_i54.ExploreBloc>(
-      () => _i54.ExploreBloc(get<_i41.GetExploreUseCase>()));
-  gh.factory<_i55.FeedBloc>(() =>
-      _i55.FeedBloc(get<_i42.GetNewsFeedUseCase>(), get<_i48.NetworkBloc>()));
+  gh.factory<_i54.SuggestFeedBloc>(() => _i54.SuggestFeedBloc(
+      get<_i45.GetSuggestionNewsUseCase>(), get<_i49.NetworkBloc>()));
+  gh.factory<_i55.ExploreBloc>(
+      () => _i55.ExploreBloc(get<_i41.GetExploreUseCase>()));
+  gh.factory<_i56.FeedBloc>(() =>
+      _i56.FeedBloc(get<_i43.GetNewsFeedUseCase>(), get<_i49.NetworkBloc>()));
   gh.singleton<_i5.AppHttpManager>(_i5.AppHttpManager());
   gh.singleton<_i7.AuthenticationRepository>(_i7.AuthenticationRepository(
       get<_i4.AuthenticationRemoteDataSource>(), get<_i5.AppHttpManager>()));
-  gh.singleton<_i56.IPv6>(_i56.IPv6());
-  gh.singleton<_i48.NetworkBloc>(_i48.NetworkBloc(get<_i56.IPv6>()));
-  gh.singleton<_i57.UserStorage>(_i57.UserStorage());
+  gh.singleton<_i57.IPv6>(_i57.IPv6());
+  gh.singleton<_i49.NetworkBloc>(_i49.NetworkBloc(get<_i57.IPv6>()));
+  gh.singleton<_i58.UserStorage>(_i58.UserStorage());
   gh.singleton<_i32.AuthenticationBloc>(_i32.AuthenticationBloc(
       get<_i6.GetCurrentUserUseCase>(),
       get<_i28.UserSignOutUseCase>(),
       get<_i9.InitialAuthenticationUseCase>(),
       get<_i8.IdentifyUserUseCase>()));
-  gh.singleton<_i58.ShareNewsBloc>(_i58.ShareNewsBloc(
+  gh.singleton<_i59.ShareNewsBloc>(_i59.ShareNewsBloc(
       get<_i22.ShareNewsUseCase>(), get<_i24.UserEventBloc>()));
   gh.singleton<_i36.UserRepository>(
-      _i36.UserRepository(get<_i57.UserStorage>()));
-  gh.singleton<_i59.HistoryBloc>(
-      _i59.HistoryBloc(get<_i45.GetViewNewsHistoryUseCase>()));
-  gh.singleton<_i60.BlockBloc>(_i60.BlockBloc(get<_i39.GetBlocksUseCase>()));
-  gh.singleton<_i61.BookmarkBloc>(
-      _i61.BookmarkBloc(get<_i40.GetBookmarkUseCase>()));
-  gh.singleton<_i62.LikeNewsBloc>(_i62.LikeNewsBloc(
-      get<_i46.LikeNewsUseCase>(), get<_i24.UserEventBloc>()));
-  gh.singleton<_i63.ManageBlockBloc>(_i63.ManageBlockBloc(
-      get<_i50.SaveBlockUseCase>(), get<_i35.DeleteBlockUseCase>()));
-  gh.singleton<_i64.ManageBookmarkBloc>(_i64.ManageBookmarkBloc(
-      get<_i51.SaveBookmarkUseCase>(),
+      _i36.UserRepository(get<_i58.UserStorage>()));
+  gh.singleton<_i60.HistoryBloc>(
+      _i60.HistoryBloc(get<_i46.GetViewNewsHistoryUseCase>()));
+  gh.singleton<_i61.BlockBloc>(_i61.BlockBloc(get<_i39.GetBlocksUseCase>()));
+  gh.singleton<_i62.BookmarkBloc>(
+      _i62.BookmarkBloc(get<_i40.GetBookmarkUseCase>()));
+  gh.singleton<_i63.LikeNewsBloc>(_i63.LikeNewsBloc(
+      get<_i47.LikeNewsUseCase>(), get<_i24.UserEventBloc>()));
+  gh.singleton<_i64.ManageBlockBloc>(_i64.ManageBlockBloc(
+      get<_i51.SaveBlockUseCase>(), get<_i35.DeleteBlockUseCase>()));
+  gh.singleton<_i65.ManageBookmarkBloc>(_i65.ManageBookmarkBloc(
+      get<_i52.SaveBookmarkUseCase>(),
       get<_i24.UserEventBloc>(),
       get<_i37.DeleteBookmarkUseCase>()));
-  gh.singleton<_i65.ManageHistoryBloc>(_i65.ManageHistoryBloc(
-      get<_i52.SaveUserViewNewsHistoryUseCase>(),
+  gh.singleton<_i66.ManageHistoryBloc>(_i66.ManageHistoryBloc(
+      get<_i53.SaveUserViewNewsHistoryUseCase>(),
       get<_i38.DeleteUserViewNewsHistoryUseCase>(),
       get<_i24.UserEventBloc>()));
-  gh.singleton<_i66.NewsBloc>(_i66.NewsBloc(get<_i64.ManageBookmarkBloc>(),
-      get<_i65.ManageHistoryBloc>(), get<_i62.LikeNewsBloc>()));
+  gh.singleton<_i67.NewsBloc>(_i67.NewsBloc(get<_i65.ManageBookmarkBloc>(),
+      get<_i66.ManageHistoryBloc>(), get<_i63.LikeNewsBloc>()));
   return get;
 }

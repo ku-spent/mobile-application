@@ -79,8 +79,7 @@ class _CardBaseState extends State<CardBase> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: _news.source,
-        queryField: QueryField.source,
+        query: QueryWithField(_news.source, query: _news.source, queryField: QueryField.source),
         coverUrl: NewsSource.newsSourceCover[_news.source],
         isShowTitle: true,
       ),
@@ -91,10 +90,9 @@ class _CardBaseState extends State<CardBase> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        isShowTitle: true,
-        query: _news.category,
-        queryField: QueryField.category,
+        query: QueryWithField(_news.category, query: _news.category, queryField: QueryField.category),
         coverUrl: Category.newsCategoryCover[_news.category],
+        isShowTitle: true,
       ),
     );
   }
@@ -106,8 +104,7 @@ class _CardBaseState extends State<CardBase> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: tag,
-        queryField: 'tags',
+        query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
         isShowTitle: true,
         coverUrl: coverUrl,
       ),

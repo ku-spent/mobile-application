@@ -60,8 +60,7 @@ class _SearchBarState extends State<SearchBar> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: category,
-        queryField: QueryField.category,
+        query: QueryWithField(category, query: category, queryField: QueryField.category),
         coverUrl: Category.newsCategoryCover[category],
         isShowTitle: true,
       ),
@@ -72,7 +71,9 @@ class _SearchBarState extends State<SearchBar> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-          query: source, queryField: QueryField.source, coverUrl: NewsSource.newsSourceCover[source]),
+        query: QueryWithField(source, query: source, queryField: QueryField.source),
+        coverUrl: NewsSource.newsSourceCover[source],
+      ),
     );
   }
 

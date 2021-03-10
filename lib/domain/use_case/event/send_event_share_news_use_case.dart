@@ -8,9 +8,10 @@ import 'package:spent/domain/model/send_event.dart';
 class SendEventShareNewsUseCase {
   const SendEventShareNewsUseCase();
 
-  Future<void> call(News news) async {
+  Future<void> call(News news, {String recommendationId}) async {
     AnalyticsEvent analyticsEvent = AnalyticsEvent(SendEvent.shareNewsEvent);
     analyticsEvent.properties.addStringProperty("news_id", news.id);
+    analyticsEvent.properties.addStringProperty("recommendation_id", recommendationId);
     await Amplify.Analytics.recordEvent(event: analyticsEvent);
   }
 }

@@ -70,6 +70,16 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   Widget _buildItem({TrendingTopic trendingTopic, int i = -1}) {
     return Section(
       title: trendingTopic.topic,
+      onSeeMore: () {
+        ExtendedNavigator.of(context).push(
+          Routes.queryPage,
+          arguments: QueryPageArguments(
+            query: QueryWithTrend(trendingTopic.topic, trend: trendingTopic.topic),
+            coverUrl: Category.newsCategoryCover[trendingTopic.newsList[0].category],
+            isShowTitle: true,
+          ),
+        );
+      },
       child: Column(
         children: [CardBase(news: trendingTopic.newsList[0])] +
             trendingTopic.newsList
@@ -108,8 +118,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
                       ExtendedNavigator.of(context).push(
                         Routes.queryPage,
                         arguments: QueryPageArguments(
-                            query: tag,
-                            queryField: 'tags',
+                            query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
                             isShowTitle: true,
                             coverUrl: Category.newsCategoryCover[Category.localNews]),
                       );
@@ -125,8 +134,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: source,
-        queryField: QueryField.source,
+        query: QueryWithField(source, query: source, queryField: QueryField.source),
         coverUrl: NewsSource.newsSourceCover[source],
         isShowTitle: true,
       ),
@@ -137,9 +145,8 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
+        query: QueryWithField(category, query: category, queryField: QueryField.category),
         isShowTitle: true,
-        query: category,
-        queryField: QueryField.category,
         coverUrl: Category.newsCategoryCover[category],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class Section extends StatelessWidget {
   final String title;
   final Widget child;
+  final void Function() onSeeMore;
   final bool hasSeeMore;
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
@@ -12,6 +13,7 @@ class Section extends StatelessWidget {
     Key key,
     @required this.title,
     @required this.child,
+    this.onSeeMore,
     this.hasSeeMore = true,
     this.margin = const EdgeInsets.only(bottom: 12.0),
     this.padding = const EdgeInsets.symmetric(vertical: 10.0),
@@ -33,7 +35,7 @@ class Section extends StatelessWidget {
           this.hasSeeMore
               ? InkWell(
                   splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {},
+                  onTap: onSeeMore,
                   child: Row(
                     children: [
                       Text(

@@ -8,10 +8,9 @@ abstract class QueryFeedEvent extends Equatable {
 }
 
 class InitialQueryFeed extends QueryFeedEvent {
-  final String query;
-  final String queryField;
+  final QueryObject query;
 
-  const InitialQueryFeed({@required this.query, @required this.queryField});
+  const InitialQueryFeed({@required this.query});
 
   @override
   List<Object> get props => [];
@@ -29,9 +28,8 @@ class ClearQueryFeed extends QueryFeedEvent {
 
 class RefreshQueryFeed extends QueryFeedEvent {
   final RefreshFeedCallback callback;
-  final String source;
 
-  const RefreshQueryFeed({@required this.source, this.callback});
+  const RefreshQueryFeed({this.callback});
 
   @override
   List<Object> get props => [];

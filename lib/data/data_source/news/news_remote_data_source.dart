@@ -84,4 +84,25 @@ class NewsRemoteDataSource implements NewsDataSource {
     final News news = newsList.isNotEmpty ? newsList[0] : null;
     return news;
   }
+
+  @override
+  Future<List<News>> getNewsRelatedTrend(String trend, int from, int size) async {
+    try {
+      final RestOptions restOptions = RestOptions(
+        path: "/trending/related",
+        queryParameters: {
+          'from': from.toString(),
+          'size': size.toString(),
+          'trend': trend,
+        },
+      );
+      final Map<String, dynamic> response = await _httpManager.get(restOptions);
+      final List items = response['data']['news'];
+      final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+      return newsList;
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
 }

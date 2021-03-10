@@ -20,4 +20,10 @@ abstract class NewsDataSource {
   Future<News> getNewsById(
     String id,
   );
+
+  Future<List<News>> getNewsRelatedTrend(
+    String trend,
+    int from,
+    int size,
+  );
 }

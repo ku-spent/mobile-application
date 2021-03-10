@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:spent/di/di.dart';
@@ -202,8 +203,7 @@ class _ViewUrlState extends State<ViewUrl> {
                           ExtendedNavigator.of(context).push(
                             Routes.queryPage,
                             arguments: QueryPageArguments(
-                                query: tag,
-                                queryField: 'tags',
+                                query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
                                 isShowTitle: true,
                                 coverUrl: Category.newsCategoryCover[Category.localNews]),
                           );

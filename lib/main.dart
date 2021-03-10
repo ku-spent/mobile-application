@@ -60,9 +60,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<SearchBloc>(
           create: (BuildContext context) => getIt<SearchBloc>(),
         ),
-        BlocProvider<QueryFeedBloc>(
-          create: (BuildContext context) => getIt<QueryFeedBloc>(),
-        ),
+        // BlocProvider<QueryFeedBloc>(
+        //   create: (BuildContext context) => getIt<QueryFeedBloc>(),
+        // ),
         BlocProvider<AuthenticationBloc>(
           create: (BuildContext context) => getIt<AuthenticationBloc>(),
         ),

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../domain/model/ModelProvider.dart';
+import 'bloc/query/query_bloc.dart';
 import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
 import 'pages/bookmark_page.dart';
@@ -167,7 +168,6 @@ class AppRouter extends RouterBase {
         builder: (context) => QueryPage(
           key: args.key,
           query: args.query,
-          queryField: args.queryField,
           coverUrl: args.coverUrl,
           isShowTitle: args.isShowTitle,
         ),
@@ -253,14 +253,12 @@ class ViewUrlArguments {
 /// QueryPage arguments holder class
 class QueryPageArguments {
   final Key key;
-  final String query;
-  final String queryField;
+  final QueryObject query;
   final String coverUrl;
   final bool isShowTitle;
   QueryPageArguments(
       {this.key,
       @required this.query,
-      @required this.queryField,
       @required this.coverUrl,
       this.isShowTitle = false});
 }

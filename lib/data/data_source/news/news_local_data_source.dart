@@ -9,6 +9,12 @@ class NewsLocalDataSource implements NewsDataSource {
   const NewsLocalDataSource();
 
   @override
+  Future<List<News>> getNewsRelatedTrend(String trend, int from, int size) {
+    // TODO: implement getNewsRelatedTrend
+    throw null;
+  }
+
+  @override
   Future<Recommendation> getRecommendations(String userId) async {
     // TODO: implement local recommendations
     return null;
