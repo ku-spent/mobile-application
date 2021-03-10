@@ -22,6 +22,7 @@ import 'pages/setting_block_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
 import 'pages/view_url.dart';
+import 'pages/welcome_page.dart';
 
 class Routes {
   static const String splashPage = '/';
@@ -32,6 +33,7 @@ class Routes {
   static const String settingPage = '/setting';
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
+  static const String welcomePage = '/welcome';
   static const String viewUrl = '/news';
   static const String queryPage = '/query';
   static const String heroPhotoViewPage = '/hero-photo';
@@ -44,6 +46,7 @@ class Routes {
     settingPage,
     aboutPage,
     searchPage,
+    welcomePage,
     viewUrl,
     queryPage,
     heroPhotoViewPage,
@@ -62,6 +65,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.settingPage, page: SettingPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
+    RouteDef(Routes.welcomePage, page: WelcomePage),
     RouteDef(Routes.viewUrl, page: ViewUrl),
     RouteDef(Routes.queryPage, page: QueryPage),
     RouteDef(Routes.heroPhotoViewPage, page: HeroPhotoViewPage),
@@ -135,6 +139,15 @@ class AppRouter extends RouterBase {
     SearchPage: (data) {
       return CupertinoPageRoute<dynamic>(
         builder: (context) => const SearchPage(),
+        settings: data,
+      );
+    },
+    WelcomePage: (data) {
+      final args = data.getArgs<WelcomePageArguments>(
+        orElse: () => WelcomePageArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => WelcomePage(key: args.key),
         settings: data,
       );
     },
@@ -222,6 +235,12 @@ class SettingPageArguments {
 class AboutPageArguments {
   final Key key;
   AboutPageArguments({this.key});
+}
+
+/// WelcomePage arguments holder class
+class WelcomePageArguments {
+  final Key key;
+  WelcomePageArguments({this.key});
 }
 
 /// ViewUrl arguments holder class

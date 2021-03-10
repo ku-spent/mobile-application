@@ -4,232 +4,221 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-import 'package:get_it/get_it.dart';
-import 'package:injectable/injectable.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' as _i31;
+import 'package:get_it/get_it.dart' as _i1;
+import 'package:injectable/injectable.dart' as _i2;
 
-import '../data/http_manager/amplify_http_manager.dart';
-import '../data/http_manager/app_http_manager.dart';
-import '../presentation/bloc/authentication/authentication_bloc.dart';
-import '../data/data_source/authentication/authentication_remote_data_source.dart';
-import '../data/repository/authentication_repository.dart';
-import '../presentation/bloc/block/block_bloc.dart';
-import '../presentation/bloc/bookmark/bookmark_bloc.dart';
-import '../domain/use_case/delete_block_use_case.dart';
-import '../domain/use_case/delete_bookmark_use_case.dart';
-import '../domain/use_case/delete_user_view_news_history_use_case.dart';
-import '../presentation/bloc/explore/explore_bloc.dart';
-import '../data/repository/explore.repository.dart';
-import '../presentation/bloc/feed/feed_bloc.dart';
-import '../domain/use_case/get_blocks_use_case.dart';
-import '../domain/use_case/get_bookmark_use_case.dart';
-import '../domain/use_case/get_current_user_use_case.dart';
-import '../domain/use_case/get_explore_use_case.dart';
-import '../domain/use_case/get_news_feed_use_case.dart';
-import '../domain/use_case/get_recommendation_use_case.dart';
-import '../domain/use_case/get_suggestion_use_case.dart';
-import '../domain/use_case/get_view_news_history_use_case.dart';
-import '../presentation/bloc/history/history_bloc.dart';
-import '../core/IPv6.dart';
-import '../domain/use_case/identify_user_use_case.dart';
-import '../domain/use_case/initial_authentication_use_case.dart';
-import '../presentation/bloc/like_news/like_news_bloc.dart';
-import '../domain/use_case/like_news_use_case.dart';
-import '../presentation/bloc/manage_block/manage_block_bloc.dart';
-import '../presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
-import '../presentation/bloc/manage_history/manage_history_bloc.dart';
-import '../presentation/bloc/navigation/navigation_bloc.dart';
-import '../presentation/bloc/network/network_bloc.dart';
-import '../presentation/bloc/news/news_bloc.dart';
-import '../data/data_source/news/news_local_data_source.dart';
-import '../data/data_source/news/news_remote_data_source.dart';
-import '../data/repository/news_repository.dart';
-import '../presentation/bloc/query/query_bloc.dart';
-import '../presentation/bloc/recommendation/recommendation_bloc.dart';
-import '../domain/use_case/save_block_use_case.dart';
-import '../domain/use_case/save_bookmark_use_case.dart';
-import '../domain/use_case/save_user_view_news_history_use_case.dart';
-import '../presentation/bloc/search/search_bloc.dart';
-import '../data/data_source/search_item/search_item_fuse.dart';
-import '../data/data_source/search_item/search_local_data_source.dart';
-import '../data/data_source/search_item/search_remote_data_source.dart';
-import '../data/repository/search_repository.dart';
-import '../domain/use_case/search_use_case.dart';
-import '../domain/use_case/event/send_event_bookmark_news_use_case.dart';
-import '../domain/use_case/event/send_event_like_news_use_case.dart';
-import '../domain/use_case/event/send_event_share_news_use_case.dart';
-import '../domain/use_case/event/send_event_view_news_use_case.dart';
-import '../presentation/bloc/share_news/share_news_bloc.dart';
-import '../domain/use_case/share_news_use_case.dart';
-import '../presentation/bloc/signin/signin_bloc.dart';
-import '../presentation/bloc/suggest/suggest_bloc.dart';
-import '../data/data_source/trending/trending_remote_data_source.dart';
-import '../presentation/bloc/user_event/user_event_bloc.dart';
-import '../data/repository/user_event_repository.dart';
-import '../data/repository/user_repository.dart';
-import '../domain/use_case/user_signin_with_amplify_use_case.dart';
-import '../domain/use_case/user_signin_with_authcode_use_case.dart';
-import '../domain/use_case/user_signout_use_case.dart';
-import '../data/data_source/user_storage/user_storage.dart';
+import '../core/IPv6.dart' as _i56;
+import '../data/data_source/authentication/authentication_remote_data_source.dart'
+    as _i4;
+import '../data/data_source/news/news_local_data_source.dart' as _i10;
+import '../data/data_source/news/news_remote_data_source.dart' as _i11;
+import '../data/data_source/search_item/search_item_fuse.dart' as _i13;
+import '../data/data_source/search_item/search_local_data_source.dart' as _i14;
+import '../data/data_source/search_item/search_remote_data_source.dart' as _i15;
+import '../data/data_source/trending/trending_remote_data_source.dart' as _i23;
+import '../data/data_source/user_storage/user_storage.dart' as _i57;
+import '../data/http_manager/amplify_http_manager.dart' as _i3;
+import '../data/http_manager/app_http_manager.dart' as _i5;
+import '../data/repository/authentication_repository.dart' as _i7;
+import '../data/repository/explore.repository.dart' as _i29;
+import '../data/repository/news_repository.dart' as _i12;
+import '../data/repository/search_repository.dart' as _i16;
+import '../data/repository/user_event_repository.dart' as _i25;
+import '../data/repository/user_repository.dart' as _i36;
+import '../domain/use_case/delete_block_use_case.dart' as _i35;
+import '../domain/use_case/delete_bookmark_use_case.dart' as _i37;
+import '../domain/use_case/delete_user_view_news_history_use_case.dart' as _i38;
+import '../domain/use_case/event/send_event_bookmark_news_use_case.dart'
+    as _i18;
+import '../domain/use_case/event/send_event_like_news_use_case.dart' as _i19;
+import '../domain/use_case/event/send_event_share_news_use_case.dart' as _i20;
+import '../domain/use_case/event/send_event_view_news_use_case.dart' as _i21;
+import '../domain/use_case/get_blocks_use_case.dart' as _i39;
+import '../domain/use_case/get_bookmark_use_case.dart' as _i40;
+import '../domain/use_case/get_current_user_use_case.dart' as _i6;
+import '../domain/use_case/get_explore_use_case.dart' as _i41;
+import '../domain/use_case/get_news_feed_use_case.dart' as _i42;
+import '../domain/use_case/get_recommendation_use_case.dart' as _i43;
+import '../domain/use_case/get_suggestion_use_case.dart' as _i44;
+import '../domain/use_case/get_view_news_history_use_case.dart' as _i45;
+import '../domain/use_case/identify_user_use_case.dart' as _i8;
+import '../domain/use_case/initial_authentication_use_case.dart' as _i9;
+import '../domain/use_case/like_news_use_case.dart' as _i46;
+import '../domain/use_case/save_block_use_case.dart' as _i50;
+import '../domain/use_case/save_bookmark_use_case.dart' as _i51;
+import '../domain/use_case/save_user_view_news_history_use_case.dart' as _i52;
+import '../domain/use_case/search_use_case.dart' as _i17;
+import '../domain/use_case/share_news_use_case.dart' as _i22;
+import '../domain/use_case/user_signin_with_amplify_use_case.dart' as _i26;
+import '../domain/use_case/user_signin_with_authcode_use_case.dart' as _i27;
+import '../domain/use_case/user_signout_use_case.dart' as _i28;
+import '../presentation/bloc/authentication/authentication_bloc.dart' as _i32;
+import '../presentation/bloc/block/block_bloc.dart' as _i60;
+import '../presentation/bloc/bookmark/bookmark_bloc.dart' as _i61;
+import '../presentation/bloc/explore/explore_bloc.dart' as _i54;
+import '../presentation/bloc/feed/feed_bloc.dart' as _i55;
+import '../presentation/bloc/history/history_bloc.dart' as _i59;
+import '../presentation/bloc/like_news/like_news_bloc.dart' as _i62;
+import '../presentation/bloc/manage_block/manage_block_bloc.dart' as _i63;
+import '../presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart' as _i64;
+import '../presentation/bloc/manage_history/manage_history_bloc.dart' as _i65;
+import '../presentation/bloc/navigation/navigation_bloc.dart' as _i30;
+import '../presentation/bloc/network/network_bloc.dart' as _i48;
+import '../presentation/bloc/news/news_bloc.dart' as _i66;
+import '../presentation/bloc/query/query_bloc.dart' as _i47;
+import '../presentation/bloc/recommendation/recommendation_bloc.dart' as _i49;
+import '../presentation/bloc/search/search_bloc.dart' as _i33;
+import '../presentation/bloc/share_news/share_news_bloc.dart' as _i58;
+import '../presentation/bloc/signin/signin_bloc.dart' as _i34;
+import '../presentation/bloc/suggest/suggest_bloc.dart' as _i53;
+import '../presentation/bloc/user_event/user_event_bloc.dart'
+    as _i24; // ignore_for_file: unnecessary_lambdas
 
-/// adds generated dependencies
-/// to the provided [GetIt] instance
-
-GetIt $initGetIt(
-  GetIt get, {
-  String environment,
-  EnvironmentFilter environmentFilter,
-}) {
-  final gh = GetItHelper(get, environment, environmentFilter);
-  gh.factory<AmplifyHttpManager>(() => AmplifyHttpManager());
-  gh.factory<AuthenticationRemoteDataSource>(
-      () => AuthenticationRemoteDataSource(get<AppHttpManager>()));
-  gh.factory<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(get<AuthenticationRepository>()));
-  gh.factory<IdentifyUserUseCase>(
-      () => IdentifyUserUseCase(get<AuthenticationRepository>()));
-  gh.factory<InitialAuthenticationUseCase>(
-      () => InitialAuthenticationUseCase(get<AuthenticationRepository>()));
-  gh.factory<NewsLocalDataSource>(() => NewsLocalDataSource());
-  gh.factory<NewsRemoteDataSource>(
-      () => NewsRemoteDataSource(get<AmplifyHttpManager>()));
-  gh.factory<NewsRepository>(() =>
-      NewsRepository(get<NewsRemoteDataSource>(), get<NewsLocalDataSource>()));
-  gh.factory<SearchItemFuse>(() => SearchItemFuse());
-  gh.factory<SearchLocalDataSource>(
-      () => SearchLocalDataSource(get<SearchItemFuse>()));
-  gh.factory<SearchRemoteDataSource>(
-      () => SearchRemoteDataSource(get<AmplifyHttpManager>()));
-  gh.factory<SearchRepository>(() => SearchRepository(
-      get<SearchRemoteDataSource>(), get<SearchLocalDataSource>()));
-  gh.factory<SearchUseCase>(() => SearchUseCase(get<SearchRepository>()));
-  gh.factory<SendEventBookmarkNewsUseCase>(
-      () => SendEventBookmarkNewsUseCase());
-  gh.factory<SendEventLikeNewsUseCase>(() => SendEventLikeNewsUseCase());
-  gh.factory<SendEventShareNewsUseCase>(() => SendEventShareNewsUseCase());
-  gh.factory<SendEventViewNewsUseCase>(() => SendEventViewNewsUseCase());
-  gh.factory<ShareNewsUseCase>(() => ShareNewsUseCase());
-  gh.factory<TrendingRemoteDataSource>(
-      () => TrendingRemoteDataSource(get<AmplifyHttpManager>()));
-  gh.factory<UserEventBloc>(() => UserEventBloc(
-        get<SendEventViewNewsUseCase>(),
-        get<SendEventBookmarkNewsUseCase>(),
-        get<SendEventLikeNewsUseCase>(),
-        get<SendEventShareNewsUseCase>(),
-      ));
-  gh.factory<UserEventRepository>(() => UserEventRepository());
-  gh.factory<UserSignInWithAmplifyUseCase>(
-      () => UserSignInWithAmplifyUseCase(get<AuthenticationRepository>()));
-  gh.factory<UserSignInWithAuthCodeUseCase>(
-      () => UserSignInWithAuthCodeUseCase(get<AuthenticationRepository>()));
-  gh.factory<UserSignOutUseCase>(
-      () => UserSignOutUseCase(get<AuthenticationRepository>()));
-  gh.factory<ExploreRepository>(
-      () => ExploreRepository(get<TrendingRemoteDataSource>()));
-  gh.factoryParam<NavigationBloc, PageController, dynamic>(
+// ignore_for_file: lines_longer_than_80_chars
+/// initializes the registration of provided dependencies inside of [GetIt]
+_i1.GetIt $initGetIt(_i1.GetIt get,
+    {String environment, _i2.EnvironmentFilter environmentFilter}) {
+  final gh = _i2.GetItHelper(get, environment, environmentFilter);
+  gh.factory<_i3.AmplifyHttpManager>(() => _i3.AmplifyHttpManager());
+  gh.factory<_i4.AuthenticationRemoteDataSource>(
+      () => _i4.AuthenticationRemoteDataSource(get<_i5.AppHttpManager>()));
+  gh.factory<_i6.GetCurrentUserUseCase>(
+      () => _i6.GetCurrentUserUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i8.IdentifyUserUseCase>(
+      () => _i8.IdentifyUserUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i9.InitialAuthenticationUseCase>(() =>
+      _i9.InitialAuthenticationUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i10.NewsLocalDataSource>(() => _i10.NewsLocalDataSource());
+  gh.factory<_i11.NewsRemoteDataSource>(
+      () => _i11.NewsRemoteDataSource(get<_i3.AmplifyHttpManager>()));
+  gh.factory<_i12.NewsRepository>(() => _i12.NewsRepository(
+      get<_i11.NewsRemoteDataSource>(), get<_i10.NewsLocalDataSource>()));
+  gh.factory<_i13.SearchItemFuse>(() => _i13.SearchItemFuse());
+  gh.factory<_i14.SearchLocalDataSource>(
+      () => _i14.SearchLocalDataSource(get<_i13.SearchItemFuse>()));
+  gh.factory<_i15.SearchRemoteDataSource>(
+      () => _i15.SearchRemoteDataSource(get<_i3.AmplifyHttpManager>()));
+  gh.factory<_i16.SearchRepository>(() => _i16.SearchRepository(
+      get<_i15.SearchRemoteDataSource>(), get<_i14.SearchLocalDataSource>()));
+  gh.factory<_i17.SearchUseCase>(
+      () => _i17.SearchUseCase(get<_i16.SearchRepository>()));
+  gh.factory<_i18.SendEventBookmarkNewsUseCase>(
+      () => _i18.SendEventBookmarkNewsUseCase());
+  gh.factory<_i19.SendEventLikeNewsUseCase>(
+      () => _i19.SendEventLikeNewsUseCase());
+  gh.factory<_i20.SendEventShareNewsUseCase>(
+      () => _i20.SendEventShareNewsUseCase());
+  gh.factory<_i21.SendEventViewNewsUseCase>(
+      () => _i21.SendEventViewNewsUseCase());
+  gh.factory<_i22.ShareNewsUseCase>(() => _i22.ShareNewsUseCase());
+  gh.factory<_i23.TrendingRemoteDataSource>(
+      () => _i23.TrendingRemoteDataSource(get<_i3.AmplifyHttpManager>()));
+  gh.factory<_i24.UserEventBloc>(() => _i24.UserEventBloc(
+      get<_i21.SendEventViewNewsUseCase>(),
+      get<_i18.SendEventBookmarkNewsUseCase>(),
+      get<_i19.SendEventLikeNewsUseCase>(),
+      get<_i20.SendEventShareNewsUseCase>()));
+  gh.factory<_i25.UserEventRepository>(() => _i25.UserEventRepository());
+  gh.factory<_i26.UserSignInWithAmplifyUseCase>(() =>
+      _i26.UserSignInWithAmplifyUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i27.UserSignInWithAuthCodeUseCase>(() =>
+      _i27.UserSignInWithAuthCodeUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i28.UserSignOutUseCase>(
+      () => _i28.UserSignOutUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i29.ExploreRepository>(
+      () => _i29.ExploreRepository(get<_i23.TrendingRemoteDataSource>()));
+  gh.factoryParam<_i30.NavigationBloc, _i31.PageController, dynamic>(
       (pageController, _) =>
-          NavigationBloc(pageController, get<AuthenticationBloc>()));
-  gh.factory<SearchBloc>(() => SearchBloc(get<SearchUseCase>()));
-  gh.factory<SigninBloc>(() => SigninBloc(
-        get<AuthenticationBloc>(),
-        get<UserSignInWithAmplifyUseCase>(),
-        get<IdentifyUserUseCase>(),
-      ));
-  gh.factory<DeleteBlockUseCase>(() => DeleteBlockUseCase(
-      get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<DeleteBookmarkUseCase>(() => DeleteBookmarkUseCase(
-      get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<DeleteUserViewNewsHistoryUseCase>(() =>
-      DeleteUserViewNewsHistoryUseCase(
-          get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<GetBlocksUseCase>(() =>
-      GetBlocksUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<GetBookmarkUseCase>(() => GetBookmarkUseCase(
-        get<AuthenticationRepository>(),
-        get<UserRepository>(),
-        get<NewsRepository>(),
-      ));
-  gh.factory<GetExploreUseCase>(() => GetExploreUseCase(
-        get<ExploreRepository>(),
-        get<UserRepository>(),
-        get<AuthenticationRepository>(),
-      ));
-  gh.factory<GetNewsFeedUseCase>(() => GetNewsFeedUseCase(
-        get<NewsRepository>(),
-        get<UserRepository>(),
-        get<AuthenticationRepository>(),
-      ));
-  gh.factory<GetRecommendationsUseCase>(() => GetRecommendationsUseCase(
-        get<NewsRepository>(),
-        get<UserRepository>(),
-        get<AuthenticationRepository>(),
-      ));
-  gh.factory<GetSuggestionNewsUseCase>(() => GetSuggestionNewsUseCase(
-        get<NewsRepository>(),
-        get<UserRepository>(),
-        get<AuthenticationRepository>(),
-      ));
-  gh.factory<GetViewNewsHistoryUseCase>(() => GetViewNewsHistoryUseCase(
-        get<AuthenticationRepository>(),
-        get<UserRepository>(),
-        get<NewsRepository>(),
-      ));
-  gh.factory<LikeNewsUseCase>(() =>
-      LikeNewsUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<QueryFeedBloc>(
-      () => QueryFeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
-  gh.factory<RecommendationBloc>(() =>
-      RecommendationBloc(get<GetRecommendationsUseCase>(), get<NetworkBloc>()));
-  gh.factory<SaveBlockUseCase>(() =>
-      SaveBlockUseCase(get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<SaveBookmarkUseCase>(() => SaveBookmarkUseCase(
-      get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<SaveUserViewNewsHistoryUseCase>(() =>
-      SaveUserViewNewsHistoryUseCase(
-          get<AuthenticationRepository>(), get<UserRepository>()));
-  gh.factory<SuggestFeedBloc>(() =>
-      SuggestFeedBloc(get<GetSuggestionNewsUseCase>(), get<NetworkBloc>()));
-  gh.factory<ExploreBloc>(() => ExploreBloc(get<GetExploreUseCase>()));
-  gh.factory<FeedBloc>(
-      () => FeedBloc(get<GetNewsFeedUseCase>(), get<NetworkBloc>()));
-
-  // Eager singletons must be registered in the right order
-  gh.singleton<AppHttpManager>(AppHttpManager());
-  gh.singleton<AuthenticationRepository>(AuthenticationRepository(
-      get<AuthenticationRemoteDataSource>(), get<AppHttpManager>()));
-  gh.singleton<IPv6>(IPv6());
-  gh.singleton<NetworkBloc>(NetworkBloc(get<IPv6>()));
-  gh.singleton<UserStorage>(UserStorage());
-  gh.singleton<AuthenticationBloc>(AuthenticationBloc(
-    get<GetCurrentUserUseCase>(),
-    get<UserSignOutUseCase>(),
-    get<InitialAuthenticationUseCase>(),
-    get<IdentifyUserUseCase>(),
-  ));
-  gh.singleton<ShareNewsBloc>(
-      ShareNewsBloc(get<ShareNewsUseCase>(), get<UserEventBloc>()));
-  gh.singleton<UserRepository>(UserRepository(get<UserStorage>()));
-  gh.singleton<HistoryBloc>(HistoryBloc(get<GetViewNewsHistoryUseCase>()));
-  gh.singleton<BlockBloc>(BlockBloc(get<GetBlocksUseCase>()));
-  gh.singleton<BookmarkBloc>(BookmarkBloc(get<GetBookmarkUseCase>()));
-  gh.singleton<LikeNewsBloc>(
-      LikeNewsBloc(get<LikeNewsUseCase>(), get<UserEventBloc>()));
-  gh.singleton<ManageBlockBloc>(
-      ManageBlockBloc(get<SaveBlockUseCase>(), get<DeleteBlockUseCase>()));
-  gh.singleton<ManageBookmarkBloc>(ManageBookmarkBloc(
-    get<SaveBookmarkUseCase>(),
-    get<UserEventBloc>(),
-    get<DeleteBookmarkUseCase>(),
-  ));
-  gh.singleton<ManageHistoryBloc>(ManageHistoryBloc(
-    get<SaveUserViewNewsHistoryUseCase>(),
-    get<DeleteUserViewNewsHistoryUseCase>(),
-    get<UserEventBloc>(),
-  ));
-  gh.singleton<NewsBloc>(NewsBloc(
-    get<ManageBookmarkBloc>(),
-    get<ManageHistoryBloc>(),
-    get<LikeNewsBloc>(),
-  ));
+          _i30.NavigationBloc(pageController, get<_i32.AuthenticationBloc>()));
+  gh.factory<_i33.SearchBloc>(() => _i33.SearchBloc(get<_i17.SearchUseCase>()));
+  gh.factory<_i34.SigninBloc>(() => _i34.SigninBloc(
+      get<_i32.AuthenticationBloc>(),
+      get<_i26.UserSignInWithAmplifyUseCase>(),
+      get<_i8.IdentifyUserUseCase>()));
+  gh.factory<_i35.DeleteBlockUseCase>(() => _i35.DeleteBlockUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i37.DeleteBookmarkUseCase>(() => _i37.DeleteBookmarkUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i38.DeleteUserViewNewsHistoryUseCase>(() =>
+      _i38.DeleteUserViewNewsHistoryUseCase(
+          get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i39.GetBlocksUseCase>(() => _i39.GetBlocksUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i40.GetBookmarkUseCase>(() => _i40.GetBookmarkUseCase(
+      get<_i7.AuthenticationRepository>(),
+      get<_i36.UserRepository>(),
+      get<_i12.NewsRepository>()));
+  gh.factory<_i41.GetExploreUseCase>(() => _i41.GetExploreUseCase(
+      get<_i29.ExploreRepository>(),
+      get<_i36.UserRepository>(),
+      get<_i7.AuthenticationRepository>()));
+  gh.factory<_i42.GetNewsFeedUseCase>(() => _i42.GetNewsFeedUseCase(
+      get<_i12.NewsRepository>(),
+      get<_i36.UserRepository>(),
+      get<_i7.AuthenticationRepository>()));
+  gh.factory<_i43.GetRecommendationsUseCase>(() =>
+      _i43.GetRecommendationsUseCase(get<_i12.NewsRepository>(),
+          get<_i36.UserRepository>(), get<_i7.AuthenticationRepository>()));
+  gh.factory<_i44.GetSuggestionNewsUseCase>(() => _i44.GetSuggestionNewsUseCase(
+      get<_i12.NewsRepository>(),
+      get<_i36.UserRepository>(),
+      get<_i7.AuthenticationRepository>()));
+  gh.factory<_i45.GetViewNewsHistoryUseCase>(() =>
+      _i45.GetViewNewsHistoryUseCase(get<_i7.AuthenticationRepository>(),
+          get<_i36.UserRepository>(), get<_i12.NewsRepository>()));
+  gh.factory<_i46.LikeNewsUseCase>(() => _i46.LikeNewsUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i47.QueryFeedBloc>(() => _i47.QueryFeedBloc(
+      get<_i42.GetNewsFeedUseCase>(), get<_i48.NetworkBloc>()));
+  gh.factory<_i49.RecommendationBloc>(() => _i49.RecommendationBloc(
+      get<_i43.GetRecommendationsUseCase>(), get<_i48.NetworkBloc>()));
+  gh.factory<_i50.SaveBlockUseCase>(() => _i50.SaveBlockUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i51.SaveBookmarkUseCase>(() => _i51.SaveBookmarkUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i52.SaveUserViewNewsHistoryUseCase>(() =>
+      _i52.SaveUserViewNewsHistoryUseCase(
+          get<_i7.AuthenticationRepository>(), get<_i36.UserRepository>()));
+  gh.factory<_i53.SuggestFeedBloc>(() => _i53.SuggestFeedBloc(
+      get<_i44.GetSuggestionNewsUseCase>(), get<_i48.NetworkBloc>()));
+  gh.factory<_i54.ExploreBloc>(
+      () => _i54.ExploreBloc(get<_i41.GetExploreUseCase>()));
+  gh.factory<_i55.FeedBloc>(() =>
+      _i55.FeedBloc(get<_i42.GetNewsFeedUseCase>(), get<_i48.NetworkBloc>()));
+  gh.singleton<_i5.AppHttpManager>(_i5.AppHttpManager());
+  gh.singleton<_i7.AuthenticationRepository>(_i7.AuthenticationRepository(
+      get<_i4.AuthenticationRemoteDataSource>(), get<_i5.AppHttpManager>()));
+  gh.singleton<_i56.IPv6>(_i56.IPv6());
+  gh.singleton<_i48.NetworkBloc>(_i48.NetworkBloc(get<_i56.IPv6>()));
+  gh.singleton<_i57.UserStorage>(_i57.UserStorage());
+  gh.singleton<_i32.AuthenticationBloc>(_i32.AuthenticationBloc(
+      get<_i6.GetCurrentUserUseCase>(),
+      get<_i28.UserSignOutUseCase>(),
+      get<_i9.InitialAuthenticationUseCase>(),
+      get<_i8.IdentifyUserUseCase>()));
+  gh.singleton<_i58.ShareNewsBloc>(_i58.ShareNewsBloc(
+      get<_i22.ShareNewsUseCase>(), get<_i24.UserEventBloc>()));
+  gh.singleton<_i36.UserRepository>(
+      _i36.UserRepository(get<_i57.UserStorage>()));
+  gh.singleton<_i59.HistoryBloc>(
+      _i59.HistoryBloc(get<_i45.GetViewNewsHistoryUseCase>()));
+  gh.singleton<_i60.BlockBloc>(_i60.BlockBloc(get<_i39.GetBlocksUseCase>()));
+  gh.singleton<_i61.BookmarkBloc>(
+      _i61.BookmarkBloc(get<_i40.GetBookmarkUseCase>()));
+  gh.singleton<_i62.LikeNewsBloc>(_i62.LikeNewsBloc(
+      get<_i46.LikeNewsUseCase>(), get<_i24.UserEventBloc>()));
+  gh.singleton<_i63.ManageBlockBloc>(_i63.ManageBlockBloc(
+      get<_i50.SaveBlockUseCase>(), get<_i35.DeleteBlockUseCase>()));
+  gh.singleton<_i64.ManageBookmarkBloc>(_i64.ManageBookmarkBloc(
+      get<_i51.SaveBookmarkUseCase>(),
+      get<_i24.UserEventBloc>(),
+      get<_i37.DeleteBookmarkUseCase>()));
+  gh.singleton<_i65.ManageHistoryBloc>(_i65.ManageHistoryBloc(
+      get<_i52.SaveUserViewNewsHistoryUseCase>(),
+      get<_i38.DeleteUserViewNewsHistoryUseCase>(),
+      get<_i24.UserEventBloc>()));
+  gh.singleton<_i66.NewsBloc>(_i66.NewsBloc(get<_i64.ManageBookmarkBloc>(),
+      get<_i65.ManageHistoryBloc>(), get<_i62.LikeNewsBloc>()));
   return get;
 }

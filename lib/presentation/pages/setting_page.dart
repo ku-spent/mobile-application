@@ -26,15 +26,18 @@ class _SettingPageState extends State<SettingPage> {
 
   void _showConfirmSignOut() {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("ยกเลิก"),
       onPressed: () {
         ExtendedNavigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("ออกจากระบบ"),
-      onPressed: _handleSignout,
+      onPressed: () {
+        _handleSignout();
+        ExtendedNavigator.of(context).pop();
+      },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -57,15 +60,18 @@ class _SettingPageState extends State<SettingPage> {
 
   void _showConfirmClearData() {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("ยกเลิก"),
       onPressed: () {
         ExtendedNavigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("ล้างข้อมูล"),
-      onPressed: _handleClearData,
+      onPressed: () {
+        _handleClearData();
+        ExtendedNavigator.of(context).pop();
+      },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(

@@ -22,10 +22,13 @@ class UserSignInWithAmplifyUseCase {
         bool hasUser = await _authenticationRepository.hasUser(userId);
         if (!hasUser) {
           // if not has user in database
+          print('Not found user');
+          print('Create new user');
           Map<String, String> userMap = await _authenticationRepository.getUserMap();
           await _authenticationRepository.createUser(userMap);
         }
         final user = await _authenticationRepository.getCurrentUser();
+        print(user);
         if (user != null) {
           await _authenticationRepository.cacheToken();
           await _authenticationRepository.setRemoteAuthFromSession();

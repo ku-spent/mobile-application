@@ -37,8 +37,13 @@ class AuthenticationRepository {
   AuthenticationRepository(this._authenticationRemoteDataSource, this._httpManager);
 
   Future<bool> initAmplify() async {
-    await _configureAmplify();
-    return _amplifyConfigured;
+    try {
+      await _configureAmplify();
+      return _amplifyConfigured;
+    } on AmplifyAlreadyConfiguredException {
+      print('amplify already configured');
+      return true;
+    } catch (e) {}
   }
 
   Future<void> initCognito() async {
