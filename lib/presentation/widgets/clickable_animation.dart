@@ -18,7 +18,7 @@ class ClickableAnimation extends StatelessWidget {
   }) : super(key: key);
 
   Future<bool> onTap(bool isLiked) async {
-    // onPressed();
+    onPressed();
     return !isLiked;
   }
 

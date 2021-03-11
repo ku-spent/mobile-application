@@ -26,7 +26,6 @@ import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
-import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/di/di.dart';
 import 'package:bot_toast/bot_toast.dart';
 
@@ -60,9 +59,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<SearchBloc>(
           create: (BuildContext context) => getIt<SearchBloc>(),
         ),
-        // BlocProvider<QueryFeedBloc>(
-        //   create: (BuildContext context) => getIt<QueryFeedBloc>(),
-        // ),
         BlocProvider<AuthenticationBloc>(
           create: (BuildContext context) => getIt<AuthenticationBloc>(),
         ),
