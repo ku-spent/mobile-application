@@ -9,7 +9,7 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/recommendation/recommendation_bloc.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
-typedef BuildRecommendationItem({News news, int i});
+typedef BuildRecommendationItem({News news, int i, String recommendationId});
 
 class ForYouPage extends StatefulWidget {
   final ScrollController scrollController;
@@ -97,20 +97,21 @@ class _ForYouPageState extends State<ForYouPage> with AutomaticKeepAliveClientMi
                       return SizeFadeTransition(
                         key: ValueKey(result.id),
                         animation: animation,
-                        child: _buildItem(news: result, i: i),
+                        child: _buildItem(news: result, i: i, recommendationId: state.recommendations.recommendationID),
                       );
                     },
                     updateItemBuilder: (context, animation, result) {
                       return FadeTransition(
                         key: ValueKey(result.id),
                         opacity: animation,
-                        child: _buildItem(news: result),
+                        child: _buildItem(news: result, recommendationId: state.recommendations.recommendationID),
                       );
                     },
                     removeItemBuilder: (context, animation, result) {
                       return FadeTransition(
+                        key: ValueKey(result.id),
                         opacity: animation,
-                        child: _buildItem(news: result),
+                        child: _buildItem(news: result, recommendationId: state.recommendations.recommendationID),
                       );
                     },
                   )

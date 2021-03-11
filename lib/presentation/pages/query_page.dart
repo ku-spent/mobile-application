@@ -48,9 +48,7 @@ class _QueryPageState extends State<QueryPage> {
     _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
     _heroTag = widget.coverUrl + 'cover' + getRandomString(10);
-    // Future.delayed(Duration.zero, () {
     _queryFeedBloc = getIt<QueryFeedBloc>()..add(InitialQueryFeed(query: widget.query));
-    // });
   }
 
   void _onScroll() {

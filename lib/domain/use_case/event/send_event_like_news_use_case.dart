@@ -11,7 +11,7 @@ class SendEventLikeNewsUseCase {
   Future<void> call(News news, {String recommendationId}) async {
     AnalyticsEvent analyticsEvent = AnalyticsEvent(SendEvent.likeNewsEvent);
     analyticsEvent.properties.addStringProperty("news_id", news.id);
-    analyticsEvent.properties.addStringProperty("recommendation_id", recommendationId);
+    if (recommendationId != null) analyticsEvent.properties.addStringProperty("recommendation_id", recommendationId);
     await Amplify.Analytics.recordEvent(event: analyticsEvent);
   }
 }

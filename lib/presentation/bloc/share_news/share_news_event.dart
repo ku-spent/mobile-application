@@ -8,10 +8,11 @@ abstract class ShareNewsEvent extends Equatable {
 }
 
 class ShareNews extends ShareNewsEvent {
-  final BuildContext context;
   final News news;
+  final String recommendationId;
+  final BuildContext context;
 
-  const ShareNews({@required this.context, @required this.news});
+  const ShareNews({@required this.context, @required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];

@@ -31,7 +31,7 @@ class ShareNewsBloc extends Bloc<ShareNewsEvent, ShareNewsState> {
     yield ShareNewsLoading();
     try {
       await _shareNewsUseCase.call(event.context, event.news);
-      _userEventBloc.add(SendShareNewsEvent(news: event.news));
+      _userEventBloc.add(SendShareNewsEvent(news: event.news, recommendationId: event.recommendationId));
       yield ShareNewsSuccess(event.news);
     } catch (e) {
       print(e);

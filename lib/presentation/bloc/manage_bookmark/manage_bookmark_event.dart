@@ -9,8 +9,9 @@ abstract class ManageBookmarkEvent extends Equatable {
 
 class SaveBookmark extends ManageBookmarkEvent {
   final News news;
+  final String recommendationId;
 
-  const SaveBookmark({@required this.news});
+  const SaveBookmark({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];

@@ -44,10 +44,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget _buildItem({News news, int i = -1}) {
+  Widget _buildItem({News news, int i = -1, String recommendationId}) {
     return CardBase(
       news: news,
       isSecondary: i % 4 != 0,
+      recommendationId: recommendationId,
     );
   }
 

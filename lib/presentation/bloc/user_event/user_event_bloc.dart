@@ -45,7 +45,7 @@ class UserEventBloc extends Bloc<UserEventEvent, UserEventState> {
   Stream<UserEventState> _mapSendingViewNewsEventState(SendViewNewsEvent event) async* {
     try {
       yield UserEventSending();
-      await _sendEventViewNewsUseCase(event.news);
+      await _sendEventViewNewsUseCase(event.news, recommendationId: event.recommendationId);
       yield UserEventSuccess();
     } catch (_) {
       yield UserEventError();
@@ -55,7 +55,7 @@ class UserEventBloc extends Bloc<UserEventEvent, UserEventState> {
   Stream<UserEventState> _mapSendingLikeNewsEventState(SendLikeNewsEvent event) async* {
     try {
       yield UserEventSending();
-      await _sendEventLikeNewsUseCase(event.news);
+      await _sendEventLikeNewsUseCase(event.news, recommendationId: event.recommendationId);
       yield UserEventSuccess();
     } catch (_) {
       yield UserEventError();
@@ -65,7 +65,7 @@ class UserEventBloc extends Bloc<UserEventEvent, UserEventState> {
   Stream<UserEventState> _mapSendingShareNewsEventState(SendShareNewsEvent event) async* {
     try {
       yield UserEventSending();
-      await _sendEventShareNewsUseCase(event.news);
+      await _sendEventShareNewsUseCase(event.news, recommendationId: event.recommendationId);
       yield UserEventSuccess();
     } catch (_) {
       yield UserEventError();
@@ -75,7 +75,7 @@ class UserEventBloc extends Bloc<UserEventEvent, UserEventState> {
   Stream<UserEventState> _mapSendingBookmarkNewsEventState(SendBookmarkNewsEvent event) async* {
     try {
       yield UserEventSending();
-      await _sendEventBookmarkNewsUseCase(event.news);
+      await _sendEventBookmarkNewsUseCase(event.news, recommendationId: event.recommendationId);
       yield UserEventSuccess();
     } catch (_) {
       yield UserEventError();

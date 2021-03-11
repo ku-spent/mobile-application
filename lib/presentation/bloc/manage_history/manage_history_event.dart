@@ -9,8 +9,9 @@ abstract class ManageHistoryEvent extends Equatable {
 
 class SaveHistory extends ManageHistoryEvent {
   final News news;
+  final String recommendationId;
 
-  const SaveHistory({@required this.news});
+  const SaveHistory({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];

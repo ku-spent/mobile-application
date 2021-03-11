@@ -33,6 +33,8 @@ class CardBase extends StatefulWidget {
   final bool isSecondary;
   final EdgeInsets margin;
 
+  final String recommendationId;
+
   CardBase({
     Key key,
     @required this.news,
@@ -42,6 +44,7 @@ class CardBase extends StatefulWidget {
     this.isSecondary = false,
     this.showBottom = true,
     this.margin = const EdgeInsets.only(bottom: 8.0),
+    this.recommendationId,
   }) : super(key: key);
 
   @override
@@ -53,6 +56,7 @@ class _CardBaseState extends State<CardBase> {
   bool _isBookmarked;
   UserAction _userAction;
 
+  String _recommendationId;
   LikeNewsBloc _likeNewsBloc;
   ShareNewsBloc _shareNewsBloc;
   ManageHistoryBloc _manageHistoryBloc;
@@ -68,11 +72,7 @@ class _CardBaseState extends State<CardBase> {
     _news = widget.news;
     _isBookmarked = _news.isBookmarked;
     _userAction = _news.userAction;
-  }
-
-  void _goToLink(BuildContext context) async {
-    ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
-    _manageHistoryBloc.add(SaveHistory(news: _news));
+    _recommendationId = widget.recommendationId;
   }
 
   void _goToQuerySourcePage() {
@@ -111,19 +111,24 @@ class _CardBaseState extends State<CardBase> {
     );
   }
 
+  void _goToLink(BuildContext context) async {
+    ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
+    _manageHistoryBloc.add(SaveHistory(news: _news, recommendationId: _recommendationId));
+  }
+
   void _onClickLike() {
-    _likeNewsBloc.add(LikeNews(news: _news));
+    _likeNewsBloc.add(LikeNews(news: _news, recommendationId: _recommendationId));
   }
 
   void _onClickBookmark() {
     if (_isBookmarked)
       _manageBookmarkBloc.add(DeleteBookmark(news: _news));
     else
-      _manageBookmarkBloc.add(SaveBookmark(news: _news));
+      _manageBookmarkBloc.add(SaveBookmark(news: _news, recommendationId: _recommendationId));
   }
 
   void _onClickShare() async {
-    _shareNewsBloc.add(ShareNews(context: context, news: _news));
+    _shareNewsBloc.add(ShareNews(context: context, news: _news, recommendationId: _recommendationId));
   }
 
   void _setUserAction(UserAction userAction) {
