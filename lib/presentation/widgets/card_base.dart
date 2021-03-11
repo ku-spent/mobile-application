@@ -13,6 +13,7 @@ import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/pages/news_bottom_sheet.dart';
+import 'package:spent/presentation/widgets/clickable_animation.dart';
 import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 

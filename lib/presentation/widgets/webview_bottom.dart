@@ -7,7 +7,7 @@ import 'package:spent/domain/model/UserAction.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
-import 'package:spent/presentation/widgets/clickable_icon.dart';
+import 'package:spent/presentation/widgets/clickable_animation.dart';
 
 class WebViewBottom extends StatefulWidget {
   final News news;
@@ -67,13 +67,13 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
-      return IconButton(
-        color: isActive ? Theme.of(context).primaryColor : Colors.grey,
-        onPressed: onPressed,
-        icon: isActive ? active : inActive,
-      );
-    }
+    // Widget _build{Function onPressed, Icon inActive, Icon active, bool isActive}){
+    //   return IconButton(
+    //     color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+    //     onPressed: onPressed,
+    //     icon: isActive ? active : inActive,
+    //   );
+    // }
 
     return MultiBlocListener(
       listeners: [
@@ -109,24 +109,24 @@ class _WebViewBottomState extends State<WebViewBottom> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ClickableIcon(
+                ClickableAnimation(
                   isActive: _userAction == UserAction.LIKE,
-                  active: Icon(Icons.favorite),
-                  inActive: Icon(Icons.favorite_outline),
+                  active: Icons.favorite,
+                  inActive: Icons.favorite_outline,
                   onPressed: _onClickLike,
                   activeColor: Colors.red[400],
                 ),
                 Container(width: 12.0),
-                ClickableIcon(
+                ClickableAnimation(
                   isActive: _isBookmarked,
-                  active: Icon(Icons.bookmark),
-                  inActive: Icon(Icons.bookmark_outline),
+                  active: Icons.bookmark,
+                  inActive: Icons.bookmark_outline,
                   onPressed: _onClickBookmark,
                 ),
                 Container(width: 12.0),
-                ClickableIcon(
-                  active: Icon(Icons.share),
-                  inActive: Icon(Icons.share),
+                ClickableAnimation(
+                  active: Icons.share,
+                  inActive: Icons.share,
                   onPressed: _onClickShare,
                 )
               ],

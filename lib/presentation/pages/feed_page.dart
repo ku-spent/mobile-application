@@ -109,6 +109,7 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
                     },
                     removeItemBuilder: (context, animation, result) {
                       return FadeTransition(
+                        key: ValueKey(result.id),
                         opacity: animation,
                         child: _buildItem(news: result),
                       );
