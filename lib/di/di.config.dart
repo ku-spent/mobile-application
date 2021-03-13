@@ -125,8 +125,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       _i26.UserSignInWithAmplifyUseCase(get<_i7.AuthenticationRepository>()));
   gh.factory<_i27.UserSignInWithAuthCodeUseCase>(() =>
       _i27.UserSignInWithAuthCodeUseCase(get<_i7.AuthenticationRepository>()));
-  gh.factory<_i28.UserSignOutUseCase>(
-      () => _i28.UserSignOutUseCase(get<_i7.AuthenticationRepository>()));
+  gh.factory<_i28.UserSignOutUseCase>(() => _i28.UserSignOutUseCase(
+      get<_i7.AuthenticationRepository>(), get<_i12.NewsRepository>()));
   gh.factory<_i29.ExploreRepository>(
       () => _i29.ExploreRepository(get<_i23.TrendingRemoteDataSource>()));
   gh.factoryParam<_i30.NavigationBloc, _i31.PageController, dynamic>(

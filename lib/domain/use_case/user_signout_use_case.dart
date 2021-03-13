@@ -1,20 +1,21 @@
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:spent/data/repository/authentication_repository.dart';
-import 'package:spent/domain/model/News.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:spent/data/repository/authentication_repository.dart';
+import 'package:spent/data/repository/news_repository.dart';
 
 @injectable
 class UserSignOutUseCase {
+  final NewsRepository _newsRepository;
   final AuthenticationRepository _authenticationRepository;
 
-  const UserSignOutUseCase(this._authenticationRepository);
+  const UserSignOutUseCase(this._authenticationRepository, this._newsRepository);
 
   Future<void> call() async {
     try {
-      await _authenticationRepository.signOut();
       await CookieManager().clearCookies();
-      (await Hive.openBox<News>(News.boxName)).deleteFromDisk();
+      await _authenticationRepository.signOut();
+      await _newsRepository.deleteNewsFromLocal();
     } catch (err) {
       print(err);
     }

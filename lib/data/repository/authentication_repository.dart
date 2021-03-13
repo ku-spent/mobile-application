@@ -180,7 +180,8 @@ class AuthenticationRepository {
 
   Future<void> signOut() async {
     if (_cognitoUser != null) {
-      await _cognitoUser.signOut();
+      // await _cognitoUser.signOut();
+      await _cognitoUser.globalSignOut();
     }
     final userBox = await Hive.openBox(userBoxName);
     await userBox.put(isLoginKey, false);

@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_local_data_source.dart';
 import 'package:spent/data/data_source/news/news_remote_data_source.dart';
@@ -79,5 +80,10 @@ class NewsRepository {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<void> deleteNewsFromLocal() async {
+    final newsBox = await Hive.openBox<News>(News.boxName);
+    await newsBox.deleteFromDisk();
   }
 }
