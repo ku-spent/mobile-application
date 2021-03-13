@@ -93,6 +93,7 @@ extension CardBaseMethod on _CardBaseState {
             active: Icons.share,
             inActive: Icons.share,
             onPressed: _onClickShare,
+            toggleStatus: false,
           ),
         ]),
       ],

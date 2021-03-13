@@ -6,6 +6,7 @@ class ClickableAnimation extends StatelessWidget {
   final IconData active;
   final Color activeColor;
   final bool isActive;
+  final bool toggleStatus;
   final void Function() onPressed;
 
   const ClickableAnimation({
@@ -15,6 +16,7 @@ class ClickableAnimation extends StatelessWidget {
     this.activeColor,
     this.isActive = false,
     this.onPressed,
+    this.toggleStatus = true,
   }) : super(key: key);
 
   Future<bool> onTap(bool isLiked) async {
@@ -32,7 +34,7 @@ class ClickableAnimation extends StatelessWidget {
       likeBuilder: (isLiked) {
         return Icon(
           isLiked ? active : inActive,
-          color: isLiked ? _activeColor : Colors.grey,
+          color: isLiked && toggleStatus ? _activeColor : Colors.grey,
         );
       },
     );

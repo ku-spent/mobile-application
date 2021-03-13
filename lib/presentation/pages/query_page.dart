@@ -1,12 +1,17 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/di/di.dart';
+import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
+import 'package:spent/presentation/pages/block_bottom_sheet.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
+import 'package:spent/presentation/widgets/query_page_setting.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class QueryPage extends StatefulWidget {
@@ -30,6 +35,7 @@ class _QueryPageState extends State<QueryPage> {
   final String _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
   String _heroTag;
   QueryFeedBloc _queryFeedBloc;
+  ManageBlockBloc _manageBlockBloc;
 
   ScrollController _scrollController;
   bool _isShowFloatingAction = false;
@@ -48,6 +54,7 @@ class _QueryPageState extends State<QueryPage> {
     _scrollController = scrollController;
     _scrollController.addListener(_onScroll);
     _heroTag = widget.coverUrl + 'cover' + getRandomString(10);
+    _manageBlockBloc = BlocProvider.of<ManageBlockBloc>(context);
     _queryFeedBloc = getIt<QueryFeedBloc>()..add(InitialQueryFeed(query: widget.query));
   }
 
@@ -81,6 +88,14 @@ class _QueryPageState extends State<QueryPage> {
         duration: Duration(milliseconds: 300), curve: Curves.easeInExpo);
   }
 
+  void _onSelectedSettingChoice(QueryPageBlockChoice choice) {
+    _manageBlockBloc.add(SaveBlock(blockChoices: [choice]));
+    BotToast.showText(
+      text: 'คุณจะเห็นข่าวที่คล้ายกันน้อยลง',
+      textStyle: GoogleFonts.kanit(color: Colors.white),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,21 +127,10 @@ class _QueryPageState extends State<QueryPage> {
                           )
                         : null,
                     actions: [
-                      PopupMenuButton(itemBuilder: (BuildContext context) {
-                        return QueryPageOptions.choices
-                            .map((choice) => PopupMenuItem(
-                                value: choice,
-                                child: Row(
-                                  children: [
-                                    QueryPageOptions.icons[choice],
-                                    Container(
-                                      width: 16,
-                                    ),
-                                    Text(choice)
-                                  ],
-                                )))
-                            .toList();
-                      })
+                      QueryPageSetting(
+                        query: widget.query,
+                        onSelected: _onSelectedSettingChoice,
+                      )
                     ],
                     expandedHeight: 190.0,
                     stretch: true,
@@ -173,16 +177,6 @@ class _QueryPageState extends State<QueryPage> {
       ),
     );
   }
-}
-
-class QueryPageOptions {
-  static const String block = "ซ่อนเนื้อหาจากแหล่งข่าวนี้";
-
-  static const Map<String, Icon> icons = {block: Icon(Icons.block, size: 24, color: Colors.black54)};
-
-  static const List<String> choices = <String>[
-    block,
-  ];
 }
 
 class BottomLoader extends StatelessWidget {

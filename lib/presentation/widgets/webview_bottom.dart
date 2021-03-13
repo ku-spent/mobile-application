@@ -106,29 +106,44 @@ class _WebViewBottomState extends State<WebViewBottom> {
           child: Padding(
             padding: EdgeInsets.only(left: 16.0),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClickableAnimation(
-                  isActive: _userAction == UserAction.LIKE,
-                  active: Icons.favorite,
-                  inActive: Icons.favorite_outline,
-                  onPressed: _onClickLike,
-                  activeColor: Colors.red[400],
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClickableAnimation(
+                      isActive: _userAction == UserAction.LIKE,
+                      active: Icons.favorite,
+                      inActive: Icons.favorite_outline,
+                      onPressed: _onClickLike,
+                      activeColor: Colors.red[400],
+                    ),
+                    Container(width: 12.0),
+                    ClickableAnimation(
+                      isActive: _isBookmarked,
+                      active: Icons.bookmark,
+                      inActive: Icons.bookmark_outline,
+                      onPressed: _onClickBookmark,
+                    ),
+                    Container(width: 12.0),
+                    ClickableAnimation(
+                      active: Icons.share,
+                      inActive: Icons.share,
+                      onPressed: _onClickShare,
+                      toggleStatus: false,
+                    )
+                  ],
                 ),
-                Container(width: 12.0),
-                ClickableAnimation(
-                  isActive: _isBookmarked,
-                  active: Icons.bookmark,
-                  inActive: Icons.bookmark_outline,
-                  onPressed: _onClickBookmark,
+                Padding(
+                  padding: EdgeInsets.only(right: 12.0),
+                  child: ClickableAnimation(
+                    active: Icons.text_fields_sharp,
+                    inActive: Icons.text_fields_sharp,
+                    onPressed: () {},
+                    toggleStatus: false,
+                  ),
                 ),
-                Container(width: 12.0),
-                ClickableAnimation(
-                  active: Icons.share,
-                  inActive: Icons.share,
-                  onPressed: _onClickShare,
-                )
               ],
             ),
           ),
