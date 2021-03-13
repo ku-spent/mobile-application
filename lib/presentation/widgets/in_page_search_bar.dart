@@ -58,7 +58,7 @@ class _InPageSearchBarState extends State<InPageSearchBar> {
     return FloatingSearchAppBar(
       title: Text(widget.title, style: GoogleFonts.kanit()),
       hint: widget.hint,
-      elevation: 4,
+      elevation: 1,
       controller: _controller,
       clearQueryOnClose: false,
       hintStyle: GoogleFonts.kanit(),

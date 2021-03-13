@@ -238,7 +238,6 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   Widget _buildCategories() => Section(
       title: 'ประเภทข่าว',
       hasSeeMore: false,
-      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
