@@ -12,9 +12,10 @@ class SearchRepository {
 
   SearchRepository(this._searchRemoteDataSource, this._searchLocalDataSource);
 
-  Future<SearchResult> getSearchResults(String query) async {
+  Future<SearchResult> getSearchResults(String query, {int size = 5, int from = 0}) async {
     final List<SearchItem> localSearchItemList = await _searchLocalDataSource.getSearchItems(query);
-    final List<News> remoteSearchNewsList = query == '' ? [] : await _searchRemoteDataSource.getSearchItems(query);
+    final List<News> remoteSearchNewsList =
+        query == '' ? [] : await _searchRemoteDataSource.getSearchItems(query, size, from);
     final List<SearchItem> categories = localSearchItemList.where((e) => e.type == SearchItem.category).toList();
     final List<SearchItem> sources = localSearchItemList.where((e) => e.type == SearchItem.source).toList();
     final SearchResult searchResult = SearchResult(

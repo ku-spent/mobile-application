@@ -8,6 +8,7 @@ import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
 import 'package:spent/presentation/widgets/clickable_animation.dart';
+import 'package:spent/presentation/widgets/clickable_icon.dart';
 
 class WebViewBottom extends StatefulWidget {
   final News news;
@@ -127,21 +128,19 @@ class _WebViewBottomState extends State<WebViewBottom> {
                       onPressed: _onClickBookmark,
                     ),
                     Container(width: 12.0),
-                    ClickableAnimation(
-                      active: Icons.share,
-                      inActive: Icons.share,
+                    ClickableIcon(
+                      active: Icon(Icons.share),
+                      inActive: Icon(Icons.share),
                       onPressed: _onClickShare,
-                      toggleStatus: false,
                     )
                   ],
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: ClickableAnimation(
-                    active: Icons.text_fields_sharp,
-                    inActive: Icons.text_fields_sharp,
+                  child: ClickableIcon(
+                    active: Icon(Icons.text_fields_sharp),
+                    inActive: Icon(Icons.text_fields_sharp),
                     onPressed: () {},
-                    toggleStatus: false,
                   ),
                 ),
               ],

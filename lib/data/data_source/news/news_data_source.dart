@@ -2,7 +2,7 @@ import 'package:spent/domain/model/News.dart';
 import 'package:spent/domain/model/Recommendation.dart';
 
 abstract class NewsDataSource {
-  Future<Recommendation> getRecommendations(String userId);
+  // Future<Recommendation> getRecommendations(String userId);
 
   Future<List<News>> getFeeds(
     int from,

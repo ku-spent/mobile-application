@@ -50,7 +50,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
           }
         },
         builder: (context, state) {
-          print(state);
+          // print(state);
           if (state is AuthenticationAuthenticated) {
             return AppScreen();
           } else if (state is AuthenticationInitial || state is AuthenticationLoading) {

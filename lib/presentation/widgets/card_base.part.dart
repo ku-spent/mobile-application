@@ -88,12 +88,11 @@ extension CardBaseMethod on _CardBaseState {
             inActive: Icons.bookmark_outline,
             onPressed: _onClickBookmark,
           ),
-          ClickableAnimation(
+          ClickableIcon(
             isActive: false,
-            active: Icons.share,
-            inActive: Icons.share,
+            active: Icon(Icons.share),
+            inActive: Icon(Icons.share),
             onPressed: _onClickShare,
-            toggleStatus: false,
           ),
         ]),
       ],

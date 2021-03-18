@@ -9,14 +9,17 @@ class SearchRemoteDataSource {
 
   const SearchRemoteDataSource(this._httpManager);
 
-  Future<List<News>> getSearchItems(String query) async {
+  Future<List<News>> getSearchItems(String query, int size, int from) async {
     try {
       final RestOptions restOptions = RestOptions(
         path: "/search",
         queryParameters: {
           'q': query,
+          'size': size.toString(),
+          'from': from.toString(),
         },
       );
+      print('search query $query');
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data']['hits'];
       final List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();

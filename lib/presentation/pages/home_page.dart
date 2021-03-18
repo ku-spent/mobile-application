@@ -9,7 +9,7 @@ import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
-  static String title = 'Home';
+  static String title = 'หน้าแรก';
   final void Function(int) onTabChange;
   final TabController tabController;
   final int tabLength;

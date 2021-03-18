@@ -19,7 +19,7 @@ import 'package:spent/presentation/widgets/section.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 class ExplorePage extends StatefulWidget {
-  static String title = 'Explore';
+  static String title = 'สำรวจ';
   final ScrollController scrollController;
 
   ExplorePage({Key key, @required this.scrollController}) : super(key: key);

@@ -15,12 +15,6 @@ class NewsLocalDataSource implements NewsDataSource {
   }
 
   @override
-  Future<Recommendation> getRecommendations(String userId) async {
-    // TODO: implement local recommendations
-    return null;
-  }
-
-  @override
   Future<List<News>> getSuggestionNews(int from, int size, News curNews) async {
     try {
       final newsBox = await Hive.openBox<News>(News.boxName);

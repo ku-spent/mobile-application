@@ -11,7 +11,7 @@ import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
 class MePage extends StatefulWidget {
-  static String title = 'Me';
+  static String title = 'ฉัน';
 
   MePage({Key key}) : super(key: key);
 

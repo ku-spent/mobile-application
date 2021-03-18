@@ -26,3 +26,5 @@ class SearchChange extends SearchEvent {
     return 'LoadResults';
   }
 }
+
+class LoadMoreNewsResults extends SearchEvent {}

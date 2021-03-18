@@ -7,9 +7,7 @@ import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
-import 'package:spent/presentation/pages/block_bottom_sheet.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
-import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
 import 'package:spent/presentation/widgets/query_page_setting.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';

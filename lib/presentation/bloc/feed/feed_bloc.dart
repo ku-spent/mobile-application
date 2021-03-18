@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
-import 'package:injectable/injectable.dart';
-import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/use_case/get_news_feed_use_case.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter/widgets.dart';
+import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
+
+import 'package:spent/domain/model/News.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
+import 'package:spent/domain/use_case/get_personalize_latest_news_use_case.dart';
 
 part 'feed_event.dart';
 part 'feed_state.dart';
@@ -15,10 +16,10 @@ part 'feed_state.dart';
 @injectable
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   final int fetchSize = 10;
-  final GetNewsFeedUseCase _getNewsFeedUseCase;
   final NetworkBloc _networkBloc;
+  final GetPersonalizeLatestNewsUseCase _getPersonalizeLatestNewsUseCase;
 
-  FeedBloc(this._getNewsFeedUseCase, this._networkBloc) : super(FeedInitial());
+  FeedBloc(this._getPersonalizeLatestNewsUseCase, this._networkBloc) : super(FeedInitial());
 
   @override
   Stream<FeedState> mapEventToState(
@@ -37,14 +38,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     try {
       final curState = state;
       if (curState is FeedInitial) {
-        final feeds = await _getNewsFeedUseCase.call(
+        final feeds = await _getPersonalizeLatestNewsUseCase.call(
           from: 0,
           size: fetchSize,
           isRemote: true,
         );
         yield FeedLoaded(feeds: feeds, hasMore: true);
       } else if (curState is FeedLoaded) {
-        final feeds = await _getNewsFeedUseCase.call(
+        final feeds = await _getPersonalizeLatestNewsUseCase.call(
           from: curState.feeds.length,
           size: fetchSize,
           isRemote: _networkBloc.isConnected,
@@ -65,7 +66,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       if (curState is FeedError) {
         yield FeedLoading();
       }
-      final feeds = await _getNewsFeedUseCase.call(
+      final feeds = await _getPersonalizeLatestNewsUseCase.call(
         from: 0,
         size: fetchSize,
         isRemote: _networkBloc.isConnected,

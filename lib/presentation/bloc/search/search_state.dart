@@ -22,7 +22,9 @@ class SearchLoading extends SearchState {
 }
 
 class SearchLoaded extends SearchState {
-  SearchLoaded(SearchResult result, String query) : super(result, query);
+  final bool hasMore;
+
+  SearchLoaded(SearchResult result, String query, {@required this.hasMore}) : super(result, query);
 
   @override
   String toString() {
@@ -31,6 +33,10 @@ class SearchLoaded extends SearchState {
 
   @override
   List<Object> get props => [result];
+
+  SearchLoaded copyWith({bool hasMore}) {
+    return SearchLoaded(result, query, hasMore: hasMore ?? this.hasMore);
+  }
 }
 
 class SearchNotLoaded extends SearchState {
