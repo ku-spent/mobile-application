@@ -7,6 +7,7 @@ import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/pages/query_page.dart';
 import 'package:spent/presentation/pages/search_page.dart';
 import 'package:spent/presentation/pages/setting_block_page.dart';
+import 'package:spent/presentation/pages/setting_following_page.dart';
 import 'package:spent/presentation/pages/setting_page.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 import 'package:spent/presentation/pages/view_url.dart';
@@ -23,6 +24,7 @@ import 'package:spent/presentation/pages/welcome_page.dart';
     CupertinoRoute(path: '/about', page: AboutPage),
     CupertinoRoute(path: '/search', page: SearchPage),
     CupertinoRoute(path: '/welcome', page: WelcomePage),
+    CupertinoRoute(path: '/following/setting', page: SettingFollowingPage),
     MaterialRoute(path: '/news', page: ViewUrl),
     MaterialRoute(path: '/query', page: QueryPage),
     MaterialRoute(path: '/hero-photo', page: HeroPhotoViewPage, fullscreenDialog: true),

@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/News.dart';
+import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
 import 'package:spent/presentation/theme.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -71,6 +72,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BookmarkBloc>(
           create: (BuildContext context) => getIt<BookmarkBloc>(),
+        ),
+        BlocProvider<ManageFollowingBloc>(
+          create: (BuildContext context) => getIt<ManageFollowingBloc>(),
         ),
         BlocProvider<ManageBookmarkBloc>(
           create: (BuildContext context) => getIt<ManageBookmarkBloc>(),

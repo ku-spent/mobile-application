@@ -9,6 +9,7 @@ import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
+import 'package:spent/presentation/widgets/query_page_following.dart';
 import 'package:spent/presentation/widgets/query_page_setting.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
@@ -44,6 +45,7 @@ class _QueryPageState extends State<QueryPage> {
   @override
   void dispose() {
     super.dispose();
+    _queryFeedBloc.close();
   }
 
   @override
@@ -125,10 +127,11 @@ class _QueryPageState extends State<QueryPage> {
                           )
                         : null,
                     actions: [
+                      QueryPageFollowing(query: widget.query),
                       QueryPageSetting(
                         query: widget.query,
                         onSelected: _onSelectedSettingChoice,
-                      )
+                      ),
                     ],
                     expandedHeight: 190.0,
                     stretch: true,

@@ -82,13 +82,13 @@ class _WebViewBottomState extends State<WebViewBottom> {
           if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(true);
             BotToast.showText(
-              text: 'Bookmarked',
+              text: 'เพิ่มลงในบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           } else if (state is DeleteBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(false);
             BotToast.showText(
-              text: 'Removed',
+              text: 'ลบออกจากบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           }

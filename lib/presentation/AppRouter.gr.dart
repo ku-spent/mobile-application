@@ -20,6 +20,7 @@ import 'pages/history_page.dart';
 import 'pages/query_page.dart';
 import 'pages/search_page.dart';
 import 'pages/setting_block_page.dart';
+import 'pages/setting_following_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
 import 'pages/view_url.dart';
@@ -35,6 +36,7 @@ class Routes {
   static const String aboutPage = '/about';
   static const String searchPage = '/search';
   static const String welcomePage = '/welcome';
+  static const String settingFollowingPage = '/following/setting';
   static const String viewUrl = '/news';
   static const String queryPage = '/query';
   static const String heroPhotoViewPage = '/hero-photo';
@@ -48,6 +50,7 @@ class Routes {
     aboutPage,
     searchPage,
     welcomePage,
+    settingFollowingPage,
     viewUrl,
     queryPage,
     heroPhotoViewPage,
@@ -67,6 +70,7 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
     RouteDef(Routes.welcomePage, page: WelcomePage),
+    RouteDef(Routes.settingFollowingPage, page: SettingFollowingPage),
     RouteDef(Routes.viewUrl, page: ViewUrl),
     RouteDef(Routes.queryPage, page: QueryPage),
     RouteDef(Routes.heroPhotoViewPage, page: HeroPhotoViewPage),
@@ -149,6 +153,15 @@ class AppRouter extends RouterBase {
       );
       return CupertinoPageRoute<dynamic>(
         builder: (context) => WelcomePage(key: args.key),
+        settings: data,
+      );
+    },
+    SettingFollowingPage: (data) {
+      final args = data.getArgs<SettingFollowingPageArguments>(
+        orElse: () => SettingFollowingPageArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => SettingFollowingPage(key: args.key),
         settings: data,
       );
     },
@@ -241,6 +254,12 @@ class AboutPageArguments {
 class WelcomePageArguments {
   final Key key;
   WelcomePageArguments({this.key});
+}
+
+/// SettingFollowingPage arguments holder class
+class SettingFollowingPageArguments {
+  final Key key;
+  SettingFollowingPageArguments({this.key});
 }
 
 /// ViewUrl arguments holder class

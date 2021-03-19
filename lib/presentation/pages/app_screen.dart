@@ -8,6 +8,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:spent/di/di.dart';
 import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:spent/presentation/pages/following_page.dart';
 import 'package:spent/presentation/pages/me_page.dart';
 import 'package:spent/presentation/pages/explore_page.dart';
 
@@ -99,7 +100,7 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
         onTabChange: _setCurTabIndex,
       ),
       AppRetainWidget(child: ExplorePage(scrollController: _explorePageScrollController)),
-      // AppRetainWidget(child: NotificationPage()),
+      AppRetainWidget(child: FollowingPage()),
       AppRetainWidget(child: MePage()),
     ];
   }
@@ -124,14 +125,14 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
         activeColor: Theme.of(context).primaryColorLight,
         onPressed: _scrollExplorePageToTop,
       ),
-      // PersistentBottomNavBarItem(
-      //   icon: Icon(Icons.notifications),
-      //   title: "Notifications",
-      //   inactiveColor: Colors.grey,
-      //   activeColorAlternate: Theme.of(context).primaryColor,
-      //   textStyle: GoogleFonts.kanit(fontSize: 12.0),
-      //   activeColor: Theme.of(context).primaryColorLight,
-      // ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.rss_feed),
+        title: FollowingPage.title,
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Theme.of(context).primaryColor,
+        textStyle: GoogleFonts.kanit(fontSize: 12.0),
+        activeColor: Theme.of(context).primaryColorLight,
+      ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.account_circle),
         title: MePage.title,
