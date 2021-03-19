@@ -9,9 +9,9 @@ import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/following/following_bloc.dart';
-// import 'package:spent/presentation/bloc/following/following_bloc.dart'
 import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
 import 'package:spent/presentation/bloc/query/query_bloc.dart';
+import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 import 'package:spent/presentation/widgets/section.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
@@ -40,20 +40,10 @@ class _FollowingPageState extends State<FollowingPage> {
     _followingBloc.add(RefreshFollowingList());
   }
 
-  void _goToQuerySourcePage(String source) {
-    ExtendedNavigator.of(context).push(
-      Routes.queryPage,
-      arguments: QueryPageArguments(
-        query: QueryWithField(source, query: source, queryField: QueryField.source),
-        coverUrl: NewsSource.newsSourceCover[source],
-        isShowTitle: true,
-      ),
-    );
-  }
-
-  void _goToFollowingSettingPage() {
+  void _goToFollowingSettingPage(List<Following> followingList, FollowingType followingType) {
     ExtendedNavigator.of(context).push(
       Routes.settingFollowingPage,
+      arguments: SettingFollowingPageArguments(followingList: followingList, followingType: followingType),
     );
   }
 
@@ -70,7 +60,7 @@ class _FollowingPageState extends State<FollowingPage> {
         type: MaterialType.transparency,
         child: InkWell(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          onTap: () => _goToQuerySourcePage(source),
+          onTap: () => goToQuerySourcePage(context, source),
           splashColor: Colors.blue.withAlpha(30),
           child: Padding(
             padding: EdgeInsets.all(12.0),
@@ -90,34 +80,7 @@ class _FollowingPageState extends State<FollowingPage> {
     );
   }
 
-  Widget _buildSources(List<Following> followingList) => Section(
-      title: 'แหล่งข่าว',
-      hasSeeMore: false,
-      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Row(children: followingList.map((f) => _buildSource(f.name)).toList()),
-            ),
-          ),
-        ],
-      ));
-
-  void _goToQueryTagPage(String tag) {
-    ExtendedNavigator.of(context).push(
-      Routes.queryPage,
-      arguments: QueryPageArguments(
-          query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
-          isShowTitle: true,
-          coverUrl: Category.newsCategoryCover[Category.localNews]),
-    );
-  }
-
-  Widget _buildTag(String category) {
+  Widget _buildTag(String tag) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[100]),
@@ -130,7 +93,40 @@ class _FollowingPageState extends State<FollowingPage> {
         type: MaterialType.transparency,
         child: InkWell(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          onTap: () => _goToQueryTagPage(category),
+          onTap: () => goToQueryTagPage(context, tag),
+          splashColor: Colors.blue.withAlpha(30),
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                // SourceIcon(source: source),
+                // Container(height: 8.0),
+                Text(
+                  tag,
+                  style: GoogleFonts.kanit(fontSize: 12.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategory(String category) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[100]),
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      width: 100.0,
+      height: 56.0,
+      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          onTap: () => goToQueryCategoryPage(context, category),
           splashColor: Colors.blue.withAlpha(30),
           child: Padding(
             padding: EdgeInsets.all(12.0),
@@ -150,21 +146,54 @@ class _FollowingPageState extends State<FollowingPage> {
     );
   }
 
-  Widget _buildTags(List<Following> followingList) => Section(
-      title: 'หัวข้อ',
+  Widget _buildSources(List<Following> followingList) => Section(
+      title: 'แหล่งข่าว',
       hasSeeMore: false,
+      action: _buildSectionAction(followingList, FollowingType.SOURCE),
+      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Row(children: followingList.map((f) => _buildTag(f.name)).toList()),
-            ),
-          ),
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 12.0,
+            children:
+                followingList.where((e) => e.type == FollowingType.SOURCE).map((f) => _buildSource(f.name)).toList(),
+          )
         ],
       ));
+
+  Widget _buildTopics(List<Following> followingList) {
+    final _curList = followingList.where((e) => e.type == FollowingType.TAG || e.type == FollowingType.CATEGORY);
+    return _curList.isEmpty
+        ? Container()
+        : Section(
+            title: 'หัวข้อ',
+            hasSeeMore: false,
+            action: _buildSectionAction(followingList, FollowingType.TAG),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 12.0,
+                  children: _curList
+                      .map((f) => f.type == FollowingType.TAG ? _buildTag(f.name) : _buildCategory(f.name))
+                      .toList(),
+                ),
+              ],
+            ));
+  }
+
+  Widget _buildSectionAction(List<Following> followingList, FollowingType followingType) {
+    return IconButton(
+      icon: Icon(
+        Icons.edit,
+        color: Colors.grey,
+      ),
+      onPressed: () => _goToFollowingSettingPage(followingList, followingType),
+    );
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +206,7 @@ class _FollowingPageState extends State<FollowingPage> {
               fontWeight: FontWeight.w500,
               fontSize: 24.0,
             )),
-        actions: [IconButton(icon: Icon(Icons.settings, color: Colors.grey), onPressed: _goToFollowingSettingPage)],
+        // actions: [IconButton(icon: Icon(Icons.settings, color: Colors.grey), onPressed: _goToFollowingSettingPage)],
       ),
       backgroundColor: Colors.grey[100],
       body: BlocProvider<FollowingBloc>(
@@ -199,12 +228,10 @@ class _FollowingPageState extends State<FollowingPage> {
               if (state is FollowingInitial || state is FollowingLoading) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is FollowingListLoaded) {
-                final sourceList = state.followingList.where((e) => e.type == FollowingType.SOURCE).toList();
-                final tagList = state.followingList.where((e) => e.type == FollowingType.TAG).toList();
                 return ListView(
                   children: [
-                    _buildSources(sourceList),
-                    tagList.isNotEmpty ? _buildTags(tagList) : Container(),
+                    _buildSources(state.followingList),
+                    _buildTopics(state.followingList),
                   ],
                 );
               } else {

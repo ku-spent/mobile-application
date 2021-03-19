@@ -14,7 +14,6 @@ class GetFollowingByNameUseCase {
   Future<Following> call(String name, FollowingType followingType) async {
     final User user = await _authenticationRepository.getCurrentUser();
     final List<Following> followingList = await _userRepository.getFollowingList(user);
-
     final filtered = followingList.where((e) => e.name == name && e.type == followingType).toList();
 
     if (filtered.isEmpty) {

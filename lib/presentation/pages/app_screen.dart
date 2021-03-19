@@ -126,7 +126,7 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
         onPressed: _scrollExplorePageToTop,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.rss_feed),
+        icon: Icon(Icons.star),
         title: FollowingPage.title,
         inactiveColor: Colors.grey,
         activeColorAlternate: Theme.of(context).primaryColor,

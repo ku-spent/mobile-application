@@ -10,6 +10,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/model/Following.dart';
 import '../domain/model/ModelProvider.dart';
 import 'bloc/query/query_bloc.dart';
 import 'pages/about_page.dart';
@@ -157,11 +158,13 @@ class AppRouter extends RouterBase {
       );
     },
     SettingFollowingPage: (data) {
-      final args = data.getArgs<SettingFollowingPageArguments>(
-        orElse: () => SettingFollowingPageArguments(),
-      );
+      final args = data.getArgs<SettingFollowingPageArguments>(nullOk: false);
       return CupertinoPageRoute<dynamic>(
-        builder: (context) => SettingFollowingPage(key: args.key),
+        builder: (context) => SettingFollowingPage(
+          key: args.key,
+          followingList: args.followingList,
+          followingType: args.followingType,
+        ),
         settings: data,
       );
     },
@@ -259,7 +262,10 @@ class WelcomePageArguments {
 /// SettingFollowingPage arguments holder class
 class SettingFollowingPageArguments {
   final Key key;
-  SettingFollowingPageArguments({this.key});
+  final List<Following> followingList;
+  final FollowingType followingType;
+  SettingFollowingPageArguments(
+      {this.key, @required this.followingList, @required this.followingType});
 }
 
 /// ViewUrl arguments holder class

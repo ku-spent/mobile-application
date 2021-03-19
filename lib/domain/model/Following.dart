@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:spent/presentation/helper.dart';
 
-enum FollowingType { SOURCE, TAG }
+enum FollowingType { SOURCE, TAG, CATEGORY }
 
 class Following extends Equatable {
   final String id;

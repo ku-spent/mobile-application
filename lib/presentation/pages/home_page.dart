@@ -9,19 +9,19 @@ import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
-  static String title = 'หน้าแรก';
+  static String title = 'ฟีดข่าว';
   final void Function(int) onTabChange;
   final TabController tabController;
   final int tabLength;
   final List<ScrollController> scrollControllerList;
 
-  HomePage(
-      {Key key,
-      @required this.scrollControllerList,
-      @required this.tabController,
-      @required this.tabLength,
-      @required this.onTabChange})
-      : super(key: key);
+  HomePage({
+    Key key,
+    @required this.scrollControllerList,
+    @required this.tabController,
+    @required this.tabLength,
+    @required this.onTabChange,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();

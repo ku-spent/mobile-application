@@ -264,7 +264,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
               fontSize: 24.0,
             )),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: Colors.black87), onPressed: () => _onClickSearch(context)),
+          IconButton(icon: Icon(Icons.search, color: Colors.grey), onPressed: () => _onClickSearch(context)),
         ],
       ),
       backgroundColor: Colors.grey[100],

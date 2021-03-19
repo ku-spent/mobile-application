@@ -40,10 +40,14 @@ class _QueryPageFollowingState extends State<QueryPageFollowing> {
         case QueryField.tags:
           _followingType = FollowingType.TAG;
           break;
+        case QueryField.category:
+          _followingType = FollowingType.CATEGORY;
+          break;
         default:
           _followingType = FollowingType.SOURCE;
           break;
       }
+      print(_followingType);
       _manageFollowingBloc = BlocProvider.of<ManageFollowingBloc>(context);
       _followingBloc = getIt<FollowingBloc>()..add(FetchFollowing(_query.title, _followingType));
       _name = _query.title;
@@ -78,9 +82,7 @@ class _QueryPageFollowingState extends State<QueryPageFollowing> {
 
   @override
   Widget build(BuildContext context) {
-    if (_query is QueryWithField &&
-        ((_query as QueryWithField).queryField == QueryField.source ||
-            (_query as QueryWithField).queryField == QueryField.tags)) {
+    if (_query is QueryWithField) {
       return BlocProvider<FollowingBloc>(
         create: (BuildContext context) => _followingBloc,
         child: MultiBlocListener(
