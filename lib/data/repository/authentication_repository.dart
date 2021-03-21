@@ -107,7 +107,10 @@ class AuthenticationRepository {
   /// Get existing user from session with his/her attributes
   Future<User> getCurrentUser() async {
     // cache
-    if (_user != null) return _user;
+    if (_user != null) {
+      print('use cache user');
+      return _user;
+    }
     final String userId = _session.idToken.payload['sub'];
     final User user = (await Amplify.DataStore.query(
       User.classType,
@@ -179,14 +182,19 @@ class AuthenticationRepository {
   }
 
   Future<void> signOut() async {
+    await Amplify.Auth.signOut();
+    await Amplify.DataStore.clear();
     if (_cognitoUser != null) {
       // await _cognitoUser.signOut();
       await _cognitoUser.globalSignOut();
     }
+    _cognitoUser = null;
+    _userPool = null;
+    _session = null;
+    _user = null;
+    print('clear');
     final userBox = await Hive.openBox(userBoxName);
     await userBox.put(isLoginKey, false);
-    _session.invalidateToken();
-    await Amplify.DataStore.clear();
-    await Amplify.Auth.signOut();
+    // _session.invalidateToken();
   }
 }

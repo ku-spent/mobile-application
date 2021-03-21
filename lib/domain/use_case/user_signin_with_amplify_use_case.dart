@@ -13,7 +13,6 @@ class UserSignInWithAmplifyUseCase {
   Future<User> call() async {
     try {
       SignInResult result = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
-      print(result);
       if (!result.isSignedIn)
         return null;
       else {

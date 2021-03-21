@@ -15,7 +15,7 @@ class AccountHeader extends StatelessWidget {
           CircleAvatar(
             radius: 30.0,
             backgroundColor: Colors.grey,
-            child: ClipOval(child: CachedNetworkImage(imageUrl: imageUrl)),
+            child: ClipOval(child: CachedNetworkImage(key: ValueKey(imageUrl), imageUrl: imageUrl)),
           ),
           Container(width: 12.0),
           Text(
