@@ -261,7 +261,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
             style: GoogleFonts.kanit(
               color: Colors.black87,
               fontWeight: FontWeight.w500,
-              fontSize: 24.0,
+              fontSize: 18.0,
             )),
         actions: [
           IconButton(icon: Icon(Icons.search, color: Colors.grey), onPressed: () => _onClickSearch(context)),

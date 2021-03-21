@@ -3,14 +3,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/Following.dart';
-import 'package:spent/domain/model/category.dart';
-import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
 import 'package:spent/presentation/bloc/following/following_bloc.dart';
 import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
-import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 import 'package:spent/presentation/widgets/section.dart';
@@ -204,7 +202,7 @@ class _FollowingPageState extends State<FollowingPage> {
             style: GoogleFonts.kanit(
               color: Colors.black87,
               fontWeight: FontWeight.w500,
-              fontSize: 24.0,
+              fontSize: 18.0,
             )),
         // actions: [IconButton(icon: Icon(Icons.settings, color: Colors.grey), onPressed: _goToFollowingSettingPage)],
       ),

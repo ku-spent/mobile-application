@@ -16,12 +16,6 @@ class FollowingRemoteDataSource implements FollowingDataSource {
 
   @override
   Future<List<Following>> getFollowingList(User user) async {
-    // final List<Following> followingList = [
-    //   Following(id: '1', name: 'มติชน', type: FollowingType.SOURCE),
-    //   Following(id: '2', name: 'voiceTV', type: FollowingType.SOURCE),
-    // ];
-    // return Future.delayed(const Duration(seconds: 0), () => followingList);
-
     try {
       final RestOptions restOptions = RestOptions(
         path: "/users/${user.id}/following",
@@ -76,7 +70,6 @@ class FollowingRemoteDataSource implements FollowingDataSource {
         body: Uint8List.fromList(
             utf8.encode(json.encode({'followingItems': followingList.map((e) => e.toJson()).toList()}))),
       );
-      // print({'followingItems': followingList.map((e) => e.toJson()).toList()});
       final Map<String, dynamic> response = await _httpManager.put(restOptions);
       print(response['data']);
     } catch (e) {

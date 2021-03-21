@@ -125,6 +125,7 @@ class _SearchBarState extends State<SearchBar> {
           onSubmitted: _onSumitted,
           body: SmartRefresher(
             enablePullDown: false,
+            physics: const BouncingScrollPhysics(),
             controller: _refreshController,
             enablePullUp: state is SearchLoaded ? state.hasMore : false,
             child: ListView(
