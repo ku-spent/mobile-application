@@ -73,12 +73,6 @@ class _HomePageState extends State<HomePage> {
             tabs: <Widget>[
               Tab(text: "สำหรับคุณ"),
               Tab(text: "ล่าสุด"),
-              // Tab(text: Category.politics),
-              // Tab(text: Category.economic),
-              // Tab(text: Category.sport),
-              // Tab(text: Category.technology),
-              // Tab(text: Category.localNews),
-              // Tab(text: Category.movie),
             ],
           ),
         ),
@@ -98,12 +92,6 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ForYouPage(scrollController: _scrollControllerList[0], buildRecommendationItem: _buildItem),
               FeedPage(scrollController: _scrollControllerList[1], buildFeedItem: _buildItem),
-              // Center(child: Text(Category.politics)),
-              // Center(child: Text(Category.economic)),
-              // Center(child: Text(Category.sport)),
-              // Center(child: Text(Category.technology)),
-              // Center(child: Text(Category.localNews)),
-              // Center(child: Text(Category.movie)),
             ],
           )),
     );

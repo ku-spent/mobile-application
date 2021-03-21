@@ -9,10 +9,11 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
 import 'package:spent/presentation/widgets/list_item.dart';
-import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/widgets/setting_font_size.dart';
 
 class SettingPage extends StatefulWidget {
+  static final String title = "ตั้งค่า";
+
   SettingPage({Key key}) : super(key: key);
 
   @override
@@ -130,7 +131,7 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.grey),
-        title: Text(PageName[NavItem.page_setting],
+        title: Text(SettingPage.title,
             style: GoogleFonts.kanit(
               color: Colors.black87,
               // fontSize: 24.0,

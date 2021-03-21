@@ -47,6 +47,7 @@ class _FollowingPageState extends State<FollowingPage> {
 
   Widget _buildSource(String source) {
     return Container(
+      key: ValueKey(source),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[100]),
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
@@ -80,6 +81,7 @@ class _FollowingPageState extends State<FollowingPage> {
 
   Widget _buildTag(String tag) {
     return Container(
+      key: ValueKey(tag),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[100]),
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
@@ -113,6 +115,7 @@ class _FollowingPageState extends State<FollowingPage> {
 
   Widget _buildCategory(String category) {
     return Container(
+      key: ValueKey(category),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[100]),
         borderRadius: BorderRadius.all(Radius.circular(12.0)),
@@ -149,38 +152,36 @@ class _FollowingPageState extends State<FollowingPage> {
       hasSeeMore: false,
       action: _buildSectionAction(followingList, FollowingType.SOURCE),
       margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 12.0,
-            children:
-                followingList.where((e) => e.type == FollowingType.SOURCE).map((f) => _buildSource(f.name)).toList(),
-          )
-        ],
+      child: Wrap(
+        spacing: 8.0,
+        runSpacing: 12.0,
+        children: followingList
+            .where((e) => e.type == FollowingType.SOURCE)
+            .map((f) => AnimatedContainer(
+                  curve: Curves.easeInBack,
+                  duration: Duration(seconds: 400),
+                  child: _buildSource(f.name),
+                ))
+            .toList(),
       ));
 
   Widget _buildTopics(List<Following> followingList) {
     final _curList = followingList.where((e) => e.type == FollowingType.TAG || e.type == FollowingType.CATEGORY);
-    return _curList.isEmpty
-        ? Container()
-        : Section(
-            title: 'หัวข้อ',
-            hasSeeMore: false,
-            action: _buildSectionAction(followingList, FollowingType.TAG),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 12.0,
-                  children: _curList
-                      .map((f) => f.type == FollowingType.TAG ? _buildTag(f.name) : _buildCategory(f.name))
-                      .toList(),
-                ),
-              ],
-            ));
+    return Section(
+        title: 'หัวข้อ',
+        hasSeeMore: false,
+        action: _buildSectionAction(followingList, FollowingType.TAG),
+        child: Wrap(
+          spacing: 8.0,
+          runSpacing: 12.0,
+          children: _curList
+              .map((f) => AnimatedContainer(
+                    curve: Curves.easeInBack,
+                    duration: Duration(seconds: 400),
+                    child: f.type == FollowingType.TAG ? _buildTag(f.name) : _buildCategory(f.name),
+                  ))
+              .toList(),
+        ));
   }
 
   Widget _buildSectionAction(List<Following> followingList, FollowingType followingType) {

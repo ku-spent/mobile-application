@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
-class NavDrawerAccountHeader extends StatelessWidget {
-  const NavDrawerAccountHeader({Key key}) : super(key: key);
+class AccountHeader extends StatelessWidget {
+  const AccountHeader({Key key}) : super(key: key);
 
   Widget _build(String imageUrl, String name) {
     return Padding(

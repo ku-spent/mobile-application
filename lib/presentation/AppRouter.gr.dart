@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import '../domain/model/Following.dart';
 import '../domain/model/ModelProvider.dart';
 import 'bloc/query/query_bloc.dart';
-import 'pages/about_page.dart';
 import 'pages/app_screen.dart';
 import 'pages/bookmark_page.dart';
 import 'pages/hero_photo_view_page.dart';
@@ -34,7 +33,6 @@ class Routes {
   static const String historyPage = '/history';
   static const String settingBlockPage = '/setting/blocks';
   static const String settingPage = '/setting';
-  static const String aboutPage = '/about';
   static const String searchPage = '/search';
   static const String welcomePage = '/welcome';
   static const String settingFollowingPage = '/following/setting';
@@ -48,7 +46,6 @@ class Routes {
     historyPage,
     settingBlockPage,
     settingPage,
-    aboutPage,
     searchPage,
     welcomePage,
     settingFollowingPage,
@@ -68,7 +65,6 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.historyPage, page: HistoryPage),
     RouteDef(Routes.settingBlockPage, page: SettingBlockPage),
     RouteDef(Routes.settingPage, page: SettingPage),
-    RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
     RouteDef(Routes.welcomePage, page: WelcomePage),
     RouteDef(Routes.settingFollowingPage, page: SettingFollowingPage),
@@ -130,15 +126,6 @@ class AppRouter extends RouterBase {
       );
       return CupertinoPageRoute<dynamic>(
         builder: (context) => SettingPage(key: args.key),
-        settings: data,
-      );
-    },
-    AboutPage: (data) {
-      final args = data.getArgs<AboutPageArguments>(
-        orElse: () => AboutPageArguments(),
-      );
-      return CupertinoPageRoute<dynamic>(
-        builder: (context) => AboutPage(key: args.key),
         settings: data,
       );
     },
@@ -245,12 +232,6 @@ class SettingBlockPageArguments {
 class SettingPageArguments {
   final Key key;
   SettingPageArguments({this.key});
-}
-
-/// AboutPage arguments holder class
-class AboutPageArguments {
-  final Key key;
-  AboutPageArguments({this.key});
 }
 
 /// WelcomePage arguments holder class

@@ -22,6 +22,7 @@ class FollowingRemoteDataSource implements FollowingDataSource {
       );
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data'];
+      if (items == null) return const [];
       final List<Following> followingList = items.map((e) => Following.fromJson(e)).toList();
       return followingList;
     } catch (e) {

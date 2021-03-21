@@ -7,7 +7,7 @@ import 'package:spent/presentation/widgets/list_item.dart';
 import 'package:spent/presentation/pages/history_page.dart';
 import 'package:spent/presentation/pages/bookmark_page.dart';
 import 'package:spent/presentation/pages/setting_block_page.dart';
-import 'package:spent/presentation/widgets/nav_drawer_account_header.dart';
+import 'package:spent/presentation/widgets/account_header.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
 class MePage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _MePageState extends State<MePage> {
           color: Colors.white,
           child: ListView(
             children: <Widget>[
-              NavDrawerAccountHeader(),
+              AccountHeader(),
               ListItem(
                 title: Text(HistoryPage.title),
                 leading: Icon(Icons.history),

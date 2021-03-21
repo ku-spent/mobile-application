@@ -2,18 +2,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-import 'package:spent/di/di.dart';
-import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
-import 'package:spent/presentation/pages/following_page.dart';
 import 'package:spent/presentation/pages/me_page.dart';
-import 'package:spent/presentation/pages/explore_page.dart';
-
-// Page
 import 'package:spent/presentation/pages/home_page.dart';
+import 'package:spent/presentation/pages/explore_page.dart';
+import 'package:spent/presentation/pages/following_page.dart';
 import 'package:spent/presentation/widgets/app_retain_widget.dart';
 
 class AppScreen extends StatefulWidget {
@@ -146,37 +141,32 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<NavigationBloc>(
-      create: (BuildContext context) => getIt<NavigationBloc>(param1: _pageController),
-      child: BlocBuilder<NavigationBloc, NavigationState>(
-        builder: (BuildContext context, NavigationState state) => PersistentTabView(
-          context,
-          decoration: NavBarDecoration(boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)]),
-          controller: _controller,
-          screens: _buildScreens(),
-          items: _navBarsItems(),
-          confineInSafeArea: true,
-          backgroundColor: Colors.white,
-          handleAndroidBackButtonPress: true,
-          resizeToAvoidBottomInset: true,
-          stateManagement: true,
-          navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
-          hideNavigationBarWhenKeyboardShows: true,
-          popActionScreens: PopActionScreensType.all,
-          onWillPop: _onWillPop,
-          popAllScreensOnTapOfSelectedTab: true,
-          itemAnimationProperties: ItemAnimationProperties(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.ease,
-          ),
-          screenTransitionAnimation: ScreenTransitionAnimation(
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
-          navBarStyle: NavBarStyle.style7, // Choose the nav bar style with this property
-        ),
+    return PersistentTabView(
+      context,
+      decoration: NavBarDecoration(boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2.0)]),
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: Colors.white,
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
+      navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
+      hideNavigationBarWhenKeyboardShows: true,
+      popActionScreens: PopActionScreensType.all,
+      onWillPop: _onWillPop,
+      popAllScreensOnTapOfSelectedTab: true,
+      itemAnimationProperties: ItemAnimationProperties(
+        duration: Duration(milliseconds: 400),
+        curve: Curves.ease,
       ),
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle: NavBarStyle.style7, // Choose the nav bar style with this property
     );
   }
 }
