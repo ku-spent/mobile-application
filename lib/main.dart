@@ -9,7 +9,6 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:spent/di/di.dart';
 import 'package:spent/domain/model/News.dart';
-import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
 import 'package:spent/presentation/theme.dart';
 import 'package:spent/presentation/pages/splash_page.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -27,6 +26,7 @@ import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
 import 'package:spent/presentation/bloc/signin/signin_bloc.dart';
 import 'package:spent/presentation/bloc/search/search_bloc.dart';
+import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

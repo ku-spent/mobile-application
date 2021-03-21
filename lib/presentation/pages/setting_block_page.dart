@@ -12,6 +12,7 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/block/block_bloc.dart';
 import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 import 'package:spent/presentation/widgets/in_page_search_bar.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class SettingBlockPage extends StatefulWidget {
@@ -183,7 +184,7 @@ class _SettingBlockPageState extends State<SettingBlockPage> {
                     shrinkWrap: true,
                     controller: _scrollController,
                     children: [
-                      state.blocks.isEmpty ? Center(child: Text('no history.')) : Container(),
+                      state.blocks.isEmpty ? NoResult() : Container(),
                       ImplicitlyAnimatedList<Block>(
                         shrinkWrap: true,
                         items: state.blocks,

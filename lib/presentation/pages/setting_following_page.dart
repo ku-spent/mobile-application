@@ -13,6 +13,7 @@ import 'package:spent/domain/model/Following.dart';
 import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/widgets/list_item.dart';
 import 'package:spent/presentation/bloc/manage_following/manage_following_bloc.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 class SettingFollowingPage extends StatefulWidget {
@@ -126,40 +127,50 @@ class _SettingFollowingPageState extends State<SettingFollowingPage> {
             );
           }
         },
-        child: ImplicitlyAnimatedReorderableList<Following>(
-            padding: const EdgeInsets.only(top: 8.0),
-            physics: const NeverScrollableScrollPhysics(),
-            items: _curFollowingList,
-            areItemsTheSame: (a, b) => a == b,
-            onReorderFinished: (item, from, to, newItems) {
-              Function eq = const ListEquality().equals;
-              if (!eq(_curFollowingList, newItems)) {
-                _manageFollowingBloc.add(SaveFollowingList(newItems + _otherFollowingList));
-              }
-            },
-            itemBuilder: (context, itemAnimation, item, index) {
-              return Reorderable(
-                key: ValueKey(item.id),
-                builder: (context, dragAnimation, inDrag) {
-                  final t = dragAnimation.value;
-                  return SizeFadeTransition(
-                    sizeFraction: 0.7,
-                    curve: Curves.easeInOut,
-                    animation: itemAnimation,
-                    child: _buildBox(item, t),
-                  );
-                },
-              );
-            },
-            updateItemBuilder: (context, itemAnimation, item) {
-              return Reorderable(
-                key: ValueKey(item.id),
-                child: FadeTransition(
-                  opacity: itemAnimation,
-                  child: _buildBox(item, 0),
-                ),
-              );
-            }),
+        child: Column(
+          children: [
+            _curFollowingList.isEmpty ? NoResult() : Container(),
+            Expanded(
+              child: ImplicitlyAnimatedReorderableList<Following>(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  physics: const NeverScrollableScrollPhysics(),
+                  items: _curFollowingList,
+                  areItemsTheSame: (a, b) => a == b,
+                  onReorderFinished: (item, from, to, newItems) {
+                    Function eq = const ListEquality().equals;
+                    if (!eq(_curFollowingList, newItems)) {
+                      setState(() {
+                        _curFollowingList = newItems;
+                      });
+                      _manageFollowingBloc.add(SaveFollowingList(newItems + _otherFollowingList));
+                    }
+                  },
+                  itemBuilder: (context, itemAnimation, item, index) {
+                    return Reorderable(
+                      key: ValueKey(item.id),
+                      builder: (context, dragAnimation, inDrag) {
+                        final t = dragAnimation.value;
+                        return SizeFadeTransition(
+                          sizeFraction: 0.7,
+                          curve: Curves.easeInOut,
+                          animation: itemAnimation,
+                          child: _buildBox(item, t),
+                        );
+                      },
+                    );
+                  },
+                  updateItemBuilder: (context, itemAnimation, item) {
+                    return Reorderable(
+                      key: ValueKey(item.id),
+                      child: FadeTransition(
+                        opacity: itemAnimation,
+                        child: _buildBox(item, 0),
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

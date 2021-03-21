@@ -13,6 +13,7 @@ import 'package:spent/presentation/bloc/bookmark/bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/in_page_search_bar.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class BookmarkPage extends StatefulWidget {
@@ -145,7 +146,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     shrinkWrap: true,
                     controller: _scrollController,
                     children: [
-                      state.news.isEmpty ? Center(child: Text('no bookmarks.')) : Container(),
+                      state.news.isEmpty ? NoResult() : Container(),
                       ImplicitlyAnimatedList<News>(
                         shrinkWrap: true,
                         items: state.news,

@@ -14,6 +14,7 @@ import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/domain/model/search_item.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/search_item_Builder.dart';
 import 'package:spent/presentation/widgets/search_item_List.dart';
 
@@ -131,6 +132,13 @@ class _SearchBarState extends State<SearchBar> {
             child: ListView(
               controller: _scrollController,
               children: [
+                state.result.sources.isEmpty &&
+                        state.result.categories.isEmpty &&
+                        state.result.news.isEmpty &&
+                        state is! SearchLoading &&
+                        state is! SearchInitial
+                    ? NoResult()
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(bottom: state.result.sources.length > 0 ? 16.0 : 0.0),
                   child: SearchItemList<SearchItem>(
