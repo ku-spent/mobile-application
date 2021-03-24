@@ -108,7 +108,6 @@ class _SearchBarState extends State<SearchBar> {
         return FloatingSearchAppBar(
           elevation: 1,
           alwaysOpened: true,
-          hideKeyboardOnDownScroll: true,
           controller: _controller,
           clearQueryOnClose: false,
           hintStyle: GoogleFonts.kanit(),

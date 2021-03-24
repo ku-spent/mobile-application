@@ -38,7 +38,7 @@ class PersonalizeRemoteDataSource {
       );
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data']['hits'];
-      final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+      final List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
       return newsList;
     } catch (error) {
       print(error.details);

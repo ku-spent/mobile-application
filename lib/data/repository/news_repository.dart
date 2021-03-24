@@ -1,10 +1,11 @@
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:spent/domain/model/ModelProvider.dart';
+import 'package:spent/domain/model/Recommendation.dart';
 import 'package:spent/data/data_source/news/news_local_data_source.dart';
 import 'package:spent/data/data_source/news/news_remote_data_source.dart';
 import 'package:spent/data/data_source/personalize/personalize_remote_data_source.dart';
-import 'package:spent/domain/model/ModelProvider.dart';
-import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsRepository {
@@ -24,7 +25,6 @@ class NewsRepository {
     final Recommendation recommendation = await _personalizeRemoteDataSource.getRecommendations(userId);
     List<News> newsList = await Future.wait(recommendation.newsIdList.map((id) => getNewsById(id)));
     newsList = newsList.where((e) => e != null).toList();
-    await _newsLocalDataSource.cacheNews(newsList);
     recommendation.setNewsList(newsList);
     return recommendation;
   }

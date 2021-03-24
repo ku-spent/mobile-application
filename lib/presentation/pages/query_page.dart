@@ -9,6 +9,7 @@ import 'package:spent/presentation/bloc/query/query_bloc.dart';
 import 'package:spent/presentation/helper.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/hero_image_widget.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/query_page_following.dart';
 import 'package:spent/presentation/widgets/query_page_setting.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
@@ -30,8 +31,6 @@ class QueryPage extends StatefulWidget {
 }
 
 class _QueryPageState extends State<QueryPage> {
-  final ScrollController scrollController = ScrollController();
-  final String _noResultImage = 'https://unsplash.com/a/img/empty-states/photos.png';
   String _heroTag;
   QueryFeedBloc _queryFeedBloc;
   ManageBlockBloc _manageBlockBloc;
@@ -41,6 +40,7 @@ class _QueryPageState extends State<QueryPage> {
 
   final _minScrollThreshold = 50.0;
   final _scrollThreshold = 200.0;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -151,7 +151,7 @@ class _QueryPageState extends State<QueryPage> {
                     ? SliverFillRemaining(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Text('No Results')],
+                          children: [NoResult()],
                         ),
                       )
                     : SliverList(
@@ -165,10 +165,6 @@ class _QueryPageState extends State<QueryPage> {
                                     )),
                         ),
                       )
-                // SliverPadding(
-                //     padding: EdgeInsets.only(top: 16.0),
-                //     sliver: ,
-                //   )
               ],
             );
           } else if (state is QueryFeedError) {

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
-import 'package:spent/domain/model/Following.dart';
 import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';

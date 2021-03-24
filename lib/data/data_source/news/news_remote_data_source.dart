@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/data/http_manager/amplify_http_manager.dart';
 import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsRemoteDataSource implements NewsDataSource {
@@ -19,12 +18,12 @@ class NewsRemoteDataSource implements NewsDataSource {
         queryParameters: {
           'from': from.toString(),
           'size': size.toString(),
-          '_id': curNews.esId,
+          'id': curNews.id,
         },
       );
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data']['hits'];
-      final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+      final List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
       return newsList;
     } catch (e) {
       print(e);
@@ -46,7 +45,7 @@ class NewsRemoteDataSource implements NewsDataSource {
       );
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data']['hits'];
-      final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+      final List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
       return newsList;
     } catch (error) {
       print(error.details);
@@ -57,17 +56,13 @@ class NewsRemoteDataSource implements NewsDataSource {
   @override
   Future<News> getNewsById(String id) async {
     final RestOptions restOptions = RestOptions(
-      path: "/news",
-      queryParameters: {
-        'size': '1',
-        'queryField': 'id',
-        'query': id,
-      },
+      path: "/news2/$id",
     );
     final Map<String, dynamic> response = await _httpManager.get(restOptions);
-    final List items = response['data']['hits'];
-    final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
-    final News news = newsList.isNotEmpty ? newsList[0] : null;
+    final item = response['data'];
+    if (item == null) return null;
+
+    final news = News.fromJson(item);
     return news;
   }
 
@@ -84,7 +79,7 @@ class NewsRemoteDataSource implements NewsDataSource {
       );
       final Map<String, dynamic> response = await _httpManager.get(restOptions);
       final List items = response['data']['news'];
-      final List<News> newsList = items.map((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+      final List<News> newsList = items.map((e) => News.fromJson(e['_source'])).toList();
       return newsList;
     } catch (e) {
       print(e);
