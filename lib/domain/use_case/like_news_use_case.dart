@@ -17,9 +17,11 @@ class LikeNewsUseCase {
     final UserNewsAction userNewsAction = await _userRepository.getUserNewsActionByNewsId(user, news);
     if (userNewsAction != null) {
       await _userRepository.deleteUserNewsAction(userNewsAction);
+      news.userAction = UserAction.NONE;
       return LikeNewsResult(userAction: UserAction.NONE);
     } else {
       await _userRepository.saveUserNewsAction(user, news);
+      news.userAction = UserAction.LIKE;
       return LikeNewsResult(userAction: UserAction.LIKE);
     }
   }

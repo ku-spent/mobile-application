@@ -38,7 +38,8 @@ class _InPageSearchBarState extends State<InPageSearchBar> {
     _keyboardVisibilityController = KeyboardVisibilityController();
     _keyboardVisibilitySubscription = _keyboardVisibilityController.onChange.listen((bool visible) {
       print('visible changed to $visible');
-      if (!visible && _isKeyboardVisibility) {
+
+      if (!visible && _isKeyboardVisibility && _controller.query != '') {
         _controller.close();
       }
       setState(() {
@@ -72,7 +73,7 @@ class _InPageSearchBarState extends State<InPageSearchBar> {
         ),
       ],
       automaticallyImplyDrawerHamburger: false,
-      debounceDelay: const Duration(milliseconds: 500),
+      debounceDelay: const Duration(milliseconds: 400),
       onQueryChanged: widget.onQueryChanged,
       onSubmitted: widget.onSubmitted,
       body: widget.body,

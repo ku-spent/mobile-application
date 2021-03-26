@@ -32,7 +32,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   ExploreBloc _feedBloc;
   ScrollController _scrollController;
 
-  final _scrollThreshold = 200.0;
+  double _scrollThreshold;
   final RefreshController _refreshController = RefreshController();
 
   @override
@@ -41,6 +41,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _fetchExplore();
+    _scrollThreshold = 2 * MediaQuery.of(context).size.height;
     super.initState();
   }
 

@@ -9,8 +9,7 @@ class TrendingTopic extends Equatable {
   const TrendingTopic({@required this.topic, @required this.newsList});
 
   factory TrendingTopic.fromJson(Map<String, dynamic> trendingTopic) {
-    final List<News> newsList =
-        trendingTopic['news'].map<News>((e) => News.fromJson(e['_source'], esId: e['_id'])).toList();
+    final List<News> newsList = trendingTopic['news'].map<News>((e) => News.fromJson(e['_source'])).toList();
     return TrendingTopic(topic: trendingTopic['trend'], newsList: newsList);
   }
 

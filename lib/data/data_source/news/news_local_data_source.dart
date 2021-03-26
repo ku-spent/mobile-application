@@ -2,7 +2,6 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsLocalDataSource implements NewsDataSource {

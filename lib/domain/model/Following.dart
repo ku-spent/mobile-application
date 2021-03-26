@@ -1,12 +1,19 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:spent/presentation/helper.dart';
 
 enum FollowingType { SOURCE, TAG, CATEGORY }
 
+@HiveType(typeId: 2)
 class Following extends Equatable {
+  @HiveField(0)
   final String id;
+
+  @HiveField(1)
   final String name;
+
+  @HiveField(2)
   final FollowingType type;
 
   const Following({
