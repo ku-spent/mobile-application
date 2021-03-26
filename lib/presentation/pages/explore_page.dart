@@ -41,7 +41,9 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _fetchExplore();
-    _scrollThreshold = 2 * MediaQuery.of(context).size.height;
+    Future.delayed(Duration.zero, () async {
+      _scrollThreshold = 2 * MediaQuery.of(context).size.height;
+    });
     super.initState();
   }
 

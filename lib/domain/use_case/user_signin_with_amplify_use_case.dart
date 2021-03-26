@@ -12,26 +12,12 @@ class UserSignInWithAmplifyUseCase {
 
   Future<User> call() async {
     try {
-      SignInResult result = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
+      final SignInResult result = await Amplify.Auth.signInWithWebUI(provider: AuthProvider.google);
       if (!result.isSignedIn)
         return null;
       else {
-        await _authenticationRepository.initCognito();
-        String userId = _authenticationRepository.getUserId();
-        bool hasUser = await _authenticationRepository.hasUser(userId);
-        if (!hasUser) {
-          // if not has user in database
-          print('Not found user');
-          print('Create new user');
-          Map<String, String> userMap = await _authenticationRepository.getUserMap();
-          await _authenticationRepository.createUser(userMap);
-        }
-        final user = await _authenticationRepository.getCurrentUser();
-        print(user);
-        if (user != null) {
-          await _authenticationRepository.cacheToken();
-          await _authenticationRepository.setRemoteAuthFromSession();
-        }
+        final User user = await _authenticationRepository.initialUser();
+        await _authenticationRepository.cacheLogin();
         return user;
       }
     } catch (err) {

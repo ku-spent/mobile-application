@@ -18,13 +18,9 @@ class InitialAuthenticationUseCase {
       await Future.delayed(const Duration(milliseconds: 400), () => {});
       print('initial authentication usecase $isConfigured');
       if (isConfigured) {
-        await _authenticationRepository.initCognito();
-        final user = await _authenticationRepository.getCurrentUser();
-        print('user $user');
-        if (user != null) {
-          await _authenticationRepository.cacheToken();
-          await _authenticationRepository.setRemoteAuthFromSession();
-        }
+        await _authenticationRepository.initialUser();
+        // final user = await _authenticationRepository.getCurrentUser();
+        // print('user $user');
       }
       return isConfigured;
     } on SessionExpiredException {

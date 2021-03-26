@@ -13,9 +13,6 @@ class IdentifyUserUseCase {
 
   Future<bool> call() async {
     try {
-      final isValidSession = await _authenticationRepository.isValidSession();
-      if (!isValidSession) return null;
-
       final user = await _authenticationRepository.getCurrentUser();
 
       AnalyticsUserProfile userProfile = new AnalyticsUserProfile();
