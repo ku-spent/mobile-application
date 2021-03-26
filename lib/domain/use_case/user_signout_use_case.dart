@@ -15,7 +15,7 @@ class UserSignOutUseCase {
     try {
       await CookieManager().clearCookies();
       await _authenticationRepository.signOut();
-      await _newsRepository.deleteNewsFromLocal();
+      // await _newsRepository.deleteNewsFromLocal();
     } catch (err) {
       print(err);
     }

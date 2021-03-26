@@ -186,6 +186,8 @@ class AuthenticationRepository {
     final userBox = await Hive.openBox(userBoxName);
     await userBox.put(isLoginKey, false);
     _session.invalidateToken();
+    _user = null;
+    _session = null;
     await Amplify.DataStore.clear();
     await Amplify.Auth.signOut();
   }

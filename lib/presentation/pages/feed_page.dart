@@ -23,7 +23,7 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<FeedPage> {
   FeedBloc _feedBloc;
-  final _scrollThreshold = 200.0;
+  double _scrollThreshold;
   BuildFeedItem _buildItem;
   ScrollController _scrollController;
   final RefreshController _refreshController = RefreshController();
@@ -37,6 +37,7 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
     _buildItem = widget.buildFeedItem;
     Future.delayed(Duration.zero, () async {
       _fetchFeeds();
+      _scrollThreshold = 2 * MediaQuery.of(context).size.height;
     });
   }
 
