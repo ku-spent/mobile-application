@@ -21,10 +21,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  void _handleItemClick(BuildContext context, String route) {
-    ExtendedNavigator.of(context).push(route);
-  }
-
   void _showConfirmSignOut() {
     // set up the buttons
     Widget cancelButton = TextButton(

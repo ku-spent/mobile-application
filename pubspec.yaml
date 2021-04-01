@@ -25,7 +25,6 @@ dependencies:
     sdk: flutter
   photo_view:
     git: https://github.com/ku-spent/photo_view
-  amazon_cognito_identity_dart_2: ^0.1.18
   amplify_analytics_pinpoint: ^0.1.0
   amplify_api: ^0.1.0
   amplify_auth_cognito: ^0.1.0
