@@ -75,17 +75,17 @@ extension CardBaseMethod on _CardBaseState {
           ),
         ),
         Row(children: [
-          ClickableIcon(
+          ClickableAnimation(
             isActive: _userAction == UserAction.LIKE,
-            active: Icon(Icons.favorite),
-            inActive: Icon(Icons.favorite_outline),
+            active: Icons.favorite,
+            inActive: Icons.favorite_outline,
             onPressed: _onClickLike,
             activeColor: Colors.red[400],
           ),
-          ClickableIcon(
+          ClickableAnimation(
             isActive: _isBookmarked,
-            active: Icon(Icons.bookmark),
-            inActive: Icon(Icons.bookmark_outline),
+            active: Icons.bookmark,
+            inActive: Icons.bookmark_outline,
             onPressed: _onClickBookmark,
           ),
           ClickableIcon(

@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class Section extends StatelessWidget {
   final String title;
   final Widget child;
+  final Widget action;
+  final void Function() onSeeMore;
   final bool hasSeeMore;
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
@@ -12,6 +14,8 @@ class Section extends StatelessWidget {
     Key key,
     @required this.title,
     @required this.child,
+    this.action,
+    this.onSeeMore,
     this.hasSeeMore = true,
     this.margin = const EdgeInsets.only(bottom: 12.0),
     this.padding = const EdgeInsets.symmetric(vertical: 10.0),
@@ -30,24 +34,26 @@ class Section extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          this.hasSeeMore
-              ? InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      Text(
-                        'ดูเพิ่มเติม',
-                        style: GoogleFonts.kanit(color: Theme.of(context).primaryColor.withOpacity(0.9)),
+          this.action != null
+              ? this.action
+              : this.hasSeeMore
+                  ? InkWell(
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: onSeeMore,
+                      child: Row(
+                        children: [
+                          Text(
+                            'ดูเพิ่มเติม',
+                            style: GoogleFonts.kanit(color: Theme.of(context).primaryColor.withOpacity(0.9)),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Theme.of(context).primaryColor.withOpacity(0.9),
+                          ),
+                        ],
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Theme.of(context).primaryColor.withOpacity(0.9),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
+                    )
+                  : Container(),
         ],
       ),
     );
@@ -67,12 +73,14 @@ class Section extends StatelessWidget {
       ),
       margin: margin,
       padding: padding,
-      // color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
-          child,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+            child: child,
+          ),
         ],
       ),
     );

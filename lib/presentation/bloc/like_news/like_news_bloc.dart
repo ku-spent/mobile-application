@@ -31,7 +31,7 @@ class LikeNewsBloc extends Bloc<LikeNewsEvent, LikeNewsState> {
     yield LikeNewsLoading();
     try {
       LikeNewsResult result = await _likeNewsUseCase.call(event.news);
-      _userEventBloc.add(SendLikeNewsEvent(news: event.news));
+      _userEventBloc.add(SendLikeNewsEvent(news: event.news, recommendationId: event.recommendationId));
       yield LikeNewsSuccess(event.news, result);
     } catch (e) {
       print(e);

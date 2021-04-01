@@ -9,8 +9,9 @@ abstract class LikeNewsEvent extends Equatable {
 
 class LikeNews extends LikeNewsEvent {
   final News news;
+  final String recommendationId;
 
-  const LikeNews({@required this.news});
+  const LikeNews({@required this.news, this.recommendationId});
 
   @override
   List<Object> get props => [news];

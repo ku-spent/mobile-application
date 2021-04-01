@@ -9,19 +9,19 @@ import 'package:spent/presentation/pages/for_you_page.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 
 class HomePage extends StatefulWidget {
-  static String title = 'Home';
+  static String title = 'ฟีดข่าว';
   final void Function(int) onTabChange;
   final TabController tabController;
   final int tabLength;
   final List<ScrollController> scrollControllerList;
 
-  HomePage(
-      {Key key,
-      @required this.scrollControllerList,
-      @required this.tabController,
-      @required this.tabLength,
-      @required this.onTabChange})
-      : super(key: key);
+  HomePage({
+    Key key,
+    @required this.scrollControllerList,
+    @required this.tabController,
+    @required this.tabLength,
+    @required this.onTabChange,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -44,10 +44,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget _buildItem({News news, int i = -1}) {
+  Widget _buildItem({News news, int i = -1, String recommendationId}) {
     return CardBase(
       news: news,
       isSecondary: i % 4 != 0,
+      recommendationId: recommendationId,
     );
   }
 
@@ -72,12 +73,6 @@ class _HomePageState extends State<HomePage> {
             tabs: <Widget>[
               Tab(text: "สำหรับคุณ"),
               Tab(text: "ล่าสุด"),
-              // Tab(text: Category.politics),
-              // Tab(text: Category.economic),
-              // Tab(text: Category.sport),
-              // Tab(text: Category.technology),
-              // Tab(text: Category.localNews),
-              // Tab(text: Category.movie),
             ],
           ),
         ),
@@ -97,12 +92,6 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ForYouPage(scrollController: _scrollControllerList[0], buildRecommendationItem: _buildItem),
               FeedPage(scrollController: _scrollControllerList[1], buildFeedItem: _buildItem),
-              // Center(child: Text(Category.politics)),
-              // Center(child: Text(Category.economic)),
-              // Center(child: Text(Category.sport)),
-              // Center(child: Text(Category.technology)),
-              // Center(child: Text(Category.localNews)),
-              // Center(child: Text(Category.movie)),
             ],
           )),
     );

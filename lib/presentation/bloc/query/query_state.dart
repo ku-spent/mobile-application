@@ -20,7 +20,7 @@ class QueryFeedLoading extends QueryFeedState {
 class QueryFeedLoaded extends QueryFeedState {
   final List<News> feeds;
   final bool hasMore;
-  final String query;
+  final QueryObject query;
 
   const QueryFeedLoaded({
     @required this.feeds,
@@ -31,7 +31,7 @@ class QueryFeedLoaded extends QueryFeedState {
   @override
   List<Object> get props => [feeds, hasMore, query];
 
-  QueryFeedLoaded copyWith({List<News> feeds, bool hasMore, String query}) {
+  QueryFeedLoaded copyWith({List<News> feeds, bool hasMore, QueryObject query}) {
     return QueryFeedLoaded(
       feeds: feeds ?? this.feeds,
       hasMore: hasMore ?? this.hasMore,
@@ -41,6 +41,10 @@ class QueryFeedLoaded extends QueryFeedState {
 }
 
 class QueryFeedError extends QueryFeedState {
+  final QueryObject query;
+
+  QueryFeedError(this.query);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [query];
 }

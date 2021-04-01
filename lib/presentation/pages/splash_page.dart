@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:spent/presentation/pages/app_screen.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:spent/presentation/bloc/network/network_bloc.dart';
@@ -42,8 +43,14 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NetworkBloc, NetworkState>(
-      builder: (context, state) => BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) => BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthenticationUnAuthenticated || state is AuthenticationError) {
+            ExtendedNavigator.of(context).popUntilRoot();
+          }
+        },
         builder: (context, state) {
+          // print(state);
           if (state is AuthenticationAuthenticated) {
             return AppScreen();
           } else if (state is AuthenticationInitial || state is AuthenticationLoading) {

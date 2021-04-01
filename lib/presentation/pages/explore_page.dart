@@ -19,7 +19,7 @@ import 'package:spent/presentation/widgets/section.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
 class ExplorePage extends StatefulWidget {
-  static String title = 'Explore';
+  static String title = 'สำรวจ';
   final ScrollController scrollController;
 
   ExplorePage({Key key, @required this.scrollController}) : super(key: key);
@@ -32,7 +32,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   ExploreBloc _feedBloc;
   ScrollController _scrollController;
 
-  final _scrollThreshold = 200.0;
+  double _scrollThreshold;
   final RefreshController _refreshController = RefreshController();
 
   @override
@@ -41,6 +41,9 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     _scrollController = widget.scrollController;
     _scrollController.addListener(_onScroll);
     _fetchExplore();
+    Future.delayed(Duration.zero, () async {
+      _scrollThreshold = 2 * MediaQuery.of(context).size.height;
+    });
     super.initState();
   }
 
@@ -70,6 +73,16 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   Widget _buildItem({TrendingTopic trendingTopic, int i = -1}) {
     return Section(
       title: trendingTopic.topic,
+      onSeeMore: () {
+        ExtendedNavigator.of(context).push(
+          Routes.queryPage,
+          arguments: QueryPageArguments(
+            query: QueryWithTrend(trendingTopic.topic, trend: trendingTopic.topic),
+            coverUrl: Category.newsCategoryCover[trendingTopic.newsList[0].category],
+            isShowTitle: true,
+          ),
+        );
+      },
       child: Column(
         children: [CardBase(news: trendingTopic.newsList[0])] +
             trendingTopic.newsList
@@ -108,8 +121,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
                       ExtendedNavigator.of(context).push(
                         Routes.queryPage,
                         arguments: QueryPageArguments(
-                            query: tag,
-                            queryField: 'tags',
+                            query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
                             isShowTitle: true,
                             coverUrl: Category.newsCategoryCover[Category.localNews]),
                       );
@@ -125,8 +137,7 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: source,
-        queryField: QueryField.source,
+        query: QueryWithField(source, query: source, queryField: QueryField.source),
         coverUrl: NewsSource.newsSourceCover[source],
         isShowTitle: true,
       ),
@@ -137,9 +148,8 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
+        query: QueryWithField(category, query: category, queryField: QueryField.category),
         isShowTitle: true,
-        query: category,
-        queryField: QueryField.category,
         coverUrl: Category.newsCategoryCover[category],
       ),
     );
@@ -231,7 +241,6 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
   Widget _buildCategories() => Section(
       title: 'ประเภทข่าว',
       hasSeeMore: false,
-      margin: EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -255,10 +264,10 @@ class _ExplorePageState extends State<ExplorePage> with AutomaticKeepAliveClient
             style: GoogleFonts.kanit(
               color: Colors.black87,
               fontWeight: FontWeight.w500,
-              fontSize: 24.0,
+              fontSize: 18.0,
             )),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: Colors.black87), onPressed: () => _onClickSearch(context)),
+          IconButton(icon: Icon(Icons.search, color: Colors.grey), onPressed: () => _onClickSearch(context)),
         ],
       ),
       backgroundColor: Colors.grey[100],

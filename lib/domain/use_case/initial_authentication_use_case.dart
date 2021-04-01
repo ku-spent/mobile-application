@@ -1,5 +1,6 @@
-import 'package:amplify_flutter/amplify.dart';
 import 'package:injectable/injectable.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+
 import 'package:spent/data/repository/authentication_repository.dart';
 
 @injectable
@@ -17,19 +18,13 @@ class InitialAuthenticationUseCase {
       await Future.delayed(const Duration(milliseconds: 400), () => {});
       print('initial authentication usecase $isConfigured');
       if (isConfigured) {
-        await _authenticationRepository.initCognito();
-        final user = await _authenticationRepository.getCurrentUser();
-        print('user $user');
-        if (user != null) {
-          await _authenticationRepository.cacheToken();
-          await _authenticationRepository.setRemoteAuthFromSession();
-        }
+        await _authenticationRepository.initialUser();
+        // final user = await _authenticationRepository.getCurrentUser();
+        // print('user $user');
       }
       return isConfigured;
-    } on AmplifyAlreadyConfiguredException {
-      print('amplify already configured');
-      await _authenticationRepository.initCognito();
-      return true;
+    } on SessionExpiredException {
+      return false;
     } catch (err) {
       print(err);
     }

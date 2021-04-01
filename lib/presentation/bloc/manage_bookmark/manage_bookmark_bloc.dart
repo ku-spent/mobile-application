@@ -36,7 +36,7 @@ class ManageBookmarkBloc extends Bloc<ManageBookmarkEvent, ManageBookmarkState> 
     yield ManageBookmarkLoading();
     try {
       final ManageBookmarkResult result = await _saveBookmarkUseCase.call(event.news);
-      _userEventBloc.add(SendBookmarkNewsEvent(news: event.news));
+      _userEventBloc.add(SendBookmarkNewsEvent(news: event.news, recommendationId: event.recommendationId));
       yield SaveBookmarkSuccess(event.news, result);
     } catch (e) {
       print(e);

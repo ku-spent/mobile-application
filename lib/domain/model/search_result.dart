@@ -10,6 +10,10 @@ class SearchResult extends Equatable {
 
   const SearchResult({@required this.news, @required this.categories, @required this.sources});
 
+  SearchResult copyWith(List<News> news) {
+    return SearchResult(news: news, categories: categories, sources: sources);
+  }
+
   @override
   List<Object> get props => [news, categories, sources];
 }

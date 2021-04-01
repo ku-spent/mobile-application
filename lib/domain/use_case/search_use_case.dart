@@ -7,5 +7,6 @@ class SearchUseCase {
   SearchRepository _searchRepository;
   SearchUseCase(this._searchRepository);
 
-  Future<SearchResult> call(String query) async => _searchRepository.getSearchResults(query);
+  Future<SearchResult> call(String query, int size, int from) async =>
+      _searchRepository.getSearchResults(query, size: size, from: from);
 }

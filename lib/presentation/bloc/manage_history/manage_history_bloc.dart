@@ -36,7 +36,7 @@ class ManageHistoryBloc extends Bloc<ManageHistoryEvent, ManageHistoryState> {
     yield ManageHistoryLoading();
     try {
       await _saveUserViewNewsHistoryUseCase.call(event.news);
-      _userEventBloc.add(SendViewNewsEvent(news: event.news));
+      _userEventBloc.add(SendViewNewsEvent(news: event.news, recommendationId: event.recommendationId));
       yield SaveHistorySuccess(event.news);
     } catch (e) {
       print(e);

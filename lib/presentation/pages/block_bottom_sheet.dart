@@ -8,7 +8,7 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/manage_block/manage_block_bloc.dart';
 import 'package:spent/presentation/widgets/multi_select_badge.dart';
 
-void showNewsBottomSheet(BuildContext context, News news) {
+void showBlockBottomSheet(BuildContext context, {String source, List<BlockChoice> topicChoices}) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -17,20 +17,22 @@ void showNewsBottomSheet(BuildContext context, News news) {
       borderRadius: BorderRadius.only(topLeft: Radius.circular(12.0), topRight: Radius.circular(12.0)),
     ),
     builder: (BuildContext bc) {
-      return NewsBottomSheet(news: news);
+      return BlockBottomSheet(source: source, topicChoices: topicChoices);
     },
   );
 }
 
-class NewsBottomSheet extends StatefulWidget {
-  final News news;
-  NewsBottomSheet({Key key, @required this.news}) : super(key: key);
+class BlockBottomSheet extends StatefulWidget {
+  final String source;
+  final List<BlockChoice> topicChoices;
+  BlockBottomSheet({Key key, this.source, this.topicChoices}) : super(key: key);
 
   @override
-  _NewsBottomSheetState createState() => _NewsBottomSheetState();
+  _BlockBottomSheetState createState() => _BlockBottomSheetState();
 }
 
-class _NewsBottomSheetState extends State<NewsBottomSheet> {
+class _BlockBottomSheetState extends State<BlockBottomSheet> {
+  String _source;
   bool _isSelectedBlock = false;
   bool _isSelectedSeeLess = false;
   List<BlockChoice> _selectedList = [];
@@ -41,8 +43,8 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
   void initState() {
     super.initState();
     _manageBlockBloc = BlocProvider.of<ManageBlockBloc>(context);
-    _topicChoices = [BlockChoice(name: widget.news.category, type: BlockTypes.CATEGORY)] +
-        widget.news.tags.map((tag) => BlockChoice(name: tag, type: BlockTypes.TAG)).toList();
+    _topicChoices = widget.topicChoices;
+    _source = widget.source;
   }
 
   void onMultiSelectChange(List<Choice> selectedList) {
@@ -65,8 +67,7 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
 
   void onDone() {
     print('Done');
-    final List<BlockChoice> sourceBlock =
-        _isSelectedBlock ? [BlockChoice(name: widget.news.source, type: BlockTypes.SOURCE)] : [];
+    final List<BlockChoice> sourceBlock = _isSelectedBlock ? [BlockChoice(name: _source, type: BlockTypes.SOURCE)] : [];
     _manageBlockBloc.add(SaveBlock(blockChoices: _selectedList + sourceBlock));
     BotToast.showText(
       text: 'คุณจะเห็นข่าวที่คล้ายกันน้อยลง',
@@ -153,18 +154,22 @@ class _NewsBottomSheetState extends State<NewsBottomSheet> {
       child: Container(
         child: Wrap(
           children: <Widget>[
-            _buildListTile(
-              icon: Icons.block_flipped,
-              title: 'ซ่อนข่าวจาก ${widget.news.source}',
-              isSelected: _isSelectedBlock,
-              onTap: onClickBlock,
-            ),
-            _buildListTile(
-              icon: Icons.remove_circle_outline,
-              title: 'ซ่อนโพสต์',
-              isSelected: _isSelectedSeeLess,
-              onTap: onClickSeeLess,
-            ),
+            _source != null
+                ? _buildListTile(
+                    icon: Icons.block_flipped,
+                    title: 'ซ่อนข่าวจาก $_source',
+                    isSelected: _isSelectedBlock,
+                    onTap: onClickBlock,
+                  )
+                : Container(),
+            _topicChoices != null
+                ? _buildListTile(
+                    icon: Icons.remove_circle_outline,
+                    title: 'ซ่อนโพสต์',
+                    isSelected: _isSelectedSeeLess,
+                    onTap: onClickSeeLess,
+                  )
+                : Container(),
             _isSelectedSeeLess ? _buildSeeLessDetail() : Container(),
             _buildConfirm(),
           ],

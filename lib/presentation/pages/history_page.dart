@@ -13,6 +13,7 @@ import 'package:spent/presentation/bloc/history/history_bloc.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/widgets/card_base.dart';
 import 'package:spent/presentation/widgets/in_page_search_bar.dart';
+import 'package:spent/presentation/widgets/no_result.dart';
 import 'package:spent/presentation/widgets/retry_error.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -143,7 +144,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     shrinkWrap: true,
                     controller: _scrollController,
                     children: [
-                      state.news.isEmpty ? Center(child: Text('no history.')) : Container(),
+                      state.news.isEmpty ? NoResult() : Container(),
                       ImplicitlyAnimatedList<News>(
                         shrinkWrap: true,
                         items: state.news,

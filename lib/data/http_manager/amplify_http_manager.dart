@@ -18,4 +18,43 @@ class AmplifyHttpManager {
       print('GET call failed: $e');
     }
   }
+
+  Future<Map<String, dynamic>> post(RestOptions restOptions) async {
+    try {
+      print('Get API ${restOptions.path} ${restOptions.queryParameters}');
+      final RestOperation restOperation = Amplify.API.post(restOptions: restOptions);
+      final RestResponse response = await restOperation.response;
+      final String jsonString = utf8.decode(String.fromCharCodes(response.data).trim().runes.toList());
+      final Map<String, dynamic> res = jsonDecode(jsonString);
+      return res;
+    } on ApiException catch (e) {
+      print('GET call failed: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> put(RestOptions restOptions) async {
+    try {
+      print('Get API ${restOptions.path} ${restOptions.queryParameters}');
+      final RestOperation restOperation = Amplify.API.put(restOptions: restOptions);
+      final RestResponse response = await restOperation.response;
+      final String jsonString = utf8.decode(String.fromCharCodes(response.data).trim().runes.toList());
+      final Map<String, dynamic> res = jsonDecode(jsonString);
+      return res;
+    } on ApiException catch (e) {
+      print('GET call failed: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> delete(RestOptions restOptions) async {
+    try {
+      print('Get API ${restOptions.path} ${restOptions.queryParameters}');
+      final RestOperation restOperation = Amplify.API.delete(restOptions: restOptions);
+      final RestResponse response = await restOperation.response;
+      final String jsonString = utf8.decode(String.fromCharCodes(response.data).trim().runes.toList());
+      final Map<String, dynamic> res = jsonDecode(jsonString);
+      return res;
+    } on ApiException catch (e) {
+      print('GET call failed: $e');
+    }
+  }
 }

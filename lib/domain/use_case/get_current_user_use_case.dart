@@ -10,10 +10,11 @@ class GetCurrentUserUseCase {
 
   Future<User> call() async {
     try {
-      final isValidSession = await _authenticationRepository.isValidSession();
-      if (!isValidSession) return null;
-
+      // final isValidSession = await _authenticationRepository.isValidSession();
+      // if (!isValidSession) return null;
+      print('get cur user');
       final user = await _authenticationRepository.getCurrentUser();
+      print('get cur user ${user.name}');
       return user;
     } catch (err) {
       print(err);

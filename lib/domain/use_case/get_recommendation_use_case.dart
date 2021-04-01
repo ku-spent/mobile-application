@@ -20,8 +20,12 @@ class GetRecommendationsUseCase {
     try {
       final User user = await _authenticationRepository.getCurrentUser();
       final Recommendation recommendation = await _newsRepository.getRecommendations(user.id);
-      // final List<News> mappedUserNews =
-      //     await Future.wait(newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
+      print('Recommendation id: ${recommendation.recommendationID}');
+      // final news = await _newsRepository.getNewsFromRemote(from, size, '-', null);
+      // final Recommendation recommendation = Recommendation(newsList: news);
+      final List<News> mappedUserNews =
+          await Future.wait(recommendation.newsList.map((news) => _userRepository.mapUserActionToNews(user, news)));
+      recommendation.setNewsList(mappedUserNews);
       return recommendation;
     } catch (e) {
       print(e);

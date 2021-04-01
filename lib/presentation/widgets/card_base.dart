@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spent/domain/model/Choice.dart';
 
 import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/AppRouter.gr.dart';
@@ -12,7 +13,8 @@ import 'package:spent/domain/model/category.dart';
 import 'package:spent/domain/model/news_source.dart';
 import 'package:spent/presentation/bloc/manage_history/manage_history_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
-import 'package:spent/presentation/pages/news_bottom_sheet.dart';
+import 'package:spent/presentation/pages/block_bottom_sheet.dart';
+import 'package:spent/presentation/widgets/clickable_animation.dart';
 import 'package:spent/presentation/widgets/clickable_icon.dart';
 import 'package:spent/presentation/widgets/source_icon.dart';
 
@@ -33,6 +35,8 @@ class CardBase extends StatefulWidget {
   final bool isSecondary;
   final EdgeInsets margin;
 
+  final String recommendationId;
+
   CardBase({
     Key key,
     @required this.news,
@@ -42,6 +46,7 @@ class CardBase extends StatefulWidget {
     this.isSecondary = false,
     this.showBottom = true,
     this.margin = const EdgeInsets.only(bottom: 8.0),
+    this.recommendationId,
   }) : super(key: key);
 
   @override
@@ -53,6 +58,7 @@ class _CardBaseState extends State<CardBase> {
   bool _isBookmarked;
   UserAction _userAction;
 
+  String _recommendationId;
   LikeNewsBloc _likeNewsBloc;
   ShareNewsBloc _shareNewsBloc;
   ManageHistoryBloc _manageHistoryBloc;
@@ -68,19 +74,14 @@ class _CardBaseState extends State<CardBase> {
     _news = widget.news;
     _isBookmarked = _news.isBookmarked;
     _userAction = _news.userAction;
-  }
-
-  void _goToLink(BuildContext context) async {
-    ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
-    _manageHistoryBloc.add(SaveHistory(news: _news));
+    _recommendationId = widget.recommendationId;
   }
 
   void _goToQuerySourcePage() {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: _news.source,
-        queryField: QueryField.source,
+        query: QueryWithField(_news.source, query: _news.source, queryField: QueryField.source),
         coverUrl: NewsSource.newsSourceCover[_news.source],
         isShowTitle: true,
       ),
@@ -91,10 +92,9 @@ class _CardBaseState extends State<CardBase> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        isShowTitle: true,
-        query: _news.category,
-        queryField: QueryField.category,
+        query: QueryWithField(_news.category, query: _news.category, queryField: QueryField.category),
         coverUrl: Category.newsCategoryCover[_news.category],
+        isShowTitle: true,
       ),
     );
   }
@@ -106,27 +106,31 @@ class _CardBaseState extends State<CardBase> {
     ExtendedNavigator.of(context).push(
       Routes.queryPage,
       arguments: QueryPageArguments(
-        query: tag,
-        queryField: 'tags',
+        query: QueryWithField(tag, query: tag, queryField: QueryField.tags),
         isShowTitle: true,
         coverUrl: coverUrl,
       ),
     );
   }
 
+  void _goToLink(BuildContext context) async {
+    ExtendedNavigator.of(context).push(Routes.viewUrl, arguments: ViewUrlArguments(news: _news));
+    _manageHistoryBloc.add(SaveHistory(news: _news, recommendationId: _recommendationId));
+  }
+
   void _onClickLike() {
-    _likeNewsBloc.add(LikeNews(news: _news));
+    _likeNewsBloc.add(LikeNews(news: _news, recommendationId: _recommendationId));
   }
 
   void _onClickBookmark() {
     if (_isBookmarked)
       _manageBookmarkBloc.add(DeleteBookmark(news: _news));
     else
-      _manageBookmarkBloc.add(SaveBookmark(news: _news));
+      _manageBookmarkBloc.add(SaveBookmark(news: _news, recommendationId: _recommendationId));
   }
 
   void _onClickShare() async {
-    _shareNewsBloc.add(ShareNews(context: context, news: _news));
+    _shareNewsBloc.add(ShareNews(context: context, news: _news, recommendationId: _recommendationId));
   }
 
   void _setUserAction(UserAction userAction) {
@@ -142,7 +146,12 @@ class _CardBaseState extends State<CardBase> {
   }
 
   void _settingModalBottomSheet() {
-    showNewsBottomSheet(context, _news);
+    showBlockBottomSheet(
+      context,
+      source: _news.source,
+      topicChoices: [BlockChoice(name: _news.category, type: BlockTypes.CATEGORY)] +
+          _news.tags.map((tag) => BlockChoice(name: tag, type: BlockTypes.TAG)).toList(),
+    );
   }
 
   Widget _buildPrimary() {
@@ -170,13 +179,13 @@ class _CardBaseState extends State<CardBase> {
           if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(true);
             BotToast.showText(
-              text: 'Bookmarked',
+              text: 'เพิ่มลงในบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           } else if (state is DeleteBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(false);
             BotToast.showText(
-              text: 'Removed',
+              text: 'ลบออกจากบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           }

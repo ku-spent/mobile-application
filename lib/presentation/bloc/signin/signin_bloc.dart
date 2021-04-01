@@ -40,12 +40,15 @@ class SigninBloc extends Bloc<SigninEvent, SigninState> {
     try {
       final user = await _userSignInWithAmplifyUseCase();
       if (user != null) {
-        await _identifyUserUseCase();
-        _authenticationBloc.add(UserSignedIn(user: user));
-        yield SigninSuccess();
-      } else {
-        yield SigninError(error: 'Something very weird just happened');
+        final isValid = await _identifyUserUseCase();
+        print('signin: identifyUserUsecase, $isValid');
+        if (isValid) {
+          _authenticationBloc.add(UserSignedIn(user: user));
+          yield SigninSuccess();
+          return;
+        }
       }
+      yield SigninError(error: 'Something very weird just happened');
     } catch (e) {
       yield SigninError(error: e.message ?? 'An unknown error occured');
     }

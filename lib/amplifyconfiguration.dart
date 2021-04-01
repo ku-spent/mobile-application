@@ -82,7 +82,8 @@ const amplifyconfig = ''' {
                 },
                 "pinpointTargeting": {
                     "region": "ap-southeast-1"
-                }
+                },
+                "autoFlushEventsInterval": 3000
             }
         }
     },

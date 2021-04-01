@@ -3,8 +3,7 @@ name: Android beta App distribution
 on:
   push:
     branches:
-      - dev
-      - cicd
+      - master
 
 jobs:
   deploy_android:

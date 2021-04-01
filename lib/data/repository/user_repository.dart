@@ -1,4 +1,6 @@
 import 'package:injectable/injectable.dart';
+import 'package:spent/data/data_source/following/following_remote_data_source.dart';
+import 'package:spent/domain/model/Following.dart';
 
 import 'package:spent/helper/pagination.dart';
 import 'package:spent/domain/model/ModelProvider.dart';
@@ -7,8 +9,9 @@ import 'package:spent/data/data_source/user_storage/user_storage.dart';
 @singleton
 class UserRepository {
   final UserStorage _userStorage;
+  final FollowingRemoteDataSource _followingRemoteDataSource;
 
-  const UserRepository(this._userStorage);
+  const UserRepository(this._userStorage, this._followingRemoteDataSource);
 
   Future<News> mapUserActionToNews(User user, News news) async {
     final Bookmark bookmark = await getBookmarkByNewsId(user, news);
@@ -95,5 +98,21 @@ class UserRepository {
   Future<List<UserNewsAction>> getUserNewsActionsByUser(User user) async {
     final userNewsActions = await _userStorage.getUserNewsActionsByUser(user);
     return userNewsActions;
+  }
+
+  Future<List<Following>> getFollowingList(User user) async {
+    return await _followingRemoteDataSource.getFollowingList(user);
+  }
+
+  Future<Following> addFollowing(User user, Following following) async {
+    return await _followingRemoteDataSource.addFollowing(user, following);
+  }
+
+  Future<void> saveFollowingList(User user, List<Following> followingList) async {
+    return await _followingRemoteDataSource.saveFollowingList(user, followingList);
+  }
+
+  Future<void> deleteFollowing(User user, Following following) async {
+    return await _followingRemoteDataSource.deleteFollowing(user, following);
   }
 }

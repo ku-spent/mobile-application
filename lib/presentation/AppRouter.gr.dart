@@ -10,8 +10,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/model/Following.dart';
 import '../domain/model/ModelProvider.dart';
-import 'pages/about_page.dart';
+import 'bloc/query/query_bloc.dart';
 import 'pages/app_screen.dart';
 import 'pages/bookmark_page.dart';
 import 'pages/hero_photo_view_page.dart';
@@ -19,9 +20,11 @@ import 'pages/history_page.dart';
 import 'pages/query_page.dart';
 import 'pages/search_page.dart';
 import 'pages/setting_block_page.dart';
+import 'pages/setting_following_page.dart';
 import 'pages/setting_page.dart';
 import 'pages/splash_page.dart';
 import 'pages/view_url.dart';
+import 'pages/welcome_page.dart';
 
 class Routes {
   static const String splashPage = '/';
@@ -30,8 +33,9 @@ class Routes {
   static const String historyPage = '/history';
   static const String settingBlockPage = '/setting/blocks';
   static const String settingPage = '/setting';
-  static const String aboutPage = '/about';
   static const String searchPage = '/search';
+  static const String welcomePage = '/welcome';
+  static const String settingFollowingPage = '/following/setting';
   static const String viewUrl = '/news';
   static const String queryPage = '/query';
   static const String heroPhotoViewPage = '/hero-photo';
@@ -42,8 +46,9 @@ class Routes {
     historyPage,
     settingBlockPage,
     settingPage,
-    aboutPage,
     searchPage,
+    welcomePage,
+    settingFollowingPage,
     viewUrl,
     queryPage,
     heroPhotoViewPage,
@@ -60,8 +65,9 @@ class AppRouter extends RouterBase {
     RouteDef(Routes.historyPage, page: HistoryPage),
     RouteDef(Routes.settingBlockPage, page: SettingBlockPage),
     RouteDef(Routes.settingPage, page: SettingPage),
-    RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.searchPage, page: SearchPage),
+    RouteDef(Routes.welcomePage, page: WelcomePage),
+    RouteDef(Routes.settingFollowingPage, page: SettingFollowingPage),
     RouteDef(Routes.viewUrl, page: ViewUrl),
     RouteDef(Routes.queryPage, page: QueryPage),
     RouteDef(Routes.heroPhotoViewPage, page: HeroPhotoViewPage),
@@ -123,18 +129,29 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
-    AboutPage: (data) {
-      final args = data.getArgs<AboutPageArguments>(
-        orElse: () => AboutPageArguments(),
-      );
-      return CupertinoPageRoute<dynamic>(
-        builder: (context) => AboutPage(key: args.key),
-        settings: data,
-      );
-    },
     SearchPage: (data) {
       return CupertinoPageRoute<dynamic>(
         builder: (context) => const SearchPage(),
+        settings: data,
+      );
+    },
+    WelcomePage: (data) {
+      final args = data.getArgs<WelcomePageArguments>(
+        orElse: () => WelcomePageArguments(),
+      );
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => WelcomePage(key: args.key),
+        settings: data,
+      );
+    },
+    SettingFollowingPage: (data) {
+      final args = data.getArgs<SettingFollowingPageArguments>(nullOk: false);
+      return CupertinoPageRoute<dynamic>(
+        builder: (context) => SettingFollowingPage(
+          key: args.key,
+          followingList: args.followingList,
+          followingType: args.followingType,
+        ),
         settings: data,
       );
     },
@@ -154,7 +171,6 @@ class AppRouter extends RouterBase {
         builder: (context) => QueryPage(
           key: args.key,
           query: args.query,
-          queryField: args.queryField,
           coverUrl: args.coverUrl,
           isShowTitle: args.isShowTitle,
         ),
@@ -218,10 +234,19 @@ class SettingPageArguments {
   SettingPageArguments({this.key});
 }
 
-/// AboutPage arguments holder class
-class AboutPageArguments {
+/// WelcomePage arguments holder class
+class WelcomePageArguments {
   final Key key;
-  AboutPageArguments({this.key});
+  WelcomePageArguments({this.key});
+}
+
+/// SettingFollowingPage arguments holder class
+class SettingFollowingPageArguments {
+  final Key key;
+  final List<Following> followingList;
+  final FollowingType followingType;
+  SettingFollowingPageArguments(
+      {this.key, @required this.followingList, @required this.followingType});
 }
 
 /// ViewUrl arguments holder class
@@ -234,14 +259,12 @@ class ViewUrlArguments {
 /// QueryPage arguments holder class
 class QueryPageArguments {
   final Key key;
-  final String query;
-  final String queryField;
+  final QueryObject query;
   final String coverUrl;
   final bool isShowTitle;
   QueryPageArguments(
       {this.key,
       @required this.query,
-      @required this.queryField,
       @required this.coverUrl,
       this.isShowTitle = false});
 }

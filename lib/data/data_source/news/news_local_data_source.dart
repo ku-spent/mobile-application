@@ -2,16 +2,15 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:spent/data/data_source/news/news_data_source.dart';
 import 'package:spent/domain/model/News.dart';
-import 'package:spent/domain/model/Recommendation.dart';
 
 @injectable
 class NewsLocalDataSource implements NewsDataSource {
   const NewsLocalDataSource();
 
   @override
-  Future<Recommendation> getRecommendations(String userId) async {
-    // TODO: implement local recommendations
-    return null;
+  Future<List<News>> getNewsRelatedTrend(String trend, int from, int size) {
+    // TODO: implement getNewsRelatedTrend
+    throw null;
   }
 
   @override

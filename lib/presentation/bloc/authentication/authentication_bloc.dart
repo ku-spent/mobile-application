@@ -38,25 +38,31 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   Stream<AuthenticationState> _mapInitialUserToState(InitialUser event) async* {
+    print('InitialUser');
     yield AuthenticationLoading();
     try {
       final isValid = await _initialAuthenticationUseCase.call();
       print('isValid:: $isValid');
-      if (!isValid) yield AuthenticationUnAuthenticated();
+      if (!isValid) {
+        yield AuthenticationUnAuthenticated();
+        return;
+      }
 
       final currentUser = await _getCurrentUserUseCase.call();
       if (currentUser != null) {
-        await _identifyUserUseCase();
-        yield AuthenticationAuthenticated(user: currentUser);
-      } else {
-        yield AuthenticationUnAuthenticated();
+        final isValid = await _identifyUserUseCase();
+        print('identifyUsecases $isValid');
+        if (isValid) yield AuthenticationAuthenticated(user: currentUser);
+        return;
       }
+      yield AuthenticationUnAuthenticated();
     } catch (e) {
       yield AuthenticationError(message: e.message ?? 'An unknown error occurred');
     }
   }
 
   Stream<AuthenticationState> _mapUserSignInToState(UserSignedIn event) async* {
+    print('AuthenticationBloc: user signin success');
     yield AuthenticationAuthenticated(user: event.user);
   }
 

@@ -9,10 +9,11 @@ import 'package:spent/domain/model/ModelProvider.dart';
 import 'package:spent/presentation/bloc/authentication/authentication_bloc.dart';
 
 import 'package:spent/presentation/widgets/list_item.dart';
-import 'package:spent/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:spent/presentation/widgets/setting_font_size.dart';
 
 class SettingPage extends StatefulWidget {
+  static final String title = "ตั้งค่า";
+
   SettingPage({Key key}) : super(key: key);
 
   @override
@@ -20,21 +21,20 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  void _handleItemClick(BuildContext context, String route) {
-    ExtendedNavigator.of(context).push(route);
-  }
-
   void _showConfirmSignOut() {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("ยกเลิก"),
       onPressed: () {
         ExtendedNavigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("ออกจากระบบ"),
-      onPressed: _handleSignout,
+      onPressed: () {
+        _handleSignout();
+        ExtendedNavigator.of(context).pop();
+      },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -57,20 +57,23 @@ class _SettingPageState extends State<SettingPage> {
 
   void _showConfirmClearData() {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("ยกเลิก"),
       onPressed: () {
         ExtendedNavigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("ล้างข้อมูล"),
-      onPressed: _handleClearData,
+      onPressed: () {
+        _handleClearData();
+        ExtendedNavigator.of(context).pop();
+      },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("ล้างข้อมูล"),
-      content: Text("คุณต้องการที่จะลบข้อมูลที่บันทึกไว้หรือไม่"),
+      content: Text("คุณต้องการที่จะลบข้อมูลแคชหรือไม่"),
       actions: [
         cancelButton,
         continueButton,
@@ -124,7 +127,7 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.grey),
-        title: Text(PageName[NavItem.page_setting],
+        title: Text(SettingPage.title,
             style: GoogleFonts.kanit(
               color: Colors.black87,
               // fontSize: 24.0,
@@ -204,7 +207,7 @@ class _SettingPageState extends State<SettingPage> {
               children: [
                 ListItem(
                   leading: Icon(Icons.delete_outlined),
-                  title: Text('ล้างข้อมูลที่บันทึกไว้'),
+                  title: Text('ล้างข้อมูลแคช'),
                   onTap: _showConfirmClearData,
                 ),
                 ListItem(

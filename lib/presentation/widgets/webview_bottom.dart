@@ -7,6 +7,7 @@ import 'package:spent/domain/model/UserAction.dart';
 import 'package:spent/presentation/bloc/like_news/like_news_bloc.dart';
 import 'package:spent/presentation/bloc/manage_bookmark/manage_bookmark_bloc.dart';
 import 'package:spent/presentation/bloc/share_news/share_news_bloc.dart';
+import 'package:spent/presentation/widgets/clickable_animation.dart';
 import 'package:spent/presentation/widgets/clickable_icon.dart';
 
 class WebViewBottom extends StatefulWidget {
@@ -67,13 +68,13 @@ class _WebViewBottomState extends State<WebViewBottom> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildIcon({Function onPressed, Icon inActive, Icon active, bool isActive}) {
-      return IconButton(
-        color: isActive ? Theme.of(context).primaryColor : Colors.grey,
-        onPressed: onPressed,
-        icon: isActive ? active : inActive,
-      );
-    }
+    // Widget _build{Function onPressed, Icon inActive, Icon active, bool isActive}){
+    //   return IconButton(
+    //     color: isActive ? Theme.of(context).primaryColor : Colors.grey,
+    //     onPressed: onPressed,
+    //     icon: isActive ? active : inActive,
+    //   );
+    // }
 
     return MultiBlocListener(
       listeners: [
@@ -81,13 +82,13 @@ class _WebViewBottomState extends State<WebViewBottom> {
           if (state is SaveBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(true);
             BotToast.showText(
-              text: 'Bookmarked',
+              text: 'เพิ่มลงในบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           } else if (state is DeleteBookmarkSuccess && state.news.id == _news.id) {
             _setIsBookmarked(false);
             BotToast.showText(
-              text: 'Removed',
+              text: 'ลบออกจากบุ๊คมาร์ค',
               textStyle: GoogleFonts.kanit(color: Colors.white),
             );
           }
@@ -106,29 +107,42 @@ class _WebViewBottomState extends State<WebViewBottom> {
           child: Padding(
             padding: EdgeInsets.only(left: 16.0),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClickableIcon(
-                  isActive: _userAction == UserAction.LIKE,
-                  active: Icon(Icons.favorite),
-                  inActive: Icon(Icons.favorite_outline),
-                  onPressed: _onClickLike,
-                  activeColor: Colors.red[400],
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ClickableAnimation(
+                      isActive: _userAction == UserAction.LIKE,
+                      active: Icons.favorite,
+                      inActive: Icons.favorite_outline,
+                      onPressed: _onClickLike,
+                      activeColor: Colors.red[400],
+                    ),
+                    Container(width: 12.0),
+                    ClickableAnimation(
+                      isActive: _isBookmarked,
+                      active: Icons.bookmark,
+                      inActive: Icons.bookmark_outline,
+                      onPressed: _onClickBookmark,
+                    ),
+                    Container(width: 12.0),
+                    ClickableIcon(
+                      active: Icon(Icons.share),
+                      inActive: Icon(Icons.share),
+                      onPressed: _onClickShare,
+                    )
+                  ],
                 ),
-                Container(width: 12.0),
-                ClickableIcon(
-                  isActive: _isBookmarked,
-                  active: Icon(Icons.bookmark),
-                  inActive: Icon(Icons.bookmark_outline),
-                  onPressed: _onClickBookmark,
+                Padding(
+                  padding: EdgeInsets.only(right: 12.0),
+                  child: ClickableIcon(
+                    active: Icon(Icons.text_fields_sharp),
+                    inActive: Icon(Icons.text_fields_sharp),
+                    onPressed: () {},
+                  ),
                 ),
-                Container(width: 12.0),
-                ClickableIcon(
-                  active: Icon(Icons.share),
-                  inActive: Icon(Icons.share),
-                  onPressed: _onClickShare,
-                )
               ],
             ),
           ),
